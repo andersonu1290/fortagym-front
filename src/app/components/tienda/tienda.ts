@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
 import { environment } from '../../../environments/environment';
+import { CartService, ProductoCarrito } from '../../services/cart.service'; // Importa tu servicio
 
 export interface Producto {
   id: number;
@@ -35,13 +36,16 @@ export class TiendaComponent implements OnInit {
   productoModal: Producto | null = null;
   categorias: string[] = [];
 
-  constructor(private productoService: ProductoService) {}
+  constructor(
+    private productoService: ProductoService,
+    private cartService: CartService // Inyectamos el servicio
+  ) {}
 
   ngOnInit(): void {
     this.cargarProductos();
   }
 
-  // ── Carga de datos usando el Service unificado ─────────────
+  // ── Carga de datos ─────────────
   cargarProductos(): void {
     this.productoService.getProductos().subscribe({
       next: (data) => {
@@ -55,6 +59,31 @@ export class TiendaComponent implements OnInit {
   private extraerCategorias(): void {
     const set = new Set(this.listaProductos.map(p => p.categoria));
     this.categorias = Array.from(set).sort();
+  }
+
+  // ── Lógica del Carrito ─────────────────────────────────────
+  agregarAlCarrito(prod: Producto): void {
+
+    console.log('Intento de agregar:', prod); // <--- ESTO ES VITAL: Si esto no sale en consola al hacer clic, es un tema de CSS.
+
+    if (!prod) {
+        console.error('Producto nulo');
+        return;
+    }
+    // Mapeamos el producto de la tienda a la interfaz ProductoCarrito del CartService
+    const item: ProductoCarrito = {
+      id: prod.id,
+      nombre: prod.nombre,
+      categoria: prod.categoria,
+      descripcion: prod.descripcion || 'Sin descripción',
+      precio: prod.precio,
+      cantidad: 1, // Por defecto agregamos 1
+      img: prod.img || ''
+    };
+
+    this.cartService.agregarProducto(item);
+    this.cerrarModal();
+    alert(`¡${prod.nombre} agregado al carrito!`);
   }
 
   // ── Filtrado y Ordenamiento ────────────────────────────────
@@ -98,9 +127,7 @@ export class TiendaComponent implements OnInit {
     this.categoriaActiva = cat;
   }
 
-  ordenar(): void {
-    // Se ejecuta al cambiar el select
-  }
+  ordenar(): void {}
 
   resetFiltros(): void {
     this.busqueda = '';
@@ -121,7 +148,6 @@ export class TiendaComponent implements OnInit {
   resolverImg(img?: string): string {
     if (!img) return 'https://via.placeholder.com/400x300?text=Sin+Imagen';
     if (img.startsWith('http')) return img;
-    // Si la imagen es una ruta del servidor, se concatena correctamente
     return `${this.IMG_BASE}${img}`;
   }
 

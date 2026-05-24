@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { CartService } from '../../../services/cart.service';
 
-// Interfaces para tipar fuertemente nuestros datos
+// Interfaces
 export interface ProductoCarrito {
   id: number;
   nombre: string;
@@ -31,32 +32,34 @@ export interface ProductoRecomendado {
 })
 export class CarritoComponent implements OnInit {
 
-  // Datos del carrito
-  carrito: ProductoCarrito[] = [];
-  recomendados: ProductoRecomendado[] = [];
-
-  // Cupón y Descuentos
+  // Variables de control de cupones
   codigoCupon: string = '';
   cuponAplicado: boolean = false;
-  porcentajeDescuento: number = 0.10; // 10% para FORTA10
+  porcentajeDescuento: number = 0.10; // 10%
 
-  constructor() {}
+  // Array para recomendados locales
+  recomendados: ProductoRecomendado[] = [];
+
+  constructor(
+    private cartService: CartService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    // Inicializamos con los datos mockeados
-    this.cargarDatosIniciales();
+    this.cargarDatosRecomendados();
   }
 
-  // ==========================================
-  // GETTERS (Calculan totales en tiempo real)
-  // ==========================================
+  // GETTERS: Leen el estado directamente desde el CartService
+  get carrito(): ProductoCarrito[] {
+    return this.cartService.getCarrito();
+  }
 
   get cantidadTotal(): number {
     return this.carrito.reduce((acc, item) => acc + item.cantidad, 0);
   }
 
   get subtotal(): number {
-    return this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+    return this.cartService.getSubtotal();
   }
 
   get descuento(): number {
@@ -67,55 +70,46 @@ export class CarritoComponent implements OnInit {
     return this.subtotal - this.descuento;
   }
 
-  // ==========================================
-  // MÉTODOS DEL CARRITO
-  // ==========================================
-
+  // MÉTODOS DE LÓGICA
   cambiarCantidad(index: number, delta: number): void {
-    const nuevaCantidad = this.carrito[index].cantidad + delta;
+    const item = this.carrito[index];
+    const nuevaCantidad = item.cantidad + delta;
+
     if (nuevaCantidad >= 1 && nuevaCantidad <= 99) {
-      this.carrito[index].cantidad = nuevaCantidad;
+      item.cantidad = nuevaCantidad;
     }
   }
 
   eliminarItem(index: number): void {
-    this.carrito.splice(index, 1);
+    this.cartService.eliminarProducto(index);
   }
 
   agregarRecomendado(rec: ProductoRecomendado): void {
-    // Verificamos si ya está en el carrito para solo sumarle 1
-    const existe = this.carrito.find(item => item.id === rec.id);
-    if (existe) {
-      existe.cantidad++;
-    } else {
-      this.carrito.push({
-        id: rec.id,
-        nombre: rec.nombre,
-        categoria: rec.categoria,
-        descripcion: 'Producto FortaGym premium', // Descripción por defecto
-        precio: rec.precio,
-        cantidad: 1,
-        img: rec.img
-      });
-    }
+    const nuevoProducto: ProductoCarrito = {
+      id: rec.id,
+      nombre: rec.nombre,
+      categoria: rec.categoria,
+      descripcion: 'Producto FortaGym premium',
+      precio: rec.precio,
+      cantidad: 1,
+      img: rec.img
+    };
+    this.cartService.agregarProducto(nuevoProducto);
   }
 
   aplicarCupon(): void {
-    const cupon = this.codigoCupon.trim().toUpperCase();
-    this.cuponAplicado = (cupon === 'FORTA10');
+    this.cuponAplicado = (this.codigoCupon.trim().toUpperCase() === 'FORTA10');
   }
 
-  // ==========================================
-  // CARGA DE DATOS MOCK
-  // ==========================================
+  irACompra(): void {
+    if (this.carrito.length > 0) {
+      this.router.navigate(['/compra']);
+    } else {
+      alert("Tu carrito está vacío.");
+    }
+  }
 
-  private cargarDatosIniciales(): void {
-    this.carrito = [
-      { id: 1, nombre: 'Whey Protein Gold 2kg', categoria: 'Suplementos', descripcion: 'Proteína de suero de leche, 24g por porción, sabor chocolate', precio: 189, cantidad: 1, img: 'https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?w=200&q=80' },
-      { id: 2, nombre: 'Guantes de entrenamiento pro', categoria: 'Accesorios', descripcion: 'Grip antideslizante, talla M, muñequera integrada', precio: 75, cantidad: 2, img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&q=80' },
-      { id: 3, nombre: 'Camiseta Fortagym Dry-Fit', categoria: 'Ropa', descripcion: 'Tela de secado rápido, color negro, talla L', precio: 55, cantidad: 1, img: 'https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=200&q=80' }
-    ];
-
+  private cargarDatosRecomendados(): void {
     this.recomendados = [
       { id: 101, nombre: 'Creatina micronizada 500g', categoria: 'Suplementos', precio: 99.00, img: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=300&q=80' },
       { id: 102, nombre: 'Cinturón olímpico cuero', categoria: 'Accesorios', precio: 139.90, img: 'https://images.unsplash.com/photo-1620188467120-5042ed1eb5da?w=300&q=80' },

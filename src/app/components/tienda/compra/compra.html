@@ -260,7 +260,7 @@
           </div>
 
           <div class="sum-prod">
-            <img class="sp-img" [src]="producto.imagen" [alt]="producto.nombre">
+            <img class="sp-img" [src]="producto.img" [alt]="producto.nombre">
             <div style="flex:1;min-width:0">
               <div class="sp-cat">{{ producto.categoria }}</div>
               <div class="sp-nm">{{ producto.nombre }}</div>
@@ -326,138 +326,296 @@
 
   <div class="screen active" *ngIf="vistaActual === 'confirmacion'">
 
-    <div class="topbar">
-      <nav class="bc">
-        <a (click)="volverAlCarrito()">Carrito</a>
-        <span class="bc-sep">›</span>
-        <span class="bc-cur">Pedido confirmado</span>
-      </nav>
-    </div>
+  <div class="topbar">
+    <nav class="bc">
+      <a (click)="volverAlCarrito()">Carrito</a>
+      <span class="bc-sep">›</span>
+      <span class="bc-cur">Pedido confirmado</span>
+    </nav>
+  </div>
 
-    <div class="steps-wrap">
-      <div class="steps">
-        <div class="step done">
-          <div class="snum"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i></div>
-          <span class="slbl">Carrito</span>
-        </div>
-        <div class="sline done"></div>
-        <div class="step done">
-          <div class="snum"><i class="ti ti-check" style="font-size:12px" aria-hidden="true"></i></div>
-          <span class="slbl">Datos &amp; Pago</span>
-        </div>
-        <div class="sline done"></div>
-        <div class="step active">
-          <div class="snum">3</div>
-          <span class="slbl">Confirmación</span>
-        </div>
-      </div>
-    </div>
+  <div class="steps-wrap">
+    <div class="steps">
 
-    <div class="conf-wrap">
-      <div class="conf-hero">
-        <div class="conf-circle">
-          <i class="ti ti-check" aria-hidden="true"></i>
+      <div class="step done">
+        <div class="snum">
+          <i class="ti ti-check" style="font-size:12px"></i>
         </div>
-        <h1 class="conf-ttl">¡Pedido confirmado!</h1>
-        <p class="conf-sub">Gracias {{ checkoutForm.get('nombre')?.value || 'Cliente' }}. Tu pedido fue recibido y está siendo procesado. Te notificaremos cuando sea despachado.</p>
-        <div class="conf-order-num">
-          <i class="ti ti-receipt" style="font-size:14px;color:#ff8d22" aria-hidden="true"></i>
-          Orden <strong>#{{ numeroOrden }}</strong>
-          &nbsp;·&nbsp;
-          <span>{{ fechaActual | date:'dd MMM yyyy' }}</span>
-        </div>
+        <span class="slbl">Carrito</span>
       </div>
 
-      <div class="receipt-card">
-        <div class="receipt-hd">
-          <i class="ti ti-package" aria-hidden="true"></i>
-          <span class="receipt-hd-ttl">Detalle del pedido</span>
-        </div>
-        <div class="receipt-body">
-          <div class="receipt-prod" *ngFor="let item of carritoConfirmado">
-            <img class="rp-img" [src]="item.img" [alt]="item.nombre">
-            <div class="rp-info">
-              <div class="rp-cat">{{ item.categoria }}</div>
-              <div class="rp-nm">{{ item.nombre }}</div>
-              <div class="rp-qty">Cantidad: {{ item.cantidad }}</div>
-            </div>
-            <span class="rp-price">S/. {{ (item.precio * item.cantidad) | number:'1.2-2' }}</span>
-          </div>
+      <div class="sline done"></div>
 
-          <table class="price-tbl" style="margin-top:4px">
-            <tr>
-              <td>Subtotal</td>
-              <td>S/. {{ subtotalConfirmado | number:'1.2-2' }}</td>
-            </tr>
-            <tr>
-              <td>Envío</td>
-              <td style="color:#16a34a;font-weight:500">{{ shipCost === 0 ? 'GRATIS' : 'S/. ' + (shipCost | number:'1.2-2') }}</td>
-            </tr>
-            <tr class="disc-row-r" *ngIf="descuentoConfirmado > 0">
-              <td>Descuento (FORTA10)</td>
-              <td>— S/. {{ descuentoConfirmado | number:'1.2-2' }}</td>
-            </tr>
-            <tr>
-              <td style="color:var(--color-text-secondary)">IGV incluido (18%)</td>
-              <td>S/. {{ igvConfirmado | number:'1.2-2' }}</td>
-            </tr>
-            <tr class="total-row">
-              <td>Total pagado</td>
-              <td>S/. {{ totalConfirmado | number:'1.2-2' }}</td>
-            </tr>
-          </table>
+      <div class="step done">
+        <div class="snum">
+          <i class="ti ti-check" style="font-size:12px"></i>
         </div>
+        <span class="slbl">Datos & Pago</span>
       </div>
 
-      <div class="receipt-card">
-        <div class="receipt-hd">
-          <i class="ti ti-map-pin" aria-hidden="true"></i>
-          <span class="receipt-hd-ttl">Información de envío</span>
-        </div>
-        <div class="receipt-body">
-          <div class="info-grid">
-            <div class="info-item">
-              <div class="info-lbl">Destinatario</div>
-              <div class="info-val">{{ checkoutForm.get('nombre')?.value }} {{ checkoutForm.get('apellido')?.value }}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-lbl">Método</div>
-              <div class="info-val" style="text-transform: capitalize;">{{ checkoutForm.get('metodoEntrega')?.value }}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-lbl">Dirección</div>
-              <div class="info-val">{{ checkoutForm.get('direccion')?.value }}, {{ checkoutForm.get('distrito')?.value }}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-lbl">Entrega estimada</div>
-              <div class="info-val" style="color:#ff8d22;font-weight:500">2 a 4 días hábiles</div>
-            </div>
-            <div class="info-item">
-              <div class="info-lbl">Pago</div>
-              <div class="info-val" style="text-transform: capitalize;">{{ checkoutForm.get('metodoPago')?.value }}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-lbl">Estado</div>
-              <div class="info-val" style="color:#16a34a;font-weight:500;display:flex;align-items:center;gap:4px">
-                <i class="ti ti-circle-check" style="font-size:13px" aria-hidden="true"></i> Pagado
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="sline done"></div>
 
-      <div class="conf-actions">
-        <button class="btn-track">
-          <i class="ti ti-truck" aria-hidden="true"></i>
-          Rastrear pedido
-        </button>
-        <button class="btn-cont" (click)="volverAlCarrito()">
-          <i class="ti ti-arrow-left" aria-hidden="true"></i>
-          Volver
-        </button>
+      <div class="step active">
+        <div class="snum">3</div>
+        <span class="slbl">Confirmación</span>
       </div>
 
     </div>
   </div>
+
+  <div class="conf-wrap">
+
+    <div class="conf-hero">
+
+      <div class="conf-circle">
+        <i class="ti ti-check"></i>
+      </div>
+
+      <h1 class="conf-ttl">
+        ¡Pedido confirmado!
+      </h1>
+
+      <p class="conf-sub">
+        Gracias {{ checkoutForm.get('nombre')?.value || 'Cliente' }}.
+        Tu pedido fue recibido y está siendo procesado correctamente.
+      </p>
+
+      <div class="conf-order-num">
+
+        <i class="ti ti-receipt"
+           style="font-size:14px;color:#ff8d22">
+        </i>
+
+        Orden
+        <strong>
+          #{{ confirmacionData?.pedidoId || '0001' }}
+        </strong>
+
+      </div>
+
+    </div>
+
+    <div class="receipt-card">
+
+      <div class="receipt-hd">
+        <i class="ti ti-package"></i>
+        <span class="receipt-hd-ttl">
+          Detalle del pedido
+        </span>
+      </div>
+
+      <div class="receipt-body">
+
+        <div class="receipt-prod">
+
+          <img class="rp-img"
+               [src]="producto.img"
+               [alt]="producto.nombre">
+
+          <div class="rp-info">
+
+            <div class="rp-cat">
+              {{ producto.categoria }}
+            </div>
+
+            <div class="rp-nm">
+              {{ producto.nombre }}
+            </div>
+
+            <div class="rp-qty">
+              Cantidad: {{ qty }}
+            </div>
+
+          </div>
+
+          <span class="rp-price">
+            S/. {{ subtotal | number:'1.2-2' }}
+          </span>
+
+        </div>
+
+        <table class="price-tbl" style="margin-top:4px">
+
+          <tr>
+            <td>Subtotal</td>
+            <td>S/. {{ subtotal | number:'1.2-2' }}</td>
+          </tr>
+
+          <tr>
+            <td>Envío</td>
+
+            <td style="color:#16a34a;font-weight:500">
+
+              {{
+                shipCost === 0
+                ? 'GRATIS'
+                : ('S/. ' + (shipCost | number:'1.2-2'))
+              }}
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="hasDsc">
+
+            <td>Descuento (FORTA10)</td>
+
+            <td>
+              — S/. {{ discountAmount | number:'1.2-2' }}
+            </td>
+
+          </tr>
+
+          <tr>
+
+            <td style="color:var(--color-text-secondary)">
+              IGV incluido (18%)
+            </td>
+
+            <td>
+              S/. {{ igv | number:'1.2-2' }}
+            </td>
+
+          </tr>
+
+          <tr class="total-row">
+
+            <td>Total pagado</td>
+
+            <td>
+              S/. {{ total | number:'1.2-2' }}
+            </td>
+
+          </tr>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <div class="receipt-card">
+
+      <div class="receipt-hd">
+        <i class="ti ti-map-pin"></i>
+
+        <span class="receipt-hd-ttl">
+          Información de envío
+        </span>
+      </div>
+
+      <div class="receipt-body">
+
+        <div class="info-grid">
+
+          <div class="info-item">
+
+            <div class="info-lbl">
+              Destinatario
+            </div>
+
+            <div class="info-val">
+
+              {{ checkoutForm.get('nombre')?.value }}
+              {{ checkoutForm.get('apellido')?.value }}
+
+            </div>
+
+          </div>
+
+          <div class="info-item">
+
+            <div class="info-lbl">
+              Método
+            </div>
+
+            <div class="info-val"
+                 style="text-transform: capitalize;">
+
+              {{ checkoutForm.get('metodoEntrega')?.value }}
+
+            </div>
+
+          </div>
+
+          <div class="info-item">
+
+            <div class="info-lbl">
+              Dirección
+            </div>
+
+            <div class="info-val">
+
+              {{ checkoutForm.get('direccion')?.value }},
+              {{ checkoutForm.get('distrito')?.value }}
+
+            </div>
+
+          </div>
+
+          <div class="info-item">
+
+            <div class="info-lbl">
+              Pago
+            </div>
+
+            <div class="info-val"
+                 style="text-transform: capitalize;">
+
+              {{ checkoutForm.get('metodoPago')?.value }}
+
+            </div>
+
+          </div>
+
+          <div class="info-item">
+
+            <div class="info-lbl">
+              Estado
+            </div>
+
+            <div class="info-val"
+                 style="color:#16a34a;font-weight:500;display:flex;align-items:center;gap:4px">
+
+              <i class="ti ti-circle-check"
+                 style="font-size:13px">
+              </i>
+
+              Pagado
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="conf-actions">
+
+      <button class="btn-track">
+
+        <i class="ti ti-truck"></i>
+
+        Rastrear pedido
+
+      </button>
+
+      <button class="btn-cont"
+              (click)="volverAlCarrito()">
+
+        <i class="ti ti-arrow-left"></i>
+
+        Volver
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
 </div>

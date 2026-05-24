@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { CartService, ProductoCarrito } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-compra',
@@ -10,74 +12,66 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
   styleUrls: ['./compra.scss']
 })
 export class CompraComponent implements OnInit {
-  checkoutForm!: FormGroup;
 
-  // Variables de control de flujo para las pantallas
-  vistaActual: string = 'compra'; // Estados: 'compra' | 'confirmacion'
+  checkoutForm!: FormGroup;
+  vistaActual: 'compra' | 'confirmacion' = 'compra';
+  confirmacionData: any = null;
+
+  // Variables para confirmación
   numeroOrden: string = '';
   fechaActual: Date = new Date();
-  carritoConfirmado: any[] = [];
+  carritoConfirmado: ProductoCarrito[] = [];
   subtotalConfirmado: number = 0;
   descuentoConfirmado: number = 0;
   igvConfirmado: number = 0;
   totalConfirmado: number = 0;
 
-  // Datos mockeados del producto (según tu interfaz)
-  producto = {
-    nombre: 'WHEY PROTEIN GOLD STANDARD 2KG',
-    categoria: 'SUPLEMENTOS',
-    precio: 250.00,
-    imagen: 'assets/img/whey.png' // Reemplaza con tu ruta real
-  };
-
-  // Variables de estado del carrito
-  qty: number = 3; // Inicializado en 3 como en tu captura de pantalla
-  shipCost: number | null = null;
+  shipCost: number = 0;
   couponCode: string = '';
   hasDsc: boolean = false;
-  discountPercentage: number = 0.10; // Cupón FORTA10 = 10%
+  discountPercentage: number = 0.10;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
-    // 🛠️ INTEGRACIÓN TOTAL: Mapeo completo de datos de cliente, entrega, tarjeta y términos
     this.checkoutForm = this.fb.group({
-      // Datos personales
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       dni: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
       telefono: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
-
-      // Dirección de envío
       departamento: ['', Validators.required],
       provincia: ['', Validators.required],
       distrito: ['', Validators.required],
-      codigoPostal: ['', Validators.required],
+      codigoPostal: [''],
       direccion: ['', Validators.required],
       referencia: [''],
-
-      // Método de entrega (Ej: 'domicilio', 'express', 'sede')
       metodoEntrega: ['domicilio', Validators.required],
-
-      // Método de pago (Ej: 'tarjeta', 'transferencia', 'yape', 'efectivo')
       metodoPago: ['tarjeta', Validators.required],
-
-      // Datos de la Tarjeta de Crédito/Débito
-      numeroTarjeta: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
-      nombreTarjeta: ['', Validators.required],
-      vencimiento: ['', [Validators.required, Validators.pattern('^(0[1-9]|1[0-2])\\/?([0-9]{2})$')]], // MM/AA
-      cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3,4}$')]],
+      numeroTarjeta: [''],
+      nombreTarjeta: [''],
+      vencimiento: [''],
+      cvv: [''],
       guardarTarjeta: [false],
-
-      // Términos y condiciones (Debe ser true obligatoriamente)
       aceptarTerminos: [false, Validators.requiredTrue]
     });
   }
 
-  // Cálculos dinámicos (Getters reemplazan a la función recalc() del JS)
+  // --- GETTERS ---
+  get carrito(): ProductoCarrito[] {
+    return this.cartService.getCarrito();
+  }
+
+  get qty(): number {
+    return this.carrito.length > 0 ? this.carrito[0].cantidad : 0;
+  }
+
   get subtotal(): number {
-    return this.producto.precio * this.qty;
+    return this.cartService.getSubtotal();
   }
 
   get discountAmount(): number {
@@ -85,23 +79,44 @@ export class CompraComponent implements OnInit {
   }
 
   get total(): number {
-    const envio = this.shipCost || 0;
-    return (this.subtotal - this.discountAmount) + envio;
+    return (this.subtotal - this.discountAmount) + this.shipCost;
   }
 
   get igv(): number {
-    // Calculado de forma informativa asumiendo que el total ya incluye IGV (18% en Perú)
     return this.total - (this.total / 1.18);
   }
 
-  // Métodos de interacción
+  // Getter para el producto que muestra el HTML
+  get producto(): ProductoCarrito {
+    return this.carrito.length > 0
+      ? this.carrito[0]
+      : {
+          id: 0,
+          nombre: '',
+          categoria: '',
+          precio: 0,
+          img: '',
+          cantidad: 0,
+          descripcion: ''
+        };
+  }
+
+  // --- MÉTODOS ---
   chQty(delta: number): void {
-    this.qty = Math.max(1, Math.min(99, this.qty + delta));
+    if (this.carrito.length > 0) {
+
+      const nueva = this.carrito[0].cantidad + delta;
+
+      if (nueva >= 1 && nueva <= 99) {
+        this.carrito[0].cantidad = nueva;
+      }
+    }
   }
 
   applyCoupon(): void {
-    const v = this.couponCode.trim().toUpperCase();
-    this.hasDsc = (v === 'FORTA10');
+    this.hasDsc = (
+      this.couponCode.trim().toUpperCase() === 'FORTA10'
+    );
   }
 
   selDel(cost: number): void {
@@ -109,47 +124,86 @@ export class CompraComponent implements OnInit {
   }
 
   confirmarPedido(): void {
-    if (this.checkoutForm.valid) {
-      // 1. Almacenamos los valores finales calculados para pasarlos estáticos a la vista de confirmación
-      this.numeroOrden = Math.floor(100000 + Math.random() * 900000).toString();
-      this.fechaActual = new Date();
-      this.subtotalConfirmado = this.subtotal;
-      this.descuentoConfirmado = this.discountAmount;
-      this.igvConfirmado = this.igv;
-      this.totalConfirmado = this.total;
 
-      // 2. Mapeamos el item comprado a la lista que itera el HTML de confirmación
-      this.carritoConfirmado = [{
-        nombre: this.producto.nombre,
-        categoria: this.producto.categoria,
-        precio: this.producto.precio,
-        cantidad: this.qty,
-        img: this.producto.imagen
-      }];
+    if (this.checkoutForm.valid && this.carrito.length > 0) {
 
-      // 3. Cambiamos la vista para renderizar la pantalla de pedido confirmado
-      this.vistaActual = 'confirmacion';
+      const payload = {
+        usuarioId: 1,
 
-      console.log('Datos listos para enviar al backend:', {
-        cliente: this.checkoutForm.value,
-        pedido: {
-          total: this.totalConfirmado,
-          descuento: this.descuentoConfirmado,
-          envio: this.shipCost
+        departamento: this.checkoutForm.value.departamento,
+        provincia: this.checkoutForm.value.provincia,
+        distrito: this.checkoutForm.value.distrito,
+        direccion: this.checkoutForm.value.direccion,
+        codigoPostal: this.checkoutForm.value.codigoPostal,
+        referencia: this.checkoutForm.value.referencia,
+
+        metodoEntrega: this.checkoutForm.value.metodoEntrega,
+        metodoPago: this.checkoutForm.value.metodoPago,
+
+        codigoCupon: this.hasDsc
+          ? this.couponCode
+          : null,
+
+        items: this.carrito.map(item => ({
+          productoId: item.id,
+          cantidad: item.cantidad
+        }))
+      };
+
+      this.http.post<any>(
+        'http://localhost:8090/api/tienda/checkout',
+        payload
+      ).subscribe({
+
+        next: (res) => {
+
+          this.confirmacionData = res;
+
+          this.numeroOrden = res.numeroOrden || 'FG-999999';
+
+          this.fechaActual = new Date();
+
+          this.carritoConfirmado = [...this.carrito];
+
+          this.subtotalConfirmado = this.subtotal;
+          this.descuentoConfirmado = this.discountAmount;
+          this.igvConfirmado = this.igv;
+          this.totalConfirmado = this.total;
+
+          this.vistaActual = 'confirmacion';
+
+          this.cartService.limpiarCarrito();
+
+          window.scrollTo(0, 0);
+        },
+
+        error: (err) => {
+
+          alert(
+            'Error: ' +
+            (err.error?.message || 'Revisa tu conexión')
+          );
         }
       });
+
     } else {
-      console.log('Formulario Inválido. Estado actual de los campos:', this.checkoutForm.controls);
-      this.checkoutForm.markAllAsTouched(); // Esto activará los bordes rojos del SCSS
-      alert("Por favor, revisa los campos en rojo. (Asegúrate de no dejar espacios en la tarjeta o DNI y aceptar los términos).");
+
+      if (this.carrito.length === 0) {
+
+        alert('Tu carrito está vacío.');
+
+      } else {
+
+        this.checkoutForm.markAllAsTouched();
+
+        alert(
+          'Por favor, completa correctamente todos los campos obligatorios.'
+        );
+      }
     }
   }
 
-  // Método para regresar desde la confirmación a la pantalla del proceso de compra
   volverAlCarrito(): void {
     this.vistaActual = 'compra';
   }
-
-
 }
-

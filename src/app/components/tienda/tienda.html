@@ -174,9 +174,13 @@
           <div class="modal-detalle-item"><span class="detalle-lbl">Disponibles</span><span class="detalle-val">{{ productoModal.stock }} unidades</span></div>
         </div>
 
-        <button class="btn-comprar-modal" [disabled]="productoModal.stock === 0">
-          <i class="fa fa-shopping-cart"></i> {{ productoModal.stock === 0 ? 'Sin stock disponible' : 'Consultar en recepción' }}
+        <button class="btn-comprar-modal"
+                [disabled]="productoModal.stock === 0"
+                (click)="agregarAlCarrito(productoModal)">
+          <i class="fa fa-shopping-cart"></i>
+          {{ productoModal.stock === 0 ? 'Sin stock disponible' : 'Agregar al carrito' }}
         </button>
+
         <p class="modal-aviso"><i class="fa fa-info-circle"></i> Los pedidos se gestionan en nuestras sedes.</p>
       </div>
     </div>
