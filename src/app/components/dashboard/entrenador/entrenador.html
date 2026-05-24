@@ -1,0 +1,64 @@
+<main class="admin-wrapper section-light" (click)="cerrarMenu()">
+
+  <section class="admin-wrapper">
+
+    <div class="container">
+
+      <!-- HEADER -->
+      <div class="admin-header">
+
+        <span class="badge-tech">
+          Panel de Entrenador
+        </span>
+
+        <h1 class="section-title">
+          Gestión Clínica Deportiva
+        </h1>
+
+        <p class="section-subtitle">
+          Diseña, controla y actualiza las rutinas de entrenamiento personalizadas de tus clientes.
+        </p>
+
+      </div>
+
+      <!-- GRID (Estructura idéntica lista para recibir más módulos en el futuro) -->
+      <div class="admin-grid">
+
+        <!-- CARD DE GESTIÓN DE RUTINAS -->
+        <div class="admin-card">
+
+          <div class="admin-img-wrapper">
+            <img
+              src="assets/img/gestion_rutina.webp"
+              alt="Gestión de rutinas">
+          </div>
+
+          <div class="admin-card-body">
+
+            <h3>
+              Gestión de Rutinas
+            </h3>
+
+            <p>
+              Crea y actualiza los planes de entrenamiento adaptados a los objetivos de los clientes.
+            </p>
+
+            <a
+              routerLink="/entrenador/lista-usuarios"
+              class="btn-admin-action">
+
+              Ir a Rutinas
+
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>

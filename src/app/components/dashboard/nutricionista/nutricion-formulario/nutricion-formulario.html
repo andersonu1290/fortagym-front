@@ -1,0 +1,101 @@
+<main class="section-admin">
+  <div class="container">
+
+    <!-- HERO BANNER PREMIUM -->
+    <div class="hero-banner mb-50">
+      <div class="hero-stripe"></div>
+
+      <div class="hero-text">
+        <a routerLink="/nutricion/dashboard" class="link-view-all text-light">
+          <i class="fa fa-arrow-left"></i> Volver al Listado
+        </a>
+        <h1 class="hero-title mt-20">
+          Evaluación <span class="accent">Nutricional</span>
+        </h1>
+        <p class="hero-sub">Registra medidas antropométricas, análisis corporal y planes alimenticios</p>
+      </div>
+
+      <!-- Métricas dinámicas superiores (Muestra el nombre del paciente en un chip elegante) -->
+      <div class="hero-stats">
+        <div class="stat-chip" style="min-width: auto; padding: 10px 20px;">
+          <div class="stat-num" style="font-size: 1.1rem; text-transform: capitalize;">
+            {{ paciente.nombre }} {{ paciente.apellido }}
+          </div>
+          <div class="stat-lbl">Paciente Actual</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD FORMULARIO PREMIUM -->
+    <div class="admin-card-premium slide-up-1 form-wrapper">
+
+      <div class="form-header">
+        <div class="form-header-left">
+          <span class="form-badge badge-edit">
+            <i class="fa fa-apple-alt"></i>
+            Historial Clínico
+          </span>
+          <h2 class="form-title">
+            Ficha de Nutrición Digital
+          </h2>
+        </div>
+      </div>
+
+      <!-- FORMULARIO NATIVO ADAPTADO -->
+      <form (ngSubmit)="guardar()" class="forta-form">
+
+        <!-- Campo 1: Análisis Corporal y Medidas -->
+        <div class="form-group mb-30">
+          <label class="form-label">Análisis Corporal y Medidas Antropométricas</label>
+          <textarea
+            name="analisis"
+            [(ngModel)]="nutricion.analisisCorporal"
+            rows="5"
+            class="form-control-premium textarea-resize"
+            placeholder="Ej: Peso: 80kg, Talla: 1.80m, IMC: 24.7, % Grasa: 18%..."
+            required>
+          </textarea>
+          <span class="text-gray-soft" style="font-size: 0.85rem; display: block; margin-top: 6px;">
+            Ingresa los datos físicos actuales del socio.
+          </span>
+        </div>
+
+        <!-- Campo 2: Plan Alimenticio y Recomendaciones -->
+        <div class="form-group mb-30" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px;">
+          <label class="form-label">Plan Alimenticio y Recomendaciones Especiales</label>
+          <textarea
+            name="observaciones"
+            [(ngModel)]="nutricion.observaciones"
+            rows="10"
+            class="form-control-premium textarea-resize"
+            placeholder="Escribe aquí el desglose de macro-nutrientes, plan de comidas, suplementación y sugerencias..."
+            required>
+          </textarea>
+          <span class="text-gray-soft" style="font-size: 0.85rem; display: block; margin-top: 6px;">
+            Este texto lo verá el cliente en tiempo real desde su cartilla digital.
+          </span>
+        </div>
+
+        <!-- Acciones principales del formulario inferior -->
+        <div class="form-actions" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;">
+          <button
+            type="submit"
+            class="btn-promo shadow-btn"
+            style="width: auto; min-width: 250px;">
+            <i class="fa fa-save"></i> Registrar Cartilla Nutricional
+          </button>
+
+          <button
+            type="button"
+            routerLink="/nutricion/dashboard"
+            class="btn-cancel-admin"
+            style="width: auto;">
+            <i class="fa fa-times"></i> Cancelar
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</main>

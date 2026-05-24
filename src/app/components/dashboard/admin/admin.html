@@ -1,0 +1,61 @@
+<main class="admin-wrapper section-light" (click)="cerrarMenu()">
+  <section class="admin-wrapper">
+    <div class="container">
+
+      <div class="admin-header">
+        <span class="badge-tech">
+          Panel Administrativo
+        </span>
+        <h1 class="section-title">
+          Gestión General FortaGym
+        </h1>
+        <p class="section-subtitle">
+          Administra usuarios, promociones, tienda y operaciones internas del sistema.
+        </p>
+      </div>
+
+      <div class="admin-grid">
+
+        <div class="admin-card">
+          <div class="admin-img-wrapper">
+            <img src="assets/img/gestion_user.webp" alt="Gestión de usuarios">
+          </div>
+          <div class="admin-card-body">
+            <h3>Gestión de Usuarios</h3>
+            <p>Administra perfiles, accesos, clientes y entrenadores.</p>
+            <a routerLink="/admin/lista-usuarios" class="btn-admin-action">
+              Administrar
+            </a>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-img-wrapper">
+            <img src="assets/img/gestion_promo.png" alt="Gestión promociones">
+          </div>
+          <div class="admin-card-body">
+            <h3>Gestión de Promociones</h3>
+            <p>Controla campañas, descuentos y promociones activas.</p>
+            <a routerLink="/admin/promociones" class="btn-admin-action">
+              Administrar
+            </a>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80" alt="Gestión de productos">
+          </div>
+          <div class="admin-card-body">
+            <h3>Gestión de Tienda</h3>
+            <p>Administra inventario, suplementos, ropa y accesorios.</p>
+            <a routerLink="/admin/productos" class="btn-admin-action">
+              Administrar Tienda
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>

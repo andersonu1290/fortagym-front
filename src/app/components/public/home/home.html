@@ -1,0 +1,574 @@
+<div class="home-wrapper">
+
+  <section class="hero-section">
+    <div class="hero-bg-wrapper">
+      <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920" alt="Fondo Gimnasio" class="hero-bg-img">
+    </div>
+    <div class="hero-overlay pointer-events-none"></div>
+    <div class="hero-content container">
+      <div class="badge-premium slide-up-1">Calidad Premium Garantizada</div>
+      <h1 class="slide-up-2">Vive la experiencia<br><span class="text-naranja">FortaGym</span></h1>
+      <p class="slide-up-3">No somos solo un gimnasio, somos la comunidad fitness más grande. Equipos biomecánicos modernos, clases inmersivas y zonas de alto rendimiento.</p>
+      <div class="hero-actions slide-up-4">
+        <button class="btn-hero" routerLink="/registro">¡Inscríbete ya!</button>
+        <button class="btn-hero-outline">Ver Instalaciones</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="search-section">
+    <div class="container">
+      <h2>Encuentra tu sede ideal</h2>
+      <p>Contamos con más de 50 sedes equipadas a nivel nacional.</p>
+      <div class="search-box-pill">
+        <input type="text" placeholder="Ingresa tu distrito o ciudad...">
+        <button class="btn-search-pill">Buscar sede</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="plans-section">
+    <div class="container">
+      <h2 class="section-title">ELIGE TU PLAN</h2>
+      <p class="section-subtitle">¡Comienza a entrenar hoy! Sin excusas, elige el plan que se adapte a tu estilo de vida.</p>
+
+      <div class="flex-grid-3">
+        <div class="plan-card black-theme pop-in">
+          <div class="tag-recomendado">RECOMENDADO</div>
+          <div class="plan-header">
+            <h3>Plan Black</h3>
+            <p>El pase VIP absoluto</p>
+          </div>
+          <div class="plan-price">
+            <span class="currency">S/</span> <span class="amount">119,90</span>
+            <p class="fidelidad">12 meses de fidelidad</p>
+          </div>
+          <div class="plan-body">
+            <ul>
+              <li><strong>Entrena en todas las sedes</strong> a nivel nacional e internacional</li>
+              <li>Acceso ilimitado a áreas de musculación y cardio</li>
+              <li>Clases grupales premium ilimitadas</li>
+              <li>FortaGym App con rutinas 3D</li>
+              <li>Sillones de masajes post-entreno</li>
+              <li><strong>5 invitados VIP al mes</strong></li>
+            </ul>
+          </div>
+          <button class="btn-block-bottom" routerLink="/registro">¡Quiero ser Black!</button>
+        </div>
+
+        <div class="plan-card normal-theme pop-in delay-1">
+          <div class="plan-header">
+            <h3>Plan Fit</h3>
+            <p>Resultados constantes</p>
+          </div>
+          <div class="plan-price">
+            <span class="currency">S/</span> <span class="amount">89,90</span>
+            <p class="fidelidad">12 meses de fidelidad</p>
+          </div>
+          <div class="plan-body">
+            <ul>
+              <li>Entrena en tu gimnasio de elección</li>
+              <li>Acceso ilimitado a áreas de musculación y cardio</li>
+              <li>Clases grupales con profesores en vivo</li>
+              <li>FortaGym App con seguimiento</li>
+              <li class="disabled">Sillones de masajes post-entreno</li>
+              <li class="disabled">Invitados VIP al mes</li>
+            </ul>
+          </div>
+          <button class="btn-block-bottom" routerLink="/registro">¡Elegir Plan Fit!</button>
+        </div>
+
+        <div class="plan-card normal-theme pop-in delay-2">
+          <div class="plan-header">
+            <h3>Plan Smart</h3>
+            <p>Libertad total</p>
+          </div>
+          <div class="plan-price">
+            <span class="currency">S/</span> <span class="amount">99,90</span>
+            <p class="fidelidad">Sin fidelidad (Cancela cuando quieras)</p>
+          </div>
+          <div class="plan-body">
+            <ul>
+              <li>Entrena en tu gimnasio de elección</li>
+              <li>Acceso ilimitado a áreas de musculación y cardio</li>
+              <li>Clases grupales con profesores en vivo</li>
+              <li>FortaGym App con seguimiento</li>
+              <li class="disabled">Sillones de masajes post-entreno</li>
+              <li class="disabled">Invitados VIP al mes</li>
+            </ul>
+          </div>
+          <button class="btn-block-bottom" routerLink="/registro">¡Elegir Plan Smart!</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="promotions-section">
+  <div class="container">
+    <h2 class="section-title text-white">
+      Promociones Exclusivas
+    </h2>
+    <p class="section-subtitle text-gray">
+      Aprovecha nuestras mejores ofertas y transforma tu entrenamiento.
+    </p>
+    <div class="promotions-grid">
+      <div
+        class="promotion-card"
+        *ngFor="let promo of promocionesActivas">
+        <img
+          [src]="promo.url
+            ? promo.url
+            : (
+                promo.imagen?.startsWith('http')
+                  ? promo.imagen
+                  : apiUrl + promo.imagen
+              )"
+          [alt]="promo.nombre">
+        <div class="promo-overlay">
+          <div class="promo-content">
+            <span class="promo-badge">
+              OFERTA LIMITADA
+            </span>
+            <h3>{{ promo.titulo || promo.nombre }}</h3>
+            <p>
+              Publicado:
+              {{ promo.fechaSubida | date:'dd/MM/yyyy' }}
+            </p>
+            <button class="btn-promo" (click)="abrirModalPromo(promo)">
+              Ver promoción
+            </button>
+          </div>
+        </div>
+      </div>
+      <p
+        *ngIf="promocionesActivas.length === 0"
+        class="no-promos">
+        Próximamente nuevas promociones...
+      </p>
+    </div>
+  </div>
+  </section>
+
+  <!-- 🔄 TU VENTANA MODAL (Adaptada a tus variables de estilo globales) -->
+  <div class="promo-modal-backdrop" *ngIf="promoModalAbierto" (click)="cerrarModalPromo()" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 20px;">
+
+    <div class="promo-modal-content" (click)="$event.stopPropagation()" style="background: #0d0d0d; color: #fff; max-width: 550px; width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
+
+      <!-- Botón cerrar (X) estilizado -->
+      <button (click)="cerrarModalPromo()" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: none; color: #fff; font-size: 22px; cursor: pointer; font-weight: bold; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">&times;</button>
+
+      <!-- Imagen superior dentro del modal -->
+      <div style="width: 100%; height: 240px; overflow: hidden; position: relative;">
+        <img
+          [src]="promoSeleccionada?.url ? promoSeleccionada.url : (promoSeleccionada?.imagen?.startsWith('http') ? promoSeleccionada.imagen : apiUrl + promoSeleccionada?.imagen)"
+          style="width: 100%; height: 100%; object-fit: cover;">
+        <!-- Sombra inferior interna para fusionar con el fondo oscuro -->
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; background: linear-gradient(to top, #0d0d0d, transparent);"></div>
+      </div>
+
+      <!-- Cuerpo de contenido del modal -->
+      <div style="padding: 30px; padding-top: 15px;">
+        <!-- Badge con tu color primario del CSS -->
+        <span class="promo-badge" style="margin-bottom: 15px;">DETALLES DE LA OFERTA</span>
+
+        <h2 style="margin: 0 0 15px 0; font-size: 1.8rem; font-weight: 900; text-transform: uppercase; color: #fff;">
+          {{ promoSeleccionada?.titulo || promoSeleccionada?.nombre }}
+        </h2>
+
+        <p style="color: #ccc; line-height: 1.6; font-size: 1rem; white-space: pre-line; margin-bottom: 25px; max-height: 160px; overflow-y: auto; padding-right: 5px;">
+          {{ promoSeleccionada?.descripcion || 'Consulta las condiciones de esta promoción en la recepción del gimnasio.' }}
+        </p>
+
+        <!-- Footer del modal -->
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.85rem; color: #aaa;">Publicado: {{ promoSeleccionada?.fechaSubida | date:'dd/MM/yyyy' }}</span>
+          <button class="btn-promo" (click)="cerrarModalPromo()" style="padding: 10px 22px; font-size: 0.85rem;">Entendido</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <section class="experience-section">
+    <div class="container">
+      <h2 class="section-title">Vive la Experiencia FortaGym</h2>
+      <p class="section-subtitle">Diseñamos cada espacio pensando en tu máximo rendimiento y comodidad.</p>
+
+      <div class="flex-grid-3 mt-10">
+        <div class="img-card reveal-card">
+          <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800" alt="Equipos">
+          <div class="caption-layer pointer-events-none">
+            <h3>Equipos de Alta Gama</h3>
+            <p>Máquinas biomecánicas importadas que aseguran el movimiento perfecto para evitar lesiones y maximizar el crecimiento muscular.</p>
+          </div>
+        </div>
+
+        <div class="img-card reveal-card delay-1">
+          <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800" alt="Clases">
+          <div class="caption-layer pointer-events-none">
+            <h3>Zonas de Cardio Activo</h3>
+            <p>Siente la energía en nuestras zonas equipadas con trotadoras, elípticas y escaladoras de última generación con pantallas táctiles.</p>
+          </div>
+        </div>
+
+        <div class="img-card reveal-card delay-2">
+          <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=800" alt="Zona">
+          <div class="caption-layer pointer-events-none">
+            <h3>Peso Libre Extremo</h3>
+            <p>Racks de sentadillas, mancuernas hasta 50kg y plataformas olímpicas para los entrenamientos de fuerza más exigentes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="classes-section">
+    <div class="container">
+      <h2 class="section-title text-white">Clases Grupales Inmersivas</h2>
+      <p class="section-subtitle" style="color: #aaa;">Sal de la rutina y quema calorías al ritmo de los mejores instructores.</p>
+
+      <div class="flex-grid-3 mt-10">
+        <div class="class-card">
+          <div class="class-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=800" alt="Zumba">
+          </div>
+          <div class="class-info">
+            <h3>Zumba Fitness</h3>
+            <div class="tags"><span class="tag-time">45 MIN</span> <span class="tag-fire">ALTA INTENSIDAD</span></div>
+            <p class="desc">Una fiesta de acondicionamiento físico. Fusiona ritmos latinos e internacionales con movimientos fáciles de seguir.</p>
+            <a href="#" class="more-link">Ver horarios ➔</a>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800" alt="Tabata">
+          </div>
+          <div class="class-info">
+            <h3>Smart Tabata HIIT</h3>
+            <div class="tags"><span class="tag-time">30 MIN</span> <span class="tag-fire">EXTREMO</span></div>
+            <p class="desc">Rompe tus límites. Intervalos de esfuerzo máximo y descanso. Acelera tu metabolismo brutalmente.</p>
+            <a href="#" class="more-link">Ver horarios ➔</a>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?q=80&w=800" alt="Bike">
+          </div>
+          <div class="class-info">
+            <h3>Indoor Bike</h3>
+            <div class="tags"><span class="tag-time">60 MIN</span> <span class="tag-fire">CARDIO</span></div>
+            <p class="desc">Pedalea al ritmo de la música en un terreno simulado con colinas y sprints. Fortalece tus piernas.</p>
+            <a href="#" class="more-link">Ver horarios ➔</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="smart-balance-section">
+    <div class="container">
+      <div class="balance-grid">
+        <div class="balance-text">
+          <div class="badge-tech">Tecnología de Precisión</div>
+          <h2>Smart Balance</h2>
+          <h3 class="text-naranja">Mide tu grasa y músculo con bioimpedancia real.</h3>
+          <p>No te guíes solo por la balanza. Nuestro sistema avanzado analiza tu composición corporal completa en menos de 60 segundos.</p>
+          <ul class="balance-features">
+            <li>✓ Porcentaje de Grasa Corporal</li>
+            <li>✓ Índice de Masa Muscular Esquelética</li>
+            <li>✓ Análisis de Agua Corporal Total</li>
+            <li>✓ Sincronización automática con FortaGym App</li>
+          </ul>
+          <button class="btn-balance-action">Solicitar Evaluación</button>
+        </div>
+        <div class="balance-image-container">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800" alt="Evaluación Smart Balance" class="main-img">
+          <div class="tech-overlay-box">
+            <span>Análisis 3D</span>
+            <strong>99% Precisión</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="professionals-section">
+  <div class="container">
+
+    <h2 class="section-title">Elige a tu Profesional</h2>
+    <p class="section-subtitle">
+      Selecciona la especialidad y encuentra al experto perfecto para agendar tu cita.
+    </p>
+
+    <!-- TABS -->
+    <div class="pro-tabs">
+
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'entrenadores'"
+        (click)="activeTab = 'entrenadores'">
+        Entrenadores
+      </button>
+
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'nutricionistas'"
+        (click)="activeTab = 'nutricionistas'">
+        Nutricionistas
+      </button>
+
+    </div>
+
+    <!-- ENTRENADORES -->
+    <div class="flex-grid-3" *ngIf="activeTab === 'entrenadores'">
+
+      <div class="pro-profile-card">
+        <div class="pro-cover"></div>
+
+        <div class="pro-avatar">
+          <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=400" alt="Carlos Mendoza">
+        </div>
+
+        <div class="pro-info">
+          <span class="pro-badge badge-entrenador">Entrenador</span>
+          <h3>Carlos Mendoza</h3>
+          <p>Especialista en Hipertrofia y Fuerza Funcional.</p>
+
+          <button
+            class="btn-agendar"
+            (click)="abrirModal('Carlos Mendoza')">
+            Elegir y ver horarios
+          </button>
+        </div>
+      </div>
+
+      <div class="pro-profile-card">
+        <div class="pro-cover"></div>
+
+        <div class="pro-avatar">
+          <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400" alt="David Silva">
+        </div>
+
+        <div class="pro-info">
+          <span class="pro-badge badge-entrenador">Entrenador</span>
+          <h3>David Silva</h3>
+          <p>Acondicionamiento Físico y Pérdida de Peso Acelerada.</p>
+
+          <button
+            class="btn-agendar"
+            (click)="abrirModal('David Silva')">
+            Elegir y ver horarios
+          </button>
+        </div>
+      </div>
+
+      <div class="pro-profile-card">
+        <div class="pro-cover"></div>
+
+        <div class="pro-avatar">
+          <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=400" alt="Andrés Soto">
+        </div>
+
+        <div class="pro-info">
+          <span class="pro-badge badge-entrenador">Entrenador</span>
+          <h3>Andrés Soto</h3>
+          <p>Rehabilitación Deportiva y Biomecánica.</p>
+
+          <button
+            class="btn-agendar"
+            (click)="abrirModal('Andrés Soto')">
+            Elegir y ver horarios
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- NUTRICIONISTAS -->
+    <div class="flex-grid-3" *ngIf="activeTab === 'nutricionistas'">
+
+      <div class="pro-profile-card">
+        <div class="pro-cover"></div>
+
+        <div class="pro-avatar">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400" alt="María López">
+        </div>
+
+        <div class="pro-info">
+          <span class="pro-badge badge-nutricion">Nutricionista</span>
+          <h3>María López</h3>
+          <p>Nutrición Deportiva y Planes de Definición.</p>
+
+          <button
+            class="btn-agendar"
+            (click)="abrirModal('María López')">
+            Elegir y ver horarios
+          </button>
+        </div>
+      </div>
+
+      <div class="pro-profile-card">
+        <div class="pro-cover"></div>
+
+        <div class="pro-avatar">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400" alt="Lucía Torres">
+        </div>
+
+        <div class="pro-info">
+          <span class="pro-badge badge-nutricion">Nutricionista</span>
+          <h3>Lucía Torres</h3>
+          <p>Alimentación Saludable y Rendimiento Deportivo.</p>
+
+          <button
+            class="btn-agendar"
+            (click)="abrirModal('Lucía Torres')">
+            Elegir y ver horarios
+          </button>
+        </div>
+      </div>
+
+      <div class="pro-profile-card">
+        <div class="pro-cover"></div>
+
+        <div class="pro-avatar">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400" alt="Camila Reyes">
+        </div>
+
+        <div class="pro-info">
+          <span class="pro-badge badge-nutricion">Nutricionista</span>
+          <h3>Camila Reyes</h3>
+          <p>Especialista en Dietas Funcionales y Fitness.</p>
+
+          <button
+            class="btn-agendar"
+            (click)="abrirModal('Camila Reyes')">
+            Elegir y ver horarios
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" [class.active]="modalAbierto">
+
+  <div class="modal-content">
+
+    <button
+      class="modal-close"
+      (click)="cerrarModal()">
+      ✕
+    </button>
+
+    <div class="modal-header">
+      <h3>{{ profesionalSeleccionado }}</h3>
+    </div>
+
+    <div class="modal-body">
+
+      <h4>Horarios disponibles</h4>
+
+      <div class="schedule-grid">
+        <button class="time-slot">08:00 AM</button>
+        <button class="time-slot">09:30 AM</button>
+        <button class="time-slot">11:00 AM</button>
+        <button class="time-slot">02:00 PM</button>
+        <button class="time-slot">04:00 PM</button>
+        <button class="time-slot disabled">06:00 PM</button>
+      </div>
+
+      <button class="btn-confirm-booking">
+        Confirmar Reserva
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+  <section class="products-gym-section">
+    <div class="container">
+      <h2 class="section-title text-white">Equipamiento y Suplementación</h2>
+      <p class="section-subtitle text-light-gray">Lleva el arsenal necesario al salón para maximizar tus levantamientos y recuperación.</p>
+
+      <div class="flex-grid-3">
+        <div class="product-gym-card">
+          <div class="product-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1579758629938-03607ccdbaba?q=80&w=600" alt="Suplemento Proteina">
+          </div>
+          <div class="product-info">
+            <span class="product-tag">Suplementación</span>
+            <h3>Whey Protein Isolate 2KG</h3>
+            <div class="product-footer">
+              <span class="price">S/ 189.90</span>
+              <button class="btn-buy-product">Comprar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-gym-card">
+          <div class="product-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600" alt="Creatina pura">
+          </div>
+          <div class="product-info">
+            <span class="product-tag">Rendimiento</span>
+            <h3>Creatina Micronizada 500G</h3>
+            <div class="product-footer">
+              <span class="price">S/ 99.00</span>
+              <button class="btn-buy-product">Comprar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-gym-card">
+          <div class="product-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1620188467120-5042ed1eb5da?q=80&w=600" alt="Cinturon de cuero">
+          </div>
+          <div class="product-info">
+            <span class="product-tag">Accesorios</span>
+            <h3>Cinturón de Cuero Olímpico</h3>
+            <div class="product-footer">
+              <span class="price">S/ 139.90</span>
+              <button class="btn-buy-product">Comprar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view-more-container">
+        <a routerLink="/productos" class="link-view-all">Ver todos los productos ➔</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="modalProfesional">
+    <div class="modal-content">
+      <button class="modal-close">✕</button>
+      <div class="modal-header">
+        <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=200" alt="Prof" class="modal-avatar">
+        <div>
+          <h3>Carlos Mendoza</h3>
+          <span class="badge-entrenador">Entrenador</span>
+        </div>
+      </div>
+      <div class="modal-body">
+        <h4>Selecciona una fecha y hora:</h4>
+        <div class="schedule-grid">
+          <button class="time-slot">Lunes 09:00 AM</button>
+          <button class="time-slot disabled">Lunes 11:00 AM</button>
+          <button class="time-slot">Martes 15:00 PM</button>
+          <button class="time-slot">Jueves 18:00 PM</button>
+        </div>
+        <button class="btn-confirm-booking">Confirmar Reserva</button>
+      </div>
+    </div>
+  </div>
+
+</div>

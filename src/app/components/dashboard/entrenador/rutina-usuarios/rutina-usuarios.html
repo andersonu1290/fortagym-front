@@ -1,0 +1,131 @@
+<main class="section-admin">
+  <div class="container gestion-usuarios-container">
+
+    <!-- HERO BANNER PREMIUM -->
+    <div class="hero-banner mb-50">
+      <div class="hero-stripe"></div>
+
+      <div class="hero-text">
+        <a routerLink="/entrenador/dashboard" class="link-view-all text-light">
+          <i class="fa fa-arrow-left"></i> Dashboard
+        </a>
+        <h1 class="hero-title mt-20">
+          Gestión de <span class="accent">Rutinas</span>
+        </h1>
+        <p class="hero-sub">Planifica, asigna y actualiza los planes de entrenamiento físico</p>
+      </div>
+
+      <!-- CONTADORES DE ESTADO PREMIUM CORREGIDOS -->
+      <div class="hero-stats">
+
+        <!-- Tarjeta de Asignados Reales -->
+        <div class="stat-chip">
+          <div class="stat-num">{{ totalAsignados }}</div>
+          <div class="stat-lbl">Asignados</div>
+        </div>
+
+        <!-- Tarjeta de Pendientes (No Asignados) -->
+        <div class="stat-chip">
+          <div class="stat-num" style="color: #ef4444;">{{ totalNoAsignados }}</div>
+          <div class="stat-lbl">No Asignados</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TABLA PREMIUM UNIFICADA -->
+    <div class="table-wrapper-premium slide-up-1">
+      <div class="table-responsive">
+        <table class="table-premium-admin">
+
+          <thead>
+            <tr>
+              <th>Usuario (Cliente)</th>
+              <th>DNI / Identificación</th>
+              <th>Contacto (Correo)</th>
+              <th>Estado de Rutina</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- Estado vacío por si no se cargan datos -->
+            <tr *ngIf="usuarios.length === 0">
+              <td colspan="5" class="empty-state">
+                <i class="fa fa-search"></i>
+                <p>No se encontraron clientes asignados en este momento</p>
+              </td>
+            </tr>
+
+            <!-- Iterador de clientes -->
+            <tr *ngFor="let u of usuarios">
+
+              <!-- Celda con Avatar Inteligente e Iniciales -->
+              <td>
+                <div class="user-cell">
+                  <div class="avatar" [ngClass]="avatarClass(u)" style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+
+                    <!-- Imagen desde la API -->
+                    <img
+                      [src]="apiUrl + '/api/usuarios/foto/' + u.id"
+                      [alt]="u.nombre"
+                      (error)="onAvatarError($event)"
+                      style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2;"
+                    />
+
+                    <!-- Letras de respaldo ocultas bajo la foto -->
+                    <span style="position: relative; z-index: 1;">{{ iniciales(u) }}</span>
+                  </div>
+                  <div>
+                    <div class="user-name">{{ u.nombre }} {{ u.apellido }}</div>
+                    <div class="user-email-sm">{{ u.email }}</div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- DNI con soporte multivariable para evitar el N/A si el backend cambia la propiedad -->
+              <td class="fw-bold">{{ u.dni || u.dniUsuario || u.documento || 'N/A' }}</td>
+
+              <td class="text-gray-soft hide-mobile">{{ u.email }}</td>
+
+              <!-- Badges de Estado adaptados al SCSS -->
+              <td>
+                <span class="badge-status" [ngClass]="u.tieneRutina ? 'status-entrenador' : 'status-admin'">
+                  <i class="fa" [ngClass]="u.tieneRutina ? 'fa-check-circle' : 'fa-clock-o'"></i>
+                  {{ u.tieneRutina ? 'Asignada' : 'Pendiente' }}
+                </span>
+              </td>
+
+              <!-- Botones de Acción con Tipografía Premium -->
+              <td>
+                <div class="action-wrap" style="justify-content: center;">
+                  <button (click)="irAFormulario(u.id)"
+                          class="btn-icon-action"
+                          [ngClass]="u.tieneRutina ? 'edit' : 'danger'"
+                          [title]="u.tieneRutina ? 'Ver/Editar Plan' : 'Crear nueva rutina'">
+
+                    <i class="fa" [ngClass]="u.tieneRutina ? 'fa-edit' : 'fa-plus'"></i>
+                    <span class="btn-text" style="margin-left: 8px;">
+                      {{ u.tieneRutina ? 'Ver/Editar Rutina' : 'Asignar Rutina' }}
+                    </span>
+                  </button>
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+      <!-- Footer Informativo -->
+      <div class="table-footer">
+        <span>
+          Total de clientes en el sistema: <strong>{{ usuarios.length }}</strong>
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+</main>

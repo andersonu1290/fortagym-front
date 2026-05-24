@@ -1,0 +1,201 @@
+<main class="section-admin">
+  <div class="container">
+
+    <div class="hero-banner mb-50">
+      <div class="hero-stripe"></div>
+
+      <div class="hero-text">
+        <a routerLink="/admin/dashboard" class="link-view-all text-light">
+          <i class="fa fa-arrow-left"></i> Dashboard
+        </a>
+        <h1 class="hero-title mt-20">
+          Gestión de <span class="accent">Promociones</span>
+        </h1>
+        <p class="hero-sub">Crea, edita y publica ofertas para tus miembros</p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-chip">
+          <div class="stat-num">{{ listaPromociones.length }}</div>
+          <div class="stat-lbl">Activas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card-premium slide-up-1 form-wrapper">
+
+      <div class="form-header">
+        <div class="form-header-left">
+          <span class="form-badge" [ngClass]="enModoEdicion ? 'badge-edit' : 'badge-new'">
+            <i class="fa" [ngClass]="enModoEdicion ? 'fa-edit' : 'fa-plus'"></i>
+            {{ enModoEdicion ? 'Modo edición' : 'Nueva promoción' }}
+          </span>
+          <h2 class="form-title">
+            {{ enModoEdicion ? 'Modificar Promoción' : 'Añadir Nueva Promoción' }}
+          </h2>
+        </div>
+
+        <div class="img-preview-wrap" *ngIf="enModoEdicion && previewUrl">
+          <span class="preview-lbl">Imagen actual</span>
+          <img [src]="previewUrl" alt="Preview" class="img-preview" />
+        </div>
+      </div>
+
+      <form (ngSubmit)="subir()" class="forta-form">
+
+        <div class="flex-grid-2 mb-20">
+          <div class="form-group">
+            <label class="form-label">Nombre Interno / Identificador</label>
+            <input
+              type="text"
+              [(ngModel)]="nuevoNombre"
+              name="nombre"
+              class="form-control-premium"
+              placeholder="Ej: Promo Halloween Octubre"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Título Visible en Modal</label>
+            <input
+              type="text"
+              [(ngModel)]="nuevoTitulo"
+              name="titulo"
+              class="form-control-premium"
+              placeholder="Ej: PROMOCIÓN HALLOWEEN 50%"
+            />
+          </div>
+        </div>
+
+        <div class="form-group mb-30">
+          <label class="form-label">Descripción Detallada</label>
+          <textarea
+            [(ngModel)]="nuevaDescripcion"
+            name="descripcion"
+            rows="3"
+            class="form-control-premium textarea-resize"
+            placeholder="Escribe los detalles y condiciones de la promoción..."
+          ></textarea>
+        </div>
+
+        <div class="form-group radio-panel mb-30">
+          <label class="form-label">Origen de la Imagen</label>
+          <div class="radio-options">
+            <label class="radio-premium">
+              <input type="radio" name="modo" value="archivo" [(ngModel)]="modoSubida" />
+              <span class="radio-custom"></span>
+              {{ enModoEdicion ? 'Reemplazar por Archivo Local' : 'Subir Archivo Local' }}
+            </label>
+            <label class="radio-premium">
+              <input type="radio" name="modo" value="url" [(ngModel)]="modoSubida" />
+              <span class="radio-custom"></span>
+              Pegar URL de Internet
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group mb-30 slide-in" *ngIf="modoSubida === 'archivo'">
+          <label class="form-label">
+            Seleccionar Imagen
+            <span *ngIf="enModoEdicion" class="text-gray-soft"
+              style="font-weight:500; text-transform:none;">
+              (Opcional — dejar vacío conserva la imagen actual)
+            </span>
+          </label>
+          <div class="file-drop-area" [class.has-file]="archivoSeleccionado">
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              class="file-input"
+            />
+            <div class="file-msg">
+              <i class="fa" [ngClass]="archivoSeleccionado ? 'fa-check-circle' : 'fa-cloud-upload'"></i>
+              <span>{{ archivoSeleccionado ? archivoSeleccionado.name : 'Haz clic o arrastra tu imagen aquí' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mb-30 slide-in" *ngIf="modoSubida === 'url'">
+          <label class="form-label">URL de la Imagen</label>
+          <input
+            type="text"
+            [(ngModel)]="nuevaUrl"
+            name="url"
+            class="form-control-premium"
+            placeholder="https://ejemplo.com/foto.jpg"
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-promo shadow-btn">
+            <i class="fa" [ngClass]="enModoEdicion ? 'fa-save' : 'fa-upload'"></i>
+            {{ enModoEdicion ? 'Guardar Cambios' : 'Publicar Promoción' }}
+          </button>
+          <button
+            type="button"
+            *ngIf="enModoEdicion"
+            (click)="cancelarEdicion()"
+            class="btn-cancel-admin">
+            <i class="fa fa-times"></i> Cancelar
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <section class="slide-up-2 mt-50">
+
+      <div class="section-header-row mb-30">
+        <h3 class="section-list-title">
+          Promociones Registradas
+          <span class="count-badge">{{ listaPromociones.length }}</span>
+        </h3>
+        <p class="section-list-sub">Gestiona las ofertas visibles para los miembros</p>
+      </div>
+
+      <div class="empty-promo" *ngIf="listaPromociones.length === 0">
+        <i class="fa fa-tag"></i>
+        <p>Aún no hay promociones registradas. ¡Crea la primera!</p>
+      </div>
+
+      <div class="promo-admin-grid">
+        <div class="admin-promo-card" *ngFor="let p of listaPromociones">
+
+          <div class="img-wrapper">
+            <img
+              [src]="p.imagen.startsWith('http') ? p.imagen : (apiUrl + p.imagen)"
+              [alt]="p.nombre"
+            />
+            <span class="badge-overlay">Activa</span>
+          </div>
+
+          <div class="info-wrapper">
+            <h4 class="promo-title">{{ p.titulo || p.nombre }}</h4>
+            <p class="promo-id">ID: <span>{{ p.nombre }}</span></p>
+            <p class="promo-desc" *ngIf="p.descripcion">{{ p.descripcion }}</p>
+
+            <div class="actions-row">
+              <button
+                (click)="seleccionarParaEditar(p)"
+                class="btn-icon-action edit"
+                title="Editar promoción">
+                <i class="fa fa-pencil"></i>
+                <span class="btn-text">Editar</span>
+              </button>
+              <button
+                (click)="borrar(p.id)"
+                class="btn-icon-action danger"
+                title="Eliminar promoción">
+                <i class="fa fa-trash"></i>
+                <span class="btn-text">Borrar</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+</main>

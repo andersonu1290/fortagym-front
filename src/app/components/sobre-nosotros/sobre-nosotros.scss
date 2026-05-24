@@ -1,0 +1,241 @@
+/* =========================================
+   SOBRE NOSOTROS
+   SOLO LAYOUT EXCLUSIVO
+========================================= */
+
+.sobre-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+  background: #ffffff;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero-sobre-nosotros {
+  height: 520px;
+
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.78),
+      rgba(0,0,0,0.65)
+    ),
+    url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1920');
+
+  background-size: cover;
+  background-position: center;
+
+  text-align: center;
+
+  padding: 0 20px;
+}
+
+.hero-contenido-centrado {
+  max-width: 900px;
+
+  animation: slideUpFade 1s ease forwards;
+}
+
+.titulo-hero-sobre {
+  font-size: 4.5rem;
+  font-weight: 900;
+
+  line-height: 1.1;
+
+  text-transform: uppercase;
+
+  color: #ffffff;
+
+  margin-bottom: 25px;
+}
+
+.highlight {
+  color: var(--color-forta-primary);
+}
+
+.subtitulo-hero {
+  font-size: 1.15rem;
+
+  line-height: 1.8;
+
+  color: #dddddd;
+
+  max-width: 760px;
+
+  margin: 0 auto;
+}
+
+/* =========================================
+   SECCIONES
+========================================= */
+
+.seccion-mision-vision {
+  padding: 100px 20px;
+}
+
+.seccion-valores {
+  padding: 110px 20px;
+}
+
+/* =========================================
+   GRIDS EXCLUSIVOS
+========================================= */
+
+.mision-vision-grid {
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 40px;
+}
+
+.valores-grid-manual {
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 35px;
+}
+
+/* =========================================
+   CONTENIDO INTERNO
+========================================= */
+
+.padding-interno-card {
+  padding: 50px 40px;
+}
+
+.icono-manual-center {
+  width: 90px;
+  height: 90px;
+
+  margin: 0 auto 30px;
+
+  border-radius: 50%;
+
+  background: rgba(255,141,34,0.12);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-forta-primary);
+
+  box-shadow:
+    0 10px 30px rgba(255,141,34,0.15);
+}
+
+.titulo-tarjeta-clara {
+  text-align: center;
+
+  font-size: 2rem;
+  font-weight: 900;
+
+  color: #111111;
+
+  margin-bottom: 20px;
+
+  text-transform: uppercase;
+}
+
+.texto-tarjeta {
+  text-align: center;
+
+  color: #666666;
+
+  line-height: 1.8;
+
+  font-size: 1rem;
+}
+
+.titulo-premium-blanco {
+  text-align: center;
+
+  font-size: 3rem;
+  font-weight: 900;
+
+  color: #ffffff;
+
+  text-transform: uppercase;
+
+  margin-bottom: 70px;
+}
+
+.card-valor {
+  padding: 45px 35px;
+}
+
+.titulo-valor {
+  font-size: 1.7rem;
+  font-weight: 900;
+
+  color: var(--color-forta-primary);
+
+  margin-bottom: 18px;
+
+  text-transform: uppercase;
+}
+
+.texto-valor {
+  color: #cccccc;
+
+  line-height: 1.8;
+
+  font-size: 1rem;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 992px) {
+
+  .mision-vision-grid,
+  .valores-grid-manual {
+    grid-template-columns: 1fr;
+  }
+
+  .titulo-hero-sobre {
+    font-size: 3.3rem;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .hero-sobre-nosotros {
+    height: 430px;
+  }
+
+  .titulo-hero-sobre {
+    font-size: 2.5rem;
+  }
+
+  .subtitulo-hero {
+    font-size: 1rem;
+  }
+
+  .seccion-mision-vision,
+  .seccion-valores {
+    padding: 70px 20px;
+  }
+
+  .padding-interno-card,
+  .card-valor {
+    padding: 35px 25px;
+  }
+
+  .titulo-premium-blanco {
+    font-size: 2.2rem;
+  }
+
+}

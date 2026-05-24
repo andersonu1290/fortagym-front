@@ -1,0 +1,173 @@
+/* =========================================
+   ADMIN DASHBOARD
+========================================= */
+
+:host {
+  display: block;
+  width: 100%;
+  background: #f5f7fa;
+}
+
+/* =========================================
+   WRAPPER
+========================================= */
+
+.admin-wrapper {
+  padding: 25px 0 40px;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+/* =========================================
+   GRID
+========================================= */
+
+.admin-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(340px, 1fr));
+
+  gap: 35px;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.admin-card {
+  background: #fff;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  border: 1px solid #eeeeee;
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.06);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+
+  &:hover {
+    transform: translateY(-10px);
+
+    border-color: var(--color-forta-primary);
+
+    box-shadow:
+      0 20px 45px rgba(255,141,34,0.12);
+
+    .admin-img-wrapper img {
+      transform: scale(1.06);
+    }
+  }
+}
+
+/* =========================================
+   IMAGEN
+========================================= */
+
+.admin-img-wrapper {
+  height: 240px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.5s ease;
+  }
+}
+
+/* =========================================
+   BODY
+========================================= */
+
+.admin-card-body {
+  padding: 30px;
+
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 900;
+
+    color: #111;
+
+    margin-bottom: 15px;
+
+    text-transform: uppercase;
+  }
+
+  p {
+    color: #666;
+
+    line-height: 1.7;
+
+    margin-bottom: 30px;
+  }
+}
+
+/* =========================================
+   BOTÓN
+========================================= */
+
+.btn-admin-action {
+  display: inline-block;
+
+  background: var(--color-forta-primary);
+
+  color: #fff;
+
+  padding: 14px 28px;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  font-weight: 900;
+
+  text-transform: uppercase;
+
+  transition: 0.3s ease;
+
+  &:hover {
+    background: #111;
+
+    transform: translateY(-2px);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+  .admin-wrapper {
+    padding: 20px 0 60px;
+  }
+
+  .admin-header {
+    margin-bottom: 40px;
+  }
+
+  .admin-card-body {
+    padding: 25px;
+  }
+
+  .admin-card-body h3 {
+    font-size: 1.3rem;
+  }
+
+}

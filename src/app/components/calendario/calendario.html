@@ -1,0 +1,99 @@
+<main class="calendario-wrapper section-light" (click)="menuAbierto = false">
+
+  <section>
+
+    <div class="container">
+
+      <!-- HEADER -->
+      <div class="header-cal text-center">
+
+        <h1 class="section-title">
+          Calendario de Actividades
+        </h1>
+
+        <p class="section-subtitle">
+          Visualiza tus entrenamientos y citas programadas.
+        </p>
+
+      </div>
+
+      <!-- CARD PRINCIPAL -->
+      <div class="card-premium-clara calendario-card">
+
+        <!-- CONTROLES -->
+        <div class="controles-mes">
+
+          <button
+            class="btn-outline btn-mes"
+            (click)="cambiarMes(-1)">
+
+            ❮ Anterior
+
+          </button>
+
+          <h2 class="titulo-mes">
+            {{ mesActual | date:'MMMM yyyy' | uppercase }}
+          </h2>
+
+          <button
+            class="btn-outline btn-mes"
+            (click)="cambiarMes(1)">
+
+            Siguiente ❯
+
+          </button>
+
+        </div>
+
+        <!-- GRID -->
+        <div class="grid-calendario">
+
+          <!-- HEADERS -->
+          <div
+            class="dia-header"
+            *ngFor="let d of diasSemana">
+
+            {{ d }}
+
+          </div>
+
+          <!-- DÍAS -->
+          <div
+            class="dia"
+            *ngFor="let dia of diasDelMes"
+            [class.vacio]="dia.vacio">
+
+            <span
+              class="num"
+              *ngIf="!dia.vacio">
+
+              {{ dia.numero }}
+
+            </span>
+
+            <!-- EVENTOS -->
+            <ng-container
+              *ngIf="!dia.vacio && dia.eventos.length > 0">
+
+              <div
+                class="evento"
+                [ngClass]="evento.tipo"
+                *ngFor="let evento of dia.eventos">
+
+                {{ evento.titulo }}
+
+              </div>
+
+            </ng-container>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>

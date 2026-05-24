@@ -1,0 +1,112 @@
+<main class="section-admin" (click)="cerrarMenu()">
+  <div class="container gestion-container">
+
+    <div class="hero-banner mb-30">
+      <div class="hero-stripe"></div>
+
+      <div class="hero-text">
+        <h1 class="hero-title mt-20">
+          Panel de <span class="accent">Nutrición</span>
+        </h1>
+        <p class="hero-sub">Gestión clínica, evaluaciones y cartillas nutricionales de socios.</p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-chip">
+          <div class="stat-num">{{ usuarios.length }}</div>
+          <div class="stat-lbl">Pacientes Totales</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-num" style="color: #ef4444;">
+            {{ (usuarios | filterPendientes).length }}
+          </div>
+          <div class="stat-lbl">Pendientes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrapper-premium slide-up-1">
+      <div class="table-responsive">
+        <table class="table-premium-admin">
+
+          <thead>
+            <tr>
+              <th>Paciente (Socio)</th>
+              <th>Contacto (Email)</th>
+              <th>Estado Clínico</th>
+              <th class="text-center">Expediente</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngIf="usuarios.length === 0">
+              <td colspan="4" class="empty-state">
+                <i class="fa fa-folder-open"></i>
+                <p>No hay pacientes registrados en el sistema.</p>
+              </td>
+            </tr>
+
+            <tr *ngFor="let u of usuarios">
+
+              <td>
+                <div class="user-cell">
+                  <!-- Contenedor del Avatar Inteligente -->
+                  <div class="avatar" [ngClass]="avatarClass(u)" style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+
+                    <!-- 🖼️ Intenta cargar la imagen real de la API -->
+                    <img [src]="apiUrl + '/api/usuarios/foto/' + u.id"
+                         (error)="$any($event.target).style.display = 'none'"
+                         alt="Foto"
+                         style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2;">
+
+                    <!-- 🔤 Si la imagen falla o no existe (404), este texto queda visible por debajo -->
+                    <span style="position: relative; z-index: 1;">{{ iniciales(u) }}</span>
+
+                  </div>
+                  <div>
+                    <div class="user-name">{{ u.nombre }}</div>
+                    <div class="user-email-sm">{{ u.email }}</div>
+                  </div>
+                </div>
+              </td>
+
+              <td class="text-gray-soft hide-mobile">{{ u.email }}</td>
+
+              <td>
+                <span class="badge-status"
+                      [ngClass]="u.tieneNutricion ? 'status-entrenador' : 'status-admin'">
+                  <i class="fa" [ngClass]="u.tieneNutricion ? 'fa-check-circle' : 'fa-clock-o'"></i>
+                  {{ u.tieneNutricion ? 'Evaluado' : 'Pendiente' }}
+                </span>
+              </td>
+
+              <td>
+                <div class="flex-center">
+                  <button (click)="evaluar(u.id)"
+                          class="btn-icon-action"
+                          [ngClass]="u.tieneNutricion ? 'edit' : 'danger'"
+                          [title]="u.tieneNutricion ? 'Editar expediente' : 'Realizar evaluación inicial'">
+
+                    <i class="fa" [ngClass]="u.tieneNutricion ? 'fa-folder-open' : 'fa-stethoscope'"></i>
+                    <span class="btn-text" style="margin-left: 8px;">
+                      {{ u.tieneNutricion ? 'Abrir Cartilla' : 'Evaluar Ahora' }}
+                    </span>
+
+                  </button>
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+      <div class="table-footer">
+        <span>Total de expedientes clínicos: <strong>{{ usuarios.length }}</strong></span>
+      </div>
+
+    </div>
+
+  </div>
+</main>

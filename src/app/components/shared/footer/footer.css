@@ -1,0 +1,38 @@
+@charset "UTF-8";
+.footer-clasico {
+  background-color: #0a0a0a;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 1rem 4rem;
+  width: 100%;
+  margin-top: auto; /* Empuja el footer siempre al fondo de la pantalla */
+}
+.footer-clasico .footer-contenido {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: #555555;
+  font-family: var(--font-body, "Poppins", sans-serif);
+}
+.footer-clasico p {
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+.footer-clasico .brand {
+  color: var(--color-forta-primary, #d4a017);
+  font-weight: 600;
+}
+
+/* Adaptación fluida para celulares */
+@media (max-width: 768px) {
+  .footer-clasico {
+    padding: 1rem;
+  }
+  .footer-clasico .footer-contenido {
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: center;
+  }
+}/*# sourceMappingURL=footer.css.map */

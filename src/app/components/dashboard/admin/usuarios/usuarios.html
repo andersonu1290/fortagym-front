@@ -1,0 +1,194 @@
+<main class="section-admin">
+  <div class="container gestion-usuarios-container">
+
+    <div class="hero-banner mb-50">
+      <div class="hero-stripe"></div>
+
+      <div class="hero-text">
+        <a routerLink="/admin/dashboard" class="link-view-all text-light">
+          <i class="fa fa-arrow-left"></i> Dashboard
+        </a>
+        <h1 class="hero-title mt-20">
+          Gestión de <span class="accent">Usuarios</span>
+        </h1>
+        <p class="hero-sub">Administra roles y accesos de todos los miembros</p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-chip">
+          <div class="stat-num">{{ listaUsuarios.length }}</div>
+          <div class="stat-lbl">Total</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-num">{{ contarPorRol('entrenador') }}</div>
+          <div class="stat-lbl">Entrenadores</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-num">{{ contarPorRol('nutricionista') }}</div>
+          <div class="stat-lbl">Nutricionistas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-row mb-30">
+      <div class="metric-card slide-up-1">
+        <div class="metric-icon icon-orange">
+          <i class="fa fa-users"></i>
+        </div>
+        <div>
+          <div class="metric-val">{{ contarPorRol('usuario') }}</div>
+          <div class="metric-lbl">Clientes</div>
+        </div>
+      </div>
+      <div class="metric-card slide-up-2">
+        <div class="metric-icon icon-dark">
+          <i class="fa fa-dumbbell"></i>
+        </div>
+        <div>
+          <div class="metric-val">{{ contarPorRol('entrenador') }}</div>
+          <div class="metric-lbl">Entrenadores</div>
+        </div>
+      </div>
+      <div class="metric-card slide-up-3">
+        <div class="metric-icon icon-green">
+          <i class="fa fa-apple-alt"></i>
+        </div>
+        <div>
+          <div class="metric-val">{{ contarPorRol('nutricionista') }}</div>
+          <div class="metric-lbl">Nutricionistas</div>
+        </div>
+      </div>
+      <div class="metric-card slide-up-4">
+        <div class="metric-icon icon-red">
+          <i class="fa fa-shield-alt"></i>
+        </div>
+        <div>
+          <div class="metric-val">{{ contarPorRol('admin') }}</div>
+          <div class="metric-lbl">Admins</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row mb-30">
+
+      <div class="search-wrap">
+        <i class="fa fa-search"></i>
+        <input
+          type="text"
+          placeholder="Buscar por nombre, DNI o correo..."
+          [(ngModel)]="busqueda"
+        />
+      </div>
+
+      <div class="filter-pills">
+        <button class="pill-btn" [class.active]="filtroActivo === 'todos'"
+          (click)="setFiltro('todos')">Todos</button>
+        <button class="pill-btn" [class.active]="filtroActivo === 'usuario'"
+          (click)="setFiltro('usuario')">Clientes</button>
+        <button class="pill-btn" [class.active]="filtroActivo === 'entrenador'"
+          (click)="setFiltro('entrenador')">Entrenadores</button>
+        <button class="pill-btn" [class.active]="filtroActivo === 'nutricionista'"
+          (click)="setFiltro('nutricionista')">Nutricionistas</button>
+        <button class="pill-btn" [class.active]="filtroActivo === 'admin'"
+          (click)="setFiltro('admin')">Admins</button>
+      </div>
+
+    </div>
+
+    <div class="table-wrapper-premium slide-up-1">
+      <div class="table-responsive">
+        <table class="table-premium-admin">
+
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>DNI</th>
+              <th>Correo</th>
+              <th>Rol Actual</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngIf="usuariosFiltrados().length === 0">
+              <td colspan="5" class="empty-state">
+                <i class="fa fa-search"></i>
+                <p>No se encontraron usuarios</p>
+              </td>
+            </tr>
+
+            <tr *ngFor="let u of usuariosFiltrados()">
+
+              <td>
+                <div class="user-cell">
+                  <!-- 🚀 Contenedor de Avatar Inteligente Unificado -->
+                  <div class="avatar" [ngClass]="avatarClass(u)" style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+
+                    <!-- 🖼️ Intenta conectar al endpoint de bytes de tu API usando el ID de cada usuario -->
+                    <img
+                      [src]="apiUrl + '/api/usuarios/foto/' + u.id"
+                      [alt]="u.nombre"
+                      (error)="onAvatarError($event)"
+                      style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2;"
+                    />
+
+                    <!-- 🔤 Texto de respaldo dinámico (Queda detrás por capas de z-index) -->
+                    <span style="position: relative; z-index: 1;">{{ iniciales(u) }}</span>
+                  </div>
+                  <div>
+                    <div class="user-name">{{ u.nombre }} {{ u.apellido }}</div>
+                    <div class="user-email-sm">{{ u.email }}</div>
+                  </div>
+                </div>
+              </td>
+
+              <td class="fw-bold">{{ u.dni }}</td>
+
+              <td class="text-gray-soft hide-mobile">{{ u.email }}</td>
+
+              <td>
+                <span class="badge-status" [ngClass]="'status-' + u.rol.toLowerCase()">
+                  <i class="fa" [ngClass]="badgeIcon(u.rol)"></i>
+                  {{ rolLabel(u.rol) }}
+                </span>
+              </td>
+
+              <td>
+                <div class="action-wrap">
+                  <select
+                    class="select-premium"
+                    (change)="cambiarRol(u.id, $any($event.target).value)">
+                    <option value="" disabled selected>Cambiar a...</option>
+                    <option value="usuario">Cliente</option>
+                    <option value="entrenador">Entrenador</option>
+                    <option value="nutricionista">Nutricionista</option>
+                    <option value="admin">Admin</option>
+                  </select>
+
+                  <button
+                    class="btn-icon-action danger icon-only"
+                    title="Eliminar usuario"
+                    (click)="borrarUsuario(u.id)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+      <div class="table-footer">
+        <span>
+          Mostrando <strong>{{ usuariosFiltrados().length }}</strong>
+          de <strong>{{ listaUsuarios.length }}</strong> usuarios
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+</main>

@@ -1,0 +1,143 @@
+<div class="page">
+
+  <div class="hero-banner">
+    <div class="hero-stripe"></div>
+    <div class="hero-text">
+      <a class="back-link" routerLink="/admin/dashboard"><i class="ti ti-arrow-left"></i> Dashboard</a>
+      <div class="hero-title">Gestión de <span>Productos</span></div>
+      <div class="hero-sub">Administra el inventario y productos de la tienda Fortagym</div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-chip"><div class="num">{{ metricas.total }}</div><div class="lbl">Total</div></div>
+      <div class="stat-chip"><div class="num">{{ metricas.agotados }}</div><div class="lbl">Sin stock</div></div>
+      <div class="stat-chip"><div class="num">S/. {{ metricas.valor | number:'1.2-2' }}</div><div class="lbl">Valor</div></div>
+    </div>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-icon mi-orange"><i class="ti ti-package"></i></div>
+      <div><div class="metric-val">{{ metricas.total }}</div><div class="metric-lbl">Productos</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon mi-dark"><i class="ti ti-tag"></i></div>
+      <div><div class="metric-val">{{ metricas.categorias }}</div><div class="metric-lbl">Categorías</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon mi-green"><i class="ti ti-checks"></i></div>
+      <div><div class="metric-val">{{ metricas.enStock }}</div><div class="metric-lbl">En stock</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon mi-red"><i class="ti ti-alert-circle"></i></div>
+      <div><div class="metric-val">{{ metricas.agotados }}</div><div class="metric-lbl">Agotados</div></div>
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" placeholder="Buscar productos..." [(ngModel)]="textoBusqueda" (input)="aplicarFiltros()">
+    </div>
+    <div class="filter-pills">
+      <button class="pill-btn" [class.active]="filtroCategoria === 'Todos'" (click)="seleccionarCategoria('Todos')">Todos</button>
+      <button class="pill-btn" [class.active]="filtroCategoria === 'SUPLEMENTOS'" (click)="seleccionarCategoria('SUPLEMENTOS')">Suplementos</button>
+      <button class="pill-btn" [class.active]="filtroCategoria === 'ROPA'" (click)="seleccionarCategoria('ROPA')">Ropa</button>
+      <button class="pill-btn" [class.active]="filtroCategoria === 'EQUIPOS'" (click)="seleccionarCategoria('EQUIPOS')">Equipos</button>
+      <button class="pill-btn" [class.active]="filtroCategoria === 'ACCESORIOS'" (click)="seleccionarCategoria('ACCESORIOS')">Accesorios</button>
+    </div>
+    <button class="add-btn" (click)="limpiarFormulario()"><i class="ti ti-plus"></i> Nuevo producto</button>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card" *ngFor="let p of productosFiltrados">
+      <div class="product-img">
+        <img [src]="p.img || 'https://via.placeholder.com/400x300?text=Sin+Imagen'" [alt]="p.nombre">
+        <span class="img-badge" [class.agotado]="p.stock === 0">
+          {{ p.stock === 0 ? 'Agotado' : 'Disponible' }}
+        </span>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">{{ p.categoria }}</div>
+        <div class="product-name">{{ p.nombre }}</div>
+        <div class="product-desc">{{ p.descripcion }}</div>
+        <div class="product-footer">
+          <div class="product-price">S/. {{ p.precio | number:'1.2-2' }}</div>
+          <div class="product-stock">
+            <span class="stock-dot" [ngClass]="{'dot-out': p.stock === 0, 'dot-low': p.stock > 0 && p.stock <= 5, 'dot-ok': p.stock > 5}"></span>
+            {{ p.stock === 0 ? 'Sin stock' : p.stock + ' en stock' }}
+          </div>
+        </div>
+        <div class="product-actions">
+          <button class="btn-edit" (click)="editarProducto(p)"><i class="ti ti-pencil"></i> Editar</button>
+          <button class="btn-del" (click)="eliminarProducto(p.id)"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-section-title">
+      <i class="ti ti-plus-circle"></i>
+      {{ productoActual.id ? 'Editar Producto' : 'Añadir Nuevo Producto' }}
+      <span>{{ productoActual.id ? 'Edición' : 'Nueva' }}</span>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nombre del producto</label>
+        <input type="text" [(ngModel)]="productoActual.nombre" placeholder="Ej: Creatina Monohidrato 500g">
+      </div>
+      <div class="form-group">
+        <label>Categoría</label>
+        <select [(ngModel)]="productoActual.categoria">
+          <option value="SUPLEMENTOS">Suplementos</option>
+          <option value="ROPA">Ropa</option>
+          <option value="EQUIPOS">Equipos</option>
+          <option value="ACCESORIOS">Accesorios</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Precio (S/.)</label>
+        <input type="number" [(ngModel)]="productoActual.precio" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label>Stock disponible</label>
+        <input type="number" [(ngModel)]="productoActual.stock" placeholder="0">
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:16px">
+      <label>Descripción</label>
+      <textarea [(ngModel)]="productoActual.descripcion" placeholder="Describe el producto..."></textarea>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 20px;">
+      <label>Origen de la Imagen</label>
+      <div style="display: flex; gap: 20px; margin-top: 5px; margin-bottom: 10px;">
+        <label style="cursor:pointer; font-size: 13px;">
+          <input type="radio" value="archivo" [(ngModel)]="modoSubida" name="modo"> Subir archivo local
+        </label>
+        <label style="cursor:pointer; font-size: 13px;">
+          <input type="radio" value="url" [(ngModel)]="modoSubida" name="modo"> Pegar URL
+        </label>
+      </div>
+
+      <div *ngIf="modoSubida === 'archivo'">
+        <input type="file" (change)="onFileSelected($event)" style="padding: 10px; background: #f9f9f9; border-radius: 9px; width: 100%;">
+      </div>
+
+      <div *ngIf="modoSubida === 'url'">
+        <input type="text" [(ngModel)]="productoActual.img" placeholder="Pegar URL de imagen aquí" style="width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 9px;">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-submit" (click)="guardarProducto()">
+        <i class="ti ti-upload"></i> {{ productoActual.id ? 'Actualizar Producto' : 'Publicar Producto' }}
+      </button>
+      <button class="btn-cancel" (click)="limpiarFormulario()"><i class="ti ti-x"></i> Cancelar</button>
+    </div>
+  </div>
+
+</div>
+

@@ -1,0 +1,50 @@
+
+<main class="contenedor-perfil">
+  <div class="grid-usuario">
+
+    <div class="tarjeta-foto">
+      <div class="foto-wrapper">
+        <img [src]="fotoPreviewUrl" alt="Foto de Perfil" onerror="this.src='assets/img/user-icon.png'">
+      </div>
+
+      <label for="fotoUpload" class="btn-gold-outline" style="display: block; text-align: center; box-sizing: border-box; cursor: pointer;">
+        Seleccionar nueva imagen
+      </label>
+      <input type="file" id="fotoUpload" (change)="onFotoSeleccionada($event)" accept="image/*" style="display: none;">
+
+      <button type="button" class="btn-dark" (click)="guardarFoto()">
+        Aplicar y Guardar Foto
+      </button>
+
+      <div class="info-badge">
+        <span>Conectado como:</span>
+        <h4>{{ perfil.nombre }} {{ perfil.apellido }}</h4>
+        <p>{{ perfil.email }}</p>
+      </div>
+    </div>
+
+    <div class="tarjeta-datos">
+      <h3>Mi Información</h3>
+      <form (ngSubmit)="guardarDatos()">
+        <div class="campo">
+          <label>Nombre</label>
+          <input type="text" name="nombre" [(ngModel)]="formDatos.nombre">
+        </div>
+        <div class="campo">
+          <label>Apellido</label>
+          <input type="text" name="apellido" [(ngModel)]="formDatos.apellido">
+        </div>
+        <div class="campo">
+          <label>Nueva Contraseña (Opcional)</label>
+          <input type="password" name="password" [(ngModel)]="formDatos.password">
+        </div>
+        <div class="campo">
+          <label>Confirmar Contraseña</label>
+          <input type="password" name="confirmPassword" [(ngModel)]="formDatos.confirmPassword">
+        </div>
+        <button type="submit" class="btn-gold-full">Actualizar Mis Datos</button>
+      </form>
+    </div>
+
+  </div>
+</main>

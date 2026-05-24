@@ -1,0 +1,128 @@
+$color_1: #fff;
+$color_2: black;
+$color_3: #333;
+$color_4: #023e8a;
+$color_5: white;
+$font-family_1: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+$background-color_1: #0077b6;
+$background-color_2: #023e8a;
+$background-color_3: #ff4d4d;
+$border-color_1: #00b4d8;
+
+/* === Fondo y fuente === */
+/* === Botón === */
+/* === Enlace de registro === */
+/* === Responsive === */
+:host {
+	font-family: $font-family_1;
+	background: url('../../../../assets/img/ima_gim_!.jpg') no-repeat center center fixed;
+
+	background-size: cover;
+	height: 100vh;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.login-container {
+	background: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(10px);
+	width: 360px;
+	padding: 2rem 2.5rem;
+	border-radius: 15px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	transition: transform 0.3s ease;
+	color: $color_1;
+	label {
+		color: $color_1;
+	}
+	&:hover {
+		transform: translateY(-3px);
+	}
+}
+h1 {
+	color: $color_2;
+	margin-bottom: 1.5rem;
+}
+form {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+}
+label {
+	margin-bottom: 0.3rem;
+	color: $color_3;
+	font-weight: 600;
+}
+input[type="email"] {
+	padding: 0.7rem;
+	margin-bottom: 1rem;
+	border: 1.5px solid #ccc;
+	border-radius: 8px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+input[type="password"] {
+	padding: 0.7rem;
+	margin-bottom: 1rem;
+	border: 1.5px solid #ccc;
+	border-radius: 8px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+input {
+	&:focus {
+		border-color: $border-color_1;
+		box-shadow: 0 0 6px rgba(0, 180, 216, 0.3);
+		outline: none;
+	}
+}
+button {
+	background-color: $background-color_1;
+	color: $color_1;
+	border: none;
+	padding: 0.8rem;
+	border-radius: 8px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s;
+	&:hover {
+		background-color: $background-color_2;
+		transform: scale(1.03);
+	}
+}
+p {
+	margin-top: 1.2rem;
+	a {
+		color: $color_2;
+		text-decoration: none;
+		font-weight: 600;
+		transition: color 0.3s ease;
+		&:hover {
+			color: $color_4;
+		}
+	}
+}
+.error-message {
+	background-color: $background-color_3;
+	color: $color_5;
+	padding: 10px;
+	margin-bottom: 15px;
+	border-radius: 5px;
+	text-align: center;
+	font-weight: bold;
+}
+@media (max-width: 480px) {
+	.login-container {
+		width: 90%;
+		padding: 1.5rem;
+	}
+}
+
+.gestion img {
+  width: 100%;
+  height: 220px;       // 👈 tamaño fijo
+  object-fit: cover;   // 👈 evita deformación
+  border-bottom: 3px solid #d4a017;
+}

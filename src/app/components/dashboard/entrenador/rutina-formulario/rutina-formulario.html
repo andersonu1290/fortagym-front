@@ -1,0 +1,167 @@
+<main class="section-admin">
+  <div class="container">
+
+    <!-- HERO BANNER PREMIUM -->
+    <div class="hero-banner mb-50">
+      <div class="hero-stripe"></div>
+
+      <div class="hero-text">
+        <a routerLink="/entrenador/lista-usuarios" class="link-view-all text-light">
+          <i class="fa fa-arrow-left"></i> Volver a Clientes
+        </a>
+        <h1 class="hero-title mt-20">
+          Plan de <span class="accent">Entrenamiento</span>
+        </h1>
+        <p class="hero-sub">Diseña, asigna y personaliza las rutinas físicas para los miembros</p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-chip">
+          <div class="stat-num">{{ listaEjercicios.controls.length }}</div>
+          <div class="stat-lbl">Ejercicios</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD FORMULARIO PREMIUM -->
+    <div class="admin-card-premium slide-up-1 form-wrapper">
+
+      <div class="form-header">
+        <div class="form-header-left">
+          <span class="form-badge badge-edit">
+            <i class="fa fa-dumbbell"></i>
+            Asignación Deportiva
+          </span>
+          <h2 class="form-title">
+            Configurar Rutina del Atleta
+          </h2>
+        </div>
+      </div>
+
+      <!-- FORMULARIO REACTIVO CON ESTILOS COMPARTIDOS -->
+      <form [formGroup]="rutinaForm" (ngSubmit)="onSubmit()" class="forta-form">
+
+        <!-- Fila Informativa Superior del Coach -->
+        <div class="form-group mb-30">
+          <label class="form-label">Entrenador Responsable / Coach Asignado</label>
+          <input
+            type="text"
+            formControlName="nombreEntrenador"
+            class="form-control-premium"
+            style="opacity: 0.8; font-weight: 600;"
+            readonly
+          />
+        </div>
+
+        <div class="section-header-row mb-20" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+          <h3 class="section-list-title" style="font-size: 1.15rem; margin: 0;">
+            <i class="fa fa-list-ol text-orange" style="margin-right: 8px;"></i>
+            Detalles de la Rutina Diaria
+          </h3>
+        </div>
+
+        <!-- LISTADO DINÁMICO DE EJERCICIOS (FormArray) -->
+        <div formArrayName="detalles">
+
+          <!-- 🚀 AGREGADO: Línea divisoria naranja difuminada al final de cada caja de ejercicio -->
+          <div *ngFor="let ej of listaEjercicios.controls; let i = index"
+               [formGroupName]="i"
+               class="slide-in mb-20"
+               style="background: rgba(255, 255, 255, 0.02); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); border-bottom: 2px solid rgba(255, 69, 0, 0.4); box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;">
+
+            <!-- Encabezado de control de fila indexada -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+              <span class="count-badge" style="font-size: 0.8rem; padding: 4px 10px;">Ejercicio #{{ i + 1 }}</span>
+
+              <!-- Botón de borrar con clase icon-only danger -->
+              <button
+                type="button"
+                class="btn-icon-action danger icon-only"
+                title="Eliminar este ejercicio"
+                (click)="eliminarEjercicio(i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+
+            <!-- Grid de entradas compartiendo el diseño flex-grid-2 -->
+            <div class="flex-grid-2 mb-15">
+              <div class="form-group">
+                <label class="form-label">Nombre del Ejercicio</label>
+                <input
+                  type="text"
+                  formControlName="ejercicio"
+                  class="form-control-premium"
+                  placeholder="Ej: Press Militar Inclinado"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Series / Repeticiones</label>
+                <input
+                  type="text"
+                  formControlName="seriesReps"
+                  class="form-control-premium"
+                  placeholder="Ej: 4x12 o 4x10-8-6"
+                />
+              </div>
+            </div>
+
+            <!-- Segunda línea de especificaciones técnicas -->
+            <div class="flex-grid-2">
+              <div class="form-group">
+                <label class="form-label">Tiempo de Descanso</label>
+                <input
+                  type="text"
+                  formControlName="descanso"
+                  class="form-control-premium"
+                  placeholder="Ej: 60s / 90s"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Frecuencia Semanal (Días)</label>
+                <input
+                  type="text"
+                  formControlName="dias"
+                  class="form-control-premium"
+                  placeholder="Ej: Lun - Mié - Vie"
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Botón para añadir filas dinámicas con estilo secundario premium -->
+        <div class="mb-30" style="text-align: left;">
+          <button
+            type="button"
+            class="btn-cancel-admin"
+            style="border: 1px dashed var(--accent, #ff4500); color: #000000; background: transparent; width: auto; padding: 10px 20px;"
+            (click)="agregarEjercicio()">
+            <i class="fa fa-plus-circle" style="margin-right: 6px;"></i> Añadir Otro Ejercicio
+          </button>
+        </div>
+
+        <!-- Acciones principales del formulario inferior -->
+        <div class="form-actions" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;">
+          <button
+            type="submit"
+            [disabled]="rutinaForm.invalid"
+            class="btn-promo shadow-btn"
+            style="width: auto; min-width: 220px;">
+            <i class="fa fa-save"></i> Guardar Plan Completo
+          </button>
+
+          <button
+            type="button"
+            routerLink="/entrenador/lista-usuarios"
+            class="btn-cancel-admin"
+            style="width: auto;">
+            <i class="fa fa-times"></i> Cancelar
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</main>

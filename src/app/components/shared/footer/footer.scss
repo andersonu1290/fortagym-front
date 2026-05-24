@@ -1,0 +1,41 @@
+.footer-clasico {
+  background-color: #0a0a0a; // Fondo negro puro minimalista
+  border-top: 1px solid rgba(255, 255, 255, 0.04); // Línea divisoria ultra delgada
+  padding: 1rem 4rem; // Reducido al mínimo para hacerlo bien delgado
+  width: 100%;
+  margin-top: auto; /* Empuja el footer siempre al fondo de la pantalla */
+
+  .footer-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem; // Letra pequeña y sofisticada
+    color: #555555; // Gris oscuro discreto para no llamar la atención
+    font-family: var(--font-body, 'Poppins', sans-serif);
+  }
+
+  p {
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .brand {
+    color: var(--color-forta-primary, #d4a017); // El toque dorado corporativo sutil
+    font-weight: 600;
+  }
+}
+
+/* Adaptación fluida para celulares */
+@media (max-width: 768px) {
+  .footer-clasico {
+    padding: 1rem;
+
+    .footer-contenido {
+      flex-direction: column;
+      gap: 0.4rem;
+      text-align: center;
+    }
+  }
+}

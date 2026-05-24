@@ -1,0 +1,167 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+  background-color: #d4a017;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    img { width: 45px; }
+    a { color: white; font-weight: 800; text-decoration: none; font-size: 1.5rem; }
+  }
+
+  .nav-links {
+    display: flex; list-style: none; gap: 20px; align-items: center; margin: 0;
+    a { color: white; text-decoration: none; font-weight: 600; &:hover { color: #222; } }
+    .btn-logout-nav { background: white; color: #d4a017; border: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+  }
+}
+
+/* GRID PRINCIPAL */
+.contenedor-perfil {
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+
+  .grid-usuario {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* TARJETAS ESTILO RECTÁNGULO PARADO */
+.tarjeta-foto, .tarjeta-datos {
+  background: white;
+  width: 350px;
+  min-height: 500px; /* Rectángulo parado */
+  border-radius: 25px;
+  padding: 3rem 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.3s ease, border 0.3s ease;
+  border: 2px solid transparent;
+
+  /* Efecto hover SIN temblor (solo sombra y borde) */
+  &:hover {
+    box-shadow: 0 15px 40px rgba(212, 160, 23, 0.15);
+    border-color: #d4a017;
+  }
+}
+
+/* DISEÑO FOTO */
+.foto-wrapper {
+  width: 180px;
+  height: 180px;
+  margin-bottom: 2rem;
+  border-radius: 50%;
+  border: 5px solid #d4a017;
+  overflow: hidden;
+  background: #eee;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* BOTONES */
+.btn-gold-outline {
+  width: 100%;
+  background: white;
+  color: #d4a017;
+  border: 2px solid #d4a017;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+  &:hover { background: #d4a017; color: white; }
+}
+
+.btn-dark {
+  width: 100%;
+  background: #222;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover { background: #444; }
+}
+
+.btn-gold-full {
+  width: 100%;
+  background: #d4a017;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  &:hover { background: #b58512; }
+}
+
+/* FORMULARIO */
+.tarjeta-datos {
+  align-items: stretch;
+  h3 { text-align: center; color: #222; margin-bottom: 2rem; font-size: 1.8rem; }
+
+  .campo {
+    margin-bottom: 1.5rem;
+    label { display: block; font-weight: bold; color: #555; margin-bottom: 5px; }
+    input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; &:focus { border-color: #d4a017; } }
+  }
+}
+
+.info-badge {
+  margin-top: 2rem;
+  text-align: center;
+  span { color: #aaa; font-size: 0.8rem; text-transform: uppercase; }
+  h4 { margin: 5px 0; color: #222; font-size: 1.3rem; }
+  p { color: #d4a017; font-weight: bold; }
+}
+
+/* NUBE */
+.fitness-cloud { display: flex; justify-content: center; padding: 20px 0; }
+.cloud-text { background: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; color: #222; box-shadow: 0 5px 15px rgba(212, 160, 23, 0.3); }
+
+footer { background: #222; color: white; text-align: center; padding: 1.5rem; border-top: 5px solid #d4a017; }
+
+.user-info-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 50px;
+  border: 1px solid rgba(212, 160, 23, 0.3);
+
+  .nav-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #d4a017;
+    background-color: #fff;
+  }
+}

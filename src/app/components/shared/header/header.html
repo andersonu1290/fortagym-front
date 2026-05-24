@@ -1,0 +1,39 @@
+<nav class="navbar-premium">
+  <div class="logo-container">
+    <img src="assets/img/logo_forta.png" alt="Logo FortaGym" class="logo-img">
+    <a routerLink="/" class="logo-text">FORTAGYM</a>
+  </div>
+
+  <ul class="nav-links">
+    <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+    <li><a routerLink="/sobreNosotros" routerLinkActive="active-link">Sobre Nosotros</a></li>
+    <li><a routerLink="/calendario" routerLinkActive="active-link">Calendario</a></li>
+    <!-- 🚀 NUEVO LINK EN EL HEAD: Pestaña de Tienda oficial vinculada -->
+    <li><a routerLink="/productos" routerLinkActive="active-link">Tienda</a></li>
+
+    <!-- Se muestra si el usuario NO está logueado -->
+    <ng-container *ngIf="!usuarioLogueado">
+      <li><a routerLink="/login" class="btn-nav-login">Iniciar Sesión</a></li>
+      <li><a routerLink="/registro" class="btn-nav-register">Regístrate</a></li>
+    </ng-container>
+
+    <!-- Se muestra si el usuario SÍ inició sesión -->
+    <ng-container *ngIf="usuarioLogueado">
+      <li><a [routerLink]="rutaPanel" class="btn-nav-panel">Mi Panel</a></li>
+
+      <!-- Menú desplegable interactivo con foto de perfil -->
+      <li class="user-menu" [class.open]="menuAbierto" style="display: inline-block; position: relative;">
+        <button class="user-btn" (click)="toggleMenu($event)" style="background: none; border: none; color: #fff; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <img [src]="fotoPreviewUrl" class="user-icon" onerror="this.src='assets/img/user-icon.png'" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #ff4500;">
+          <span>Hola, {{ nombreUsuario }}</span>
+        </button>
+
+        <!-- Dropdown flotante -->
+        <ul class="dropdown" *ngIf="menuAbierto" style="position: absolute; right: 0; top: 100%; background: #1a1a1a; border: 1px solid #333; list-style: none; padding: 10px; border-radius: 8px; min-width: 150px; z-index: 1000; margin-top: 5px;">
+          <li style="margin-bottom: 8px;"><a routerLink="/usuario" style="color: #fff; text-decoration: none; font-size: 14px;">Editar Perfil</a></li>
+          <li><button (click)="cerrarSesion()" class="logout-btn" style="background: #ff4500; color: #000; border: none; width: 100%; text-align: left; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px;">Cerrar sesión</button></li>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+</nav>

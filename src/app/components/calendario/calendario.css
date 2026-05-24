@@ -1,0 +1,190 @@
+/* =========================================
+   CALENDARIO - SOLO LAYOUT EXCLUSIVO
+========================================= */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: #f4f6f9;
+}
+
+/* =========================================
+   CONTENEDOR
+========================================= */
+.calendario-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 20px 100px;
+}
+
+.header-cal {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.header-cal h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+.header-cal p {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   CARD PRINCIPAL
+========================================= */
+.calendario-card {
+  background: #fff;
+  border-radius: 25px;
+  padding: 35px;
+  border: 1px solid #eee;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  min-height: 750px;
+}
+
+/* =========================================
+   CONTROLES MES
+========================================= */
+.controles-mes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 35px;
+}
+.controles-mes h2 {
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.btn-mes {
+  background: #fff;
+  border: 2px solid #e5e5e5;
+  color: #555;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.btn-mes:hover {
+  border-color: var(--color-forta-primary);
+  color: var(--color-forta-primary);
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   GRID
+========================================= */
+.grid-calendario {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dia-header {
+  background: #111;
+  color: #fff;
+  text-align: center;
+  padding: 15px 10px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* =========================================
+   DIAS
+========================================= */
+.dia {
+  min-height: 130px;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  border-radius: 16px;
+  padding: 10px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+.dia:not(.vacio):hover {
+  border-color: var(--color-forta-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(255, 141, 34, 0.12);
+}
+.dia.vacio {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.num {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #888;
+}
+
+/* =========================================
+   EVENTOS
+========================================= */
+.evento {
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.evento.nutricion {
+  background: #2a9d8f;
+}
+.evento.entrenamiento {
+  background: var(--color-forta-primary);
+}
+.evento.evaluacion {
+  background: #3a86ff;
+}
+.evento.descanso {
+  background: #777;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 992px) {
+  .controles-mes {
+    flex-direction: column;
+  }
+  .dia {
+    min-height: 110px;
+  }
+}
+@media (max-width: 768px) {
+  .calendario-container {
+    padding: 40px 15px 80px;
+  }
+  .header-cal h1 {
+    font-size: 2.2rem;
+  }
+  .calendario-card {
+    padding: 20px;
+  }
+  .grid-calendario {
+    gap: 8px;
+  }
+  .dia {
+    min-height: 90px;
+    padding: 6px;
+  }
+  .evento {
+    font-size: 0.65rem;
+    padding: 5px;
+  }
+  .btn-mes {
+    width: 100%;
+  }
+}/*# sourceMappingURL=calendario.css.map */

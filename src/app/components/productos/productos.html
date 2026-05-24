@@ -1,0 +1,184 @@
+<div class="tienda-wrapper">
+
+  <section class="hero-section hero-tienda">
+    <div class="hero-overlay pointer-events-none"></div>
+    <div class="hero-content-tienda">
+      <span class="badge-premium slide-up-1">Equipamiento & Suplementación</span>
+      <h1 class="slide-up-2">Nuestra <span class="text-naranja">Tienda</span></h1>
+      <p class="slide-up-3">Todo lo que necesitas para llevar tu entrenamiento al siguiente nivel. Productos de calidad premium seleccionados por nuestros expertos.</p>
+
+      <div class="hero-search slide-up-4">
+        <div class="search-box-pill">
+          <input
+            type="text"
+            placeholder="Buscar producto, categoría..."
+            [(ngModel)]="busqueda"
+          />
+          <button class="btn-search-pill">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="categorias-bar">
+    <div class="container">
+      <div class="categorias-scroll">
+        <button
+          class="cat-pill"
+          [class.active]="categoriaActiva === 'todos'"
+          (click)="setCategoria('todos')">
+          <i class="fa fa-th-large"></i> Todos
+        </button>
+
+        <button
+          class="cat-pill"
+          *ngFor="let cat of categorias"
+          [class.active]="categoriaActiva === cat"
+          (click)="setCategoria(cat)">
+          <i class="fa" [ngClass]="iconoCategoria(cat)"></i>
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-strip section-light">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-num">{{ productosFiltrados().length }}</span>
+          <span class="stat-lbl">Productos disponibles</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <span class="stat-num">{{ categorias.length }}</span>
+          <span class="stat-lbl">Categorías</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <span class="stat-num">{{ contarEnStock() }}</span>
+          <span class="stat-lbl">En stock ahora</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <span class="stat-naranja">Envío gratis</span>
+          <span class="stat-lbl">En compras +S/. 200</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="productos-section section-light">
+    <div class="container">
+
+      <div class="toolbar-row mb-30">
+        <h2 class="toolbar-titulo">
+          {{ categoriaActiva === 'todos' ? 'Todos los Productos' : categoriaActiva }}
+          <span class="toolbar-count">{{ productosFiltrados().length }} productos</span>
+        </h2>
+        <div class="toolbar-right">
+          <select class="sort-select" [(ngModel)]="ordenActivo" (change)="ordenar()">
+            <option value="default">Orden por defecto</option>
+            <option value="precio-asc">Precio: menor a mayor</option>
+            <option value="precio-desc">Precio: mayor a menor</option>
+            <option value="nombre">Nombre A-Z</option>
+            <option value="stock">Mayor stock</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="empty-tienda" *ngIf="productosFiltrados().length === 0">
+        <i class="fa fa-search"></i>
+        <h3>No encontramos productos</h3>
+        <p>Intenta con otro término o categoría.</p>
+        <button class="btn-promo" (click)="resetFiltros()">Ver todos los productos</button>
+      </div>
+
+      <div class="productos-grid" *ngIf="productosFiltrados().length > 0">
+        <div
+          class="producto-card pop-in"
+          *ngFor="let p of productosFiltrados()"
+          (click)="abrirModal(p)">
+
+          <div class="producto-img-wrap">
+            <img [src]="resolverImg(p.img)" [alt]="p.nombre" (error)="onImgError($event)" />
+            <span class="badge-cat">{{ p.categoria }}</span>
+            <span class="badge-agotado" *ngIf="p.stock === 0">AGOTADO</span>
+            <span class="badge-pocas" *ngIf="p.stock > 0 && p.stock <= 5">Últimas {{ p.stock }}</span>
+
+            <div class="producto-hover-overlay">
+              <span class="hover-cta"><i class="fa fa-eye"></i> Ver detalle</span>
+            </div>
+          </div>
+
+          <div class="producto-body">
+            <h3 class="producto-nombre">{{ p.nombre }}</h3>
+            <p class="producto-desc" *ngIf="p.descripcion">{{ p.descripcion }}</p>
+
+            <div class="producto-footer">
+              <div class="producto-precio">
+                <span class="currency">S/.</span>
+                <span class="amount">{{ p.precio | number:'1.2-2' }}</span>
+              </div>
+              <div class="stock-info" [ngClass]="stockClass(p.stock)">
+                <span class="stock-dot"></span>
+                {{ stockLabel(p.stock) }}
+              </div>
+            </div>
+
+            <button class="btn-comprar" [disabled]="p.stock === 0" (click)="$event.stopPropagation(); abrirModal(p)">
+              {{ p.stock === 0 ? 'Sin stock' : 'Ver producto' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="banner-envio">
+    <div class="container">
+      <div class="banner-envio-grid">
+        <div class="banner-item"><i class="fa fa-truck"></i><div><strong>Envío gratis</strong><span>En compras mayores a S/. 200</span></div></div>
+        <div class="banner-sep"></div>
+        <div class="banner-item"><i class="fa fa-shield"></i><div><strong>Productos originales</strong><span>100% autenticidad garantizada</span></div></div>
+        <div class="banner-sep"></div>
+        <div class="banner-item"><i class="fa fa-refresh"></i><div><strong>Devoluciones</strong><span>Hasta 7 días sin preguntas</span></div></div>
+        <div class="banner-sep"></div>
+        <div class="banner-item"><i class="fa fa-star"></i><div><strong>Calidad premium</strong><span>Seleccionados por expertos</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-tienda-backdrop" *ngIf="productoModal" (click)="cerrarModal()">
+    <div class="modal-tienda" (click)="$event.stopPropagation()">
+      <button class="modal-tienda-close" (click)="cerrarModal()"><i class="fa fa-times"></i></button>
+
+      <div class="modal-img-wrap">
+        <img [src]="resolverImg(productoModal.img)" [alt]="productoModal.nombre" (error)="onImgError($event)" />
+        <span class="modal-cat-badge">{{ productoModal.categoria }}</span>
+      </div>
+
+      <div class="modal-info">
+        <h2 class="modal-nombre">{{ productoModal.nombre }}</h2>
+        <div class="modal-precio-row">
+          <span class="modal-precio">S/. {{ productoModal.precio | number:'1.2-2' }}</span>
+          <span class="modal-stock-badge" [ngClass]="stockClass(productoModal.stock)">
+            <span class="stock-dot"></span> {{ stockLabel(productoModal.stock) }}
+          </span>
+        </div>
+
+        <p class="modal-desc">{{ productoModal.descripcion || 'Consulta más detalles de este producto en recepción.' }}</p>
+
+        <div class="modal-detalle-grid">
+          <div class="modal-detalle-item"><span class="detalle-lbl">Categoría</span><span class="detalle-val">{{ productoModal.categoria }}</span></div>
+          <div class="modal-detalle-item"><span class="detalle-lbl">Disponibles</span><span class="detalle-val">{{ productoModal.stock }} unidades</span></div>
+        </div>
+
+        <button class="btn-comprar-modal" [disabled]="productoModal.stock === 0">
+          <i class="fa fa-shopping-cart"></i> {{ productoModal.stock === 0 ? 'Sin stock disponible' : 'Consultar en recepción' }}
+        </button>
+        <p class="modal-aviso"><i class="fa fa-info-circle"></i> Los pedidos se gestionan en nuestras sedes.</p>
+      </div>
+    </div>
+  </div>
+</div>
