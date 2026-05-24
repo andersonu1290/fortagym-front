@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CartService, ProductoCarrito } from '../../../services/cart.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-compra',
@@ -12,6 +13,8 @@ import { CartService, ProductoCarrito } from '../../../services/cart.service';
   styleUrls: ['./compra.scss']
 })
 export class CompraComponent implements OnInit {
+
+    private readonly ApiUrl = environment.apiUrl;
 
   checkoutForm!: FormGroup;
   vistaActual: 'compra' | 'confirmacion' = 'compra';
@@ -150,41 +153,35 @@ export class CompraComponent implements OnInit {
         }))
       };
 
-      this.http.post<any>(
-        'http://localhost:8090/api/tienda/checkout',
-        payload
-      ).subscribe({
+      // --- BUSCA ESTA SECCIÓN EN TU CÓDIGO Y REEMPLÁZALA ---
 
-        next: (res) => {
+    this.http.post<any>(
+      `${this.ApiUrl}/api/tienda/checkout`,
+      payload
+    ).subscribe({
 
-          this.confirmacionData = res;
+      next: (res) => {
+        this.confirmacionData = res;
+        this.numeroOrden = res.numeroOrden || 'FG-999999';
+        this.fechaActual = new Date();
+        this.carritoConfirmado = [...this.carrito];
+        this.subtotalConfirmado = this.subtotal;
+        this.descuentoConfirmado = this.discountAmount;
+        this.igvConfirmado = this.igv;
+        this.totalConfirmado = this.total;
+        this.vistaActual = 'confirmacion';
+        this.cartService.limpiarCarrito();
+        window.scrollTo(0, 0);
+      },
 
-          this.numeroOrden = res.numeroOrden || 'FG-999999';
+      error: (err) => {
+        alert(
+          'Error: ' +
+          (err.error?.message || 'Revisa tu conexión')
+        );
+      }
+    });
 
-          this.fechaActual = new Date();
-
-          this.carritoConfirmado = [...this.carrito];
-
-          this.subtotalConfirmado = this.subtotal;
-          this.descuentoConfirmado = this.discountAmount;
-          this.igvConfirmado = this.igv;
-          this.totalConfirmado = this.total;
-
-          this.vistaActual = 'confirmacion';
-
-          this.cartService.limpiarCarrito();
-
-          window.scrollTo(0, 0);
-        },
-
-        error: (err) => {
-
-          alert(
-            'Error: ' +
-            (err.error?.message || 'Revisa tu conexión')
-          );
-        }
-      });
 
     } else {
 
