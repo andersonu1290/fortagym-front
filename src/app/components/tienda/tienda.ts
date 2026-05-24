@@ -19,10 +19,10 @@ export interface Producto {
   selector: 'app-tienda',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './productos.html',
-  styleUrl: './productos.scss'
+  templateUrl: './tienda.html',
+  styleUrl: './tienda.scss'
 })
-export class ProductosComponent implements OnInit {
+export class TiendaComponent implements OnInit {
 
   // Usamos la URL base del entorno para evitar errores de conexión
   private readonly IMG_BASE = environment.apiUrl;

@@ -14,8 +14,10 @@ import { NutricionFormulario } from './components/dashboard/nutricionista/nutric
 import { SobreNosotros } from './components/sobre-nosotros/sobre-nosotros';
 import { Calendario } from './components/calendario/calendario';
 import { authGuard } from './guards/auth-guard'; // 👈 El Guard de seguridad
-import { ProductosComponent } from './components/productos/productos';
+import { TiendaComponent } from './components/tienda/tienda';
 import { ProductosAdmin } from './components/dashboard/admin/productos/productos';
+import { CompraComponent } from './components/tienda/compra/compra';
+import { CarritoComponent } from './components/tienda/carrito/carrito';
 
 export const routes: Routes = [
   // ==========================================
@@ -25,7 +27,9 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'registro', component: Registro },
   { path: 'sobreNosotros', component: SobreNosotros },
-  { path: 'productos', component: ProductosComponent },
+  { path: 'tienda', component: TiendaComponent },
+  { path: 'carrito', component: CarritoComponent },
+  { path: 'compra', component: CompraComponent },
 
   // ==========================================
   // 🔒 VISTAS PRIVADAS (Protegidas por authGuard)

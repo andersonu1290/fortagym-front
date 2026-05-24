@@ -20,6 +20,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   rutaPanel: string = '/';
   menuAbierto: boolean = false;
 
+  // 🛒 Variable lista para el HTML (inicializada en 0 temporalmente)
+  cantidadTotal: number = 0;
+
   private routerSub!: Subscription;
 
   constructor(

@@ -4,12 +4,30 @@
     <a routerLink="/" class="logo-text">FORTAGYM</a>
   </div>
 
+  <!-- Botón Hamburguesa oculto por defecto en desktop -->
+  <input type="checkbox" id="menu-toggle" class="menu-toggle-input">
+  <label for="menu-toggle" class="menu-toggle-label">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+
   <ul class="nav-links">
     <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
     <li><a routerLink="/sobreNosotros" routerLinkActive="active-link">Sobre Nosotros</a></li>
     <li><a routerLink="/calendario" routerLinkActive="active-link">Calendario</a></li>
-    <!-- 🚀 NUEVO LINK EN EL HEAD: Pestaña de Tienda oficial vinculada -->
-    <li><a routerLink="/productos" routerLinkActive="active-link">Tienda</a></li>
+    <li><a routerLink="/tienda" routerLinkActive="active-link">Tienda</a></li>
+
+    <!-- 🛒 NUEVO CARRITO VISUAL CON CONTADOR -->
+    <li>
+      <a routerLink="/carrito" routerLinkActive="active-link" class="nav-cart-link">
+        <div class="cart-icon-wrapper">
+          <i class="ti ti-shopping-cart" aria-hidden="true"></i>
+          <span class="cart-badge" *ngIf="cantidadTotal > 0">{{ cantidadTotal }}</span>
+        </div>
+        <span class="cart-text">Carrito</span>
+      </a>
+    </li>
 
     <!-- Se muestra si el usuario NO está logueado -->
     <ng-container *ngIf="!usuarioLogueado">

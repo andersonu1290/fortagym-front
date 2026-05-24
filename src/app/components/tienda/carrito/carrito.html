@@ -1,0 +1,142 @@
+<div class="pg">
+
+    <div class="topbar">
+      <nav class="bc">
+        <a routerLink="/">Inicio</a><span class="bc-sep">›</span>
+        <a routerLink="/tienda">Tienda</a><span class="bc-sep">›</span>
+        <span class="bc-cur">Carrito</span>
+      </nav>
+      <span style="font-size:11px;color:var(--color-text-secondary)">{{ cantidadTotal }} productos en tu carrito</span>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="steps">
+        <div class="step active">
+          <div class="snum">1</div>
+          <span class="slbl">Carrito</span>
+        </div>
+        <div class="sline"></div>
+        <div class="step">
+          <div class="snum">2</div>
+          <span class="slbl">Datos &amp; Pago</span>
+        </div>
+        <div class="sline"></div>
+        <div class="step">
+          <div class="snum">3</div>
+          <span class="slbl">Confirmación</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div>
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-ttl">
+              <i class="ti ti-shopping-cart" aria-hidden="true"></i>
+              Mi carrito
+            </div>
+            <span class="card-sub">{{ cantidadTotal }} productos</span>
+          </div>
+
+          <div id="cart-items" *ngIf="carrito.length > 0">
+            <div class="item-row" *ngFor="let item of carrito; let i = index">
+              <img class="item-img" [src]="item.img" [alt]="item.nombre">
+              <div class="item-info">
+                <div class="item-cat">{{ item.categoria }}</div>
+                <div class="item-nm">{{ item.nombre }}</div>
+                <div class="item-desc">{{ item.descripcion }}</div>
+                <div class="qty-ctrl">
+                  <button class="qb" (click)="cambiarCantidad(i, -1)" aria-label="Reducir">−</button>
+                  <span class="qn">{{ item.cantidad }}</span>
+                  <button class="qb" (click)="cambiarCantidad(i, 1)" aria-label="Aumentar">+</button>
+                </div>
+              </div>
+              <div class="item-right">
+                <span class="item-price">S/. {{ (item.precio * item.cantidad) | number:'1.2-2' }}</span>
+                <button class="item-del" (click)="eliminarItem(i)" aria-label="Eliminar producto">
+                  <i class="ti ti-trash" style="font-size:14px" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-cart" *ngIf="carrito.length === 0">
+            <i class="ti ti-shopping-cart-off" aria-hidden="true"></i>
+            <p style="margin-bottom:14px">Tu carrito está vacío</p>
+            <button class="btn-shop" style="width:auto;padding:10px 20px" routerLink="/tienda">
+              <i class="ti ti-arrow-left" aria-hidden="true"></i>
+              Volver a la tienda
+            </button>
+          </div>
+        </div>
+
+        <div class="card" *ngIf="carrito.length > 0">
+          <div class="rec-hd">
+            <i class="ti ti-sparkles" style="color:#ff8d22;font-size:15px;vertical-align:-2px;margin-right:6px" aria-hidden="true"></i>
+            También te puede interesar
+          </div>
+          <div class="rec-scroll">
+            <div class="rec-item" *ngFor="let rec of recomendados">
+              <img class="rec-img" [src]="rec.img" [alt]="rec.nombre">
+              <div class="rec-cat">{{ rec.categoria }}</div>
+              <div class="rec-nm">{{ rec.nombre }}</div>
+              <div class="rec-price">S/. {{ rec.precio | number:'1.2-2' }}</div>
+              <button class="btn-add-rec" (click)="agregarRecomendado(rec)">
+                <i class="ti ti-plus" style="font-size:12px" aria-hidden="true"></i> Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sum-col">
+        <div class="sum-card">
+          <div class="sum-hd">
+            <span class="sum-ttl">Resumen</span>
+            <span class="sum-ct">{{ cantidadTotal }} productos</span>
+          </div>
+          <div class="coupon-row">
+            <input class="ci" type="text" placeholder="Código de descuento" [(ngModel)]="codigoCupon">
+            <button class="cb" (click)="aplicarCupon()">Aplicar</button>
+          </div>
+          <div class="breakdown">
+            <div class="brow">
+              <span class="blbl">Subtotal</span>
+              <span class="bval">S/. {{ subtotal | number:'1.2-2' }}</span>
+            </div>
+            <div class="brow">
+              <span class="blbl">Envío estimado</span>
+              <span class="bval free">GRATIS</span>
+            </div>
+            <div class="brow disc-row" *ngIf="descuento > 0" style="display:flex">
+              <span class="blbl">Descuento (FORTA10)</span>
+              <span class="bval disc">— S/. {{ descuento | number:'1.2-2' }}</span>
+            </div>
+            <div class="brow total">
+              <span class="blbl">Total</span>
+              <span class="bval">S/. {{ total | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          <div class="sum-foot">
+            <button class="btn-checkout" routerLink="/compra">
+              <i class="ti ti-arrow-left" aria-hidden="true"></i>
+              Ir a pagar
+            </button>
+            <button class="btn-shop" routerLink="/tienda">
+              <i class="ti ti-arrow-left" aria-hidden="true"></i>
+              Seguir comprando
+            </button>
+            <div class="guarantees">
+              <div class="gi"><i class="ti ti-circle-check ok" aria-hidden="true"></i>Compra segura y encriptada</div>
+              <div class="gi"><i class="ti ti-circle-check ok" aria-hidden="true"></i>Devolución en 7 días</div>
+              <div class="gi"><i class="ti ti-circle-check ok" aria-hidden="true"></i>Producto original garantizado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+

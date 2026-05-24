@@ -9,6 +9,20 @@
   --color-forta-dark: #111111;
   --font-title: 'Montserrat', sans-serif;
   --font-body: 'Poppins', sans-serif;
+
+  /* NUEVAS VARIABLES NECESARIAS PARA compra.scss */
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --color-background-tertiary: #f4f6f8;
+  --color-border-secondary: #cbd5e1;
+  --color-border-tertiary: #e2e8f0;
+  --color-text-primary: #111111;
+  --color-text-secondary: #64748b;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+
+  /* Mapeando la variable de fuente de compra.scss a tu fuente global */
+  --font-sans: var(--font-body);
 }
 
 :host, html, body {
