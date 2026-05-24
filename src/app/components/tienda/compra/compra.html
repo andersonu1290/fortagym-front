@@ -259,18 +259,18 @@
             <span class="sum-ct">{{ qty }} {{ qty === 1 ? 'producto' : 'productos' }}</span>
           </div>
 
-          <div class="sum-prod">
-            <img class="sp-img" [src]="producto.img" [alt]="producto.nombre">
+          <div class="sum-prod" *ngFor="let item of carrito">
+            <img class="sp-img" [src]="resolverImg(item.img)" [alt]="item.nombre">
             <div style="flex:1;min-width:0">
-              <div class="sp-cat">{{ producto.categoria }}</div>
-              <div class="sp-nm">{{ producto.nombre }}</div>
+              <div class="sp-cat">{{ item.categoria }}</div>
+              <div class="sp-nm">{{ item.nombre }}</div>
               <div class="qty-row">
-                <button type="button" class="qbtn" (click)="chQty(-1)" aria-label="Reducir cantidad">−</button>
-                <span class="qnum">{{ qty }}</span>
-                <button type="button" class="qbtn" (click)="chQty(1)" aria-label="Aumentar cantidad">+</button>
+                <button type="button" class="qbtn" (click)="chQty(item, -1)" aria-label="Reducir cantidad">−</button>
+                <span class="qnum">{{ item.cantidad }}</span>
+                <button type="button" class="qbtn" (click)="chQty(item, 1)" aria-label="Aumentar cantidad">+</button>
               </div>
             </div>
-            <span class="sp-price">S/. {{ producto.precio | number:'1.2-2' }}</span>
+            <span class="sp-price">S/. {{ item.precio | number:'1.2-2' }}</span>
           </div>
 
           <div class="coupon-row">
@@ -406,30 +406,29 @@
 
       <div class="receipt-body">
 
-        <div class="receipt-prod">
-
+        <div class="receipt-prod" *ngFor="let item of carrito">
           <img class="rp-img"
-               [src]="producto.img"
-               [alt]="producto.nombre">
+               [src]="resolverImg(item.img)"
+               [alt]="item.nombre">
 
           <div class="rp-info">
 
             <div class="rp-cat">
-              {{ producto.categoria }}
+              {{ item.categoria }}
             </div>
 
             <div class="rp-nm">
-              {{ producto.nombre }}
+              {{ item.nombre }}
             </div>
 
             <div class="rp-qty">
-              Cantidad: {{ qty }}
+              Cantidad: {{ item.cantidad }}
             </div>
 
           </div>
 
           <span class="rp-price">
-            S/. {{ subtotal | number:'1.2-2' }}
+            S/. {{ (item.precio * item.cantidad) | number:'1.2-2' }}
           </span>
 
         </div>

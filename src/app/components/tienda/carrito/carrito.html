@@ -41,7 +41,7 @@
 
           <div id="cart-items" *ngIf="carrito.length > 0">
             <div class="item-row" *ngFor="let item of carrito; let i = index">
-              <img class="item-img" [src]="item.img" [alt]="item.nombre">
+              <img class="item-img" [src]="resolverImg(item.img)" [alt]="item.nombre">
               <div class="item-info">
                 <div class="item-cat">{{ item.categoria }}</div>
                 <div class="item-nm">{{ item.nombre }}</div>
@@ -78,7 +78,7 @@
           </div>
           <div class="rec-scroll">
             <div class="rec-item" *ngFor="let rec of recomendados">
-              <img class="rec-img" [src]="rec.img" [alt]="rec.nombre">
+              <img class="rec-img" [src]="resolverImg(rec.img)" [alt]="rec.nombre">
               <div class="rec-cat">{{ rec.categoria }}</div>
               <div class="rec-nm">{{ rec.nombre }}</div>
               <div class="rec-price">S/. {{ rec.precio | number:'1.2-2' }}</div>
@@ -120,8 +120,8 @@
             </div>
           </div>
           <div class="sum-foot">
-            <button class="btn-checkout" routerLink="/compra">
-              <i class="ti ti-arrow-left" aria-hidden="true"></i>
+            <button class="btn-checkout" (click)="irACompra()">
+              <i class="ti ti-lock" aria-hidden="true" style="margin-right: 6px;"></i>
               Ir a pagar
             </button>
             <button class="btn-shop" routerLink="/tienda">
@@ -138,5 +138,4 @@
       </div>
     </div>
 
-  </div>
-
+</div>

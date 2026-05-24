@@ -290,4 +290,7 @@
   .balance-text {
     text-align: center;
   }
+}
+html {
+  scroll-behavior: smooth;
 }/*# sourceMappingURL=home.css.map */

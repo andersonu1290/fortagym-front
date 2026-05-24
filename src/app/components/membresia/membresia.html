@@ -1,0 +1,729 @@
+<!-- ═══════════════════════════════════
+     SCREEN 1 — ELEGIR PLAN
+═══════════════════════════════════ -->
+<div class="screen act" *ngIf="pasoActual === 1">
+
+  <div class="topbar">
+    <div class="topbar-right">
+      <i class="ti ti-lock" aria-hidden="true"></i>
+      Proceso de pago seguro
+    </div>
+  </div>
+
+  <div class="steps-wrap">
+    <div class="steps">
+
+      <div class="step active">
+        <div class="snum">1</div>
+        <span class="slbl">Elegir plan</span>
+      </div>
+
+      <div class="sline"></div>
+
+      <div class="step">
+        <div class="snum">2</div>
+        <span class="slbl">Datos &amp; Pago</span>
+      </div>
+
+      <div class="sline"></div>
+
+      <div class="step">
+        <div class="snum">3</div>
+        <span class="slbl">Confirmación</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="plan-hero">
+    <div class="plan-hero-inner">
+
+      <div class="plan-eyebrow">
+        <span></span>
+        Membresías FortaGym
+      </div>
+
+      <h1>Elige tu plan y empieza hoy</h1>
+
+      <p>
+        Sin excusas. Selecciona la membresía perfecta para ti
+        y empieza a entrenar hoy mismo.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="plans-wrap">
+
+    <div class="plans-grid">
+
+      <div
+        class="plan-card"
+        *ngFor="let plan of planes"
+        [class.featured]="plan.recomendado"
+        [class.selected]="planSeleccionado?.id === plan.id"
+        (click)="seleccionarPlan(plan)"
+      >
+
+        <div
+          class="plan-badge"
+          *ngIf="plan.recomendado"
+        >
+          Recomendado
+        </div>
+
+        <div class="selected-ring">
+          <i class="ti ti-check"></i>
+        </div>
+
+        <div
+          class="plan-hd"
+          [class.plan-hd-black]="plan.recomendado"
+        >
+
+          <div class="plan-name">
+            {{ plan.nombre }}
+          </div>
+
+          <div class="plan-sub">
+            {{ plan.descripcion }}
+          </div>
+
+        </div>
+
+        <div class="plan-price-wrap">
+
+          <span class="plan-currency">s/</span>
+
+          <span class="plan-amount">
+            {{ plan.precio }}
+          </span>
+
+          <div class="plan-fidelidad">
+            {{ plan.descripcion }}
+          </div>
+
+        </div>
+
+        <div class="plan-feats">
+
+          <div
+            class="feat-item"
+            *ngFor="let feature of plan.features"
+          >
+            <i class="ti ti-check ok"></i>
+            <span>{{ feature }}</span>
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="btn-select"
+          [class.black-btn]="plan.recomendado"
+          [class.orange-btn]="!plan.recomendado"
+          (click)="seleccionarPlan(plan)"
+        >
+          <i class="ti ti-arrow-right"></i>
+          Elegir {{ plan.nombre }}
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="guarantees-strip">
+
+      <div class="gi">
+        <i class="ti ti-circle-check"></i>
+        Cancela cuando quieras
+      </div>
+
+      <div class="gi-sep"></div>
+
+      <div class="gi">
+        <i class="ti ti-circle-check"></i>
+        Sin cargos ocultos
+      </div>
+
+      <div class="gi-sep"></div>
+
+      <div class="gi">
+        <i class="ti ti-circle-check"></i>
+        Acceso inmediato
+      </div>
+
+      <div class="gi-sep"></div>
+
+      <div class="gi">
+        <i class="ti ti-circle-check"></i>
+        Pago 100% seguro
+      </div>
+
+    </div>
+
+    <div style="margin-top: 28px;">
+
+      <button
+        type="button"
+        class="btn-pay"
+        (click)="irPaso(2)"
+      >
+        Continuar
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     SCREEN 2 — CHECKOUT
+═══════════════════════════════════ -->
+<div class="screen act" *ngIf="pasoActual === 2">
+
+  <div class="topbar">
+
+    <div class="logo">
+      <div class="logo-box">
+        <i class="ti ti-bolt"></i>
+      </div>
+
+      <span class="logo-name">
+        FORTAGYM
+      </span>
+    </div>
+
+    <div class="topbar-right">
+      <i class="ti ti-lock"></i>
+      Pago 100% seguro
+    </div>
+
+  </div>
+
+  <div class="steps-wrap">
+    <div class="steps">
+
+      <div class="step done">
+        <div class="snum">
+          <i class="ti ti-check"></i>
+        </div>
+
+        <span class="slbl">Elegir plan</span>
+      </div>
+
+      <div class="sline done"></div>
+
+      <div class="step active">
+        <div class="snum">2</div>
+        <span class="slbl">Datos &amp; Pago</span>
+      </div>
+
+      <div class="sline"></div>
+
+      <div class="step">
+        <div class="snum">3</div>
+        <span class="slbl">Confirmación</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="checkout-layout">
+
+    <!-- IZQUIERDA -->
+    <div>
+
+      <!-- DATOS -->
+      <div class="card">
+
+        <div class="card-hd">
+
+          <div class="card-ico">
+            <i class="ti ti-user"></i>
+          </div>
+
+          <div>
+            <div class="card-ttl">
+              Datos personales
+            </div>
+
+            <div class="card-sub">
+              Completa tu información
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-bd">
+
+          <div class="g2">
+
+            <div class="fg">
+              <label class="flbl">Nombre</label>
+
+              <input
+                type="text"
+                class="finp"
+                placeholder="Tu nombre"
+              >
+            </div>
+
+            <div class="fg">
+              <label class="flbl">Apellido</label>
+
+              <input
+                type="text"
+                class="finp"
+                placeholder="Tu apellido"
+              >
+            </div>
+
+          </div>
+
+          <div class="g2">
+
+            <div class="fg">
+              <label class="flbl">DNI</label>
+
+              <input
+                type="text"
+                class="finp"
+                placeholder="00000000"
+              >
+            </div>
+
+            <div class="fg">
+              <label class="flbl">Teléfono</label>
+
+              <input
+                type="text"
+                class="finp"
+                placeholder="+51 999 999 999"
+              >
+            </div>
+
+          </div>
+
+          <div class="fg">
+
+            <label class="flbl">
+              Correo electrónico
+            </label>
+
+            <input
+              type="email"
+              class="finp"
+              placeholder="correo@ejemplo.com"
+            >
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PAGO -->
+      <div class="card">
+
+        <div class="card-hd">
+
+          <div class="card-ico">
+            <i class="ti ti-credit-card"></i>
+          </div>
+
+          <div>
+            <div class="card-ttl">
+              Método de pago
+            </div>
+
+            <div class="card-sub">
+              Tus datos están protegidos
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-bd">
+
+          <div class="ptabs">
+
+            <button
+              type="button"
+              class="ptab"
+              [class.act]="metodoPago === 'tarjeta'"
+              (click)="metodoPago = 'tarjeta'"
+            >
+              <i class="ti ti-credit-card"></i>
+              Tarjeta
+            </button>
+
+            <button
+              type="button"
+              class="ptab"
+              [class.act]="metodoPago === 'yape'"
+              (click)="metodoPago = 'yape'"
+            >
+              <i class="ti ti-device-mobile"></i>
+              Yape/Plin
+            </button>
+
+          </div>
+
+          <!-- TARJETA -->
+          <div *ngIf="metodoPago === 'tarjeta'">
+
+            <div class="fg">
+
+              <label class="flbl">
+                Número de tarjeta
+              </label>
+
+              <input
+                type="text"
+                class="finp"
+                placeholder="0000 0000 0000 0000"
+              >
+
+            </div>
+
+            <div class="fg">
+
+              <label class="flbl">
+                Nombre del titular
+              </label>
+
+              <input
+                type="text"
+                class="finp"
+                placeholder="Nombre completo"
+              >
+
+            </div>
+
+            <div class="g2">
+
+              <div class="fg">
+
+                <label class="flbl">
+                  Vencimiento
+                </label>
+
+                <input
+                  type="text"
+                  class="finp"
+                  placeholder="MM/AA"
+                >
+
+              </div>
+
+              <div class="fg">
+
+                <label class="flbl">
+                  CVV
+                </label>
+
+                <input
+                  type="text"
+                  class="finp"
+                  placeholder="123"
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- YAPE -->
+          <div *ngIf="metodoPago === 'yape'">
+
+            <div class="fg">
+
+              <label class="flbl">
+                Número asociado a Yape
+              </label>
+
+              <input
+                type="text"
+                class="finp"
+                placeholder="+51 999 999 999"
+              >
+
+            </div>
+
+          </div>
+
+          <div class="chrow">
+
+            <input
+              type="checkbox"
+              [(ngModel)]="terminosAceptados"
+            >
+
+            <span class="chlbl">
+              Acepto los términos y condiciones
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DERECHA -->
+    <div>
+
+      <div class="sum-card">
+
+        <div class="sum-hd">
+
+          <span class="sum-ttl">
+            Tu membresía
+          </span>
+
+          <span class="plan-pill">
+            {{ planSeleccionado?.nombre }}
+          </span>
+
+        </div>
+
+        <div class="sum-plan-block">
+
+          <div class="sum-plan-name">
+            {{ planSeleccionado?.nombre }}
+          </div>
+
+          <div class="sum-plan-desc">
+            {{ planSeleccionado?.descripcion }}
+          </div>
+
+          <div class="sum-feats">
+
+            <div
+              class="sf"
+              *ngFor="let feature of planSeleccionado?.features"
+            >
+              <i class="ti ti-check"></i>
+              {{ feature }}
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="breakdown">
+
+          <div class="brow">
+
+            <span class="blbl">
+              Membresía mensual
+            </span>
+
+            <span class="bval">
+              S/. {{ planSeleccionado?.precio }}
+            </span>
+
+          </div>
+
+          <div class="brow">
+
+            <span class="blbl">
+              IGV incluido (18%)
+            </span>
+
+            <span class="bval">
+              S/. {{ calcularIGV().toFixed(2) }}
+            </span>
+
+          </div>
+
+          <div class="brow total">
+
+            <span class="blbl">
+              Total / mes
+            </span>
+
+            <span class="bval">
+              S/. {{ calcularTotal().toFixed(2) }}
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="sum-foot">
+
+          <button
+            type="button"
+            class="btn-pay"
+            (click)="procesarPago()"
+          >
+            <i class="ti ti-lock"></i>
+            Activar membresía
+          </button>
+
+          <button
+            type="button"
+            class="btn-back"
+            (click)="irPaso(1)"
+          >
+            <i class="ti ti-arrow-left"></i>
+            Cambiar plan
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     SCREEN 3 — CONFIRMACIÓN
+═══════════════════════════════════ -->
+<div class="screen act" *ngIf="pasoActual === 3">
+
+  <div class="topbar">
+
+    <div class="logo">
+      <div class="logo-box">
+        <i class="ti ti-bolt"></i>
+      </div>
+
+      <span class="logo-name">
+        FORTAGYM
+      </span>
+    </div>
+
+    <div class="topbar-right" style="color:#16a34a;">
+      <i class="ti ti-circle-check"></i>
+      Membresía activada
+    </div>
+
+  </div>
+
+  <div class="steps-wrap">
+    <div class="steps">
+
+      <div class="step done">
+        <div class="snum">
+          <i class="ti ti-check"></i>
+        </div>
+
+        <span class="slbl">
+          Elegir plan
+        </span>
+      </div>
+
+      <div class="sline done"></div>
+
+      <div class="step done">
+        <div class="snum">
+          <i class="ti ti-check"></i>
+        </div>
+
+        <span class="slbl">
+          Datos &amp; Pago
+        </span>
+      </div>
+
+      <div class="sline done"></div>
+
+      <div class="step active">
+        <div class="snum">3</div>
+        <span class="slbl">Confirmación</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="conf-wrap">
+
+    <div class="conf-hero">
+
+      <div class="conf-circle">
+        <i class="ti ti-check"></i>
+      </div>
+
+      <h1 class="conf-ttl">
+        ¡Bienvenido a FortaGym!
+      </h1>
+
+      <p class="conf-sub">
+        Tu membresía fue activada correctamente.
+      </p>
+
+    </div>
+
+    <div class="rcard">
+
+      <div class="rcrd-hd">
+
+        <i class="ti ti-id-badge"></i>
+
+        <span class="rcrd-ttl">
+          Tu membresía
+        </span>
+
+      </div>
+
+      <div class="rcrd-bd">
+
+        <div class="conf-plan-block">
+
+          <div class="conf-plan-ico">
+            <i class="ti ti-bolt"></i>
+          </div>
+
+          <div>
+
+            <div class="conf-plan-nm">
+              {{ planSeleccionado?.nombre }}
+            </div>
+
+            <div class="conf-plan-dur">
+              {{ planSeleccionado?.descripcion }}
+            </div>
+
+          </div>
+
+          <div class="conf-plan-price">
+            S/. {{ planSeleccionado?.precio }} / mes
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="conf-actions">
+
+      <button
+        type="button"
+        class="btn-acc"
+      >
+        <i class="ti ti-user-circle"></i>
+        Ver mi cuenta
+      </button>
+
+      <button
+        type="button"
+        class="btn-home"
+        (click)="irPaso(1)"
+      >
+        <i class="ti ti-home"></i>
+        Volver al inicio
+      </button>
+
+    </div>
+
+  </div>
+</div>

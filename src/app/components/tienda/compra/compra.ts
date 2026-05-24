@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class CompraComponent implements OnInit {
 
-    private readonly ApiUrl = environment.apiUrl;
+  public readonly ApiUrl = environment.apiUrl; // Cambiado a public para usarlo en el HTML
 
   checkoutForm!: FormGroup;
   vistaActual: 'compra' | 'confirmacion' = 'compra';
@@ -70,7 +70,7 @@ export class CompraComponent implements OnInit {
   }
 
   get qty(): number {
-    return this.carrito.length > 0 ? this.carrito[0].cantidad : 0;
+    return this.carrito.reduce((acc, item) => acc + item.cantidad, 0);
   }
 
   get subtotal(): number {
@@ -89,113 +89,75 @@ export class CompraComponent implements OnInit {
     return this.total - (this.total / 1.18);
   }
 
-  // Getter para el producto que muestra el HTML
-  get producto(): ProductoCarrito {
-    return this.carrito.length > 0
-      ? this.carrito[0]
-      : {
-          id: 0,
-          nombre: '',
-          categoria: '',
-          precio: 0,
-          img: '',
-          cantidad: 0,
-          descripcion: ''
-        };
-  }
-
   // --- MÉTODOS ---
-  chQty(delta: number): void {
-    if (this.carrito.length > 0) {
-
-      const nueva = this.carrito[0].cantidad + delta;
-
-      if (nueva >= 1 && nueva <= 99) {
-        this.carrito[0].cantidad = nueva;
-      }
+  // Modificado: Ahora recibe el producto exacto que estamos modificando
+  chQty(item: ProductoCarrito, delta: number): void {
+    const nueva = item.cantidad + delta;
+    if (nueva >= 1 && nueva <= 99) {
+      this.cartService.actualizarCantidadExacta(item.id, nueva);
     }
   }
 
   applyCoupon(): void {
-    this.hasDsc = (
-      this.couponCode.trim().toUpperCase() === 'FORTA10'
-    );
+    this.hasDsc = (this.couponCode.trim().toUpperCase() === 'FORTA10');
   }
 
   selDel(cost: number): void {
     this.shipCost = cost;
   }
 
-  confirmarPedido(): void {
+  // Helper para resolver la imagen correctamente si viene de la BD
+  resolverImg(img: string): string {
+    if (!img) return 'https://via.placeholder.com/400x300?text=Sin+Imagen';
+    if (img.startsWith('http')) return img;
+    return `${this.ApiUrl}${img}`;
+  }
 
+  confirmarPedido(): void {
     if (this.checkoutForm.valid && this.carrito.length > 0) {
 
       const payload = {
-        usuarioId: 1,
-
+        usuarioId: 1, // Recuerda, el backend usa JWT, este ID es un comodín.
         departamento: this.checkoutForm.value.departamento,
         provincia: this.checkoutForm.value.provincia,
         distrito: this.checkoutForm.value.distrito,
         direccion: this.checkoutForm.value.direccion,
         codigoPostal: this.checkoutForm.value.codigoPostal,
         referencia: this.checkoutForm.value.referencia,
-
         metodoEntrega: this.checkoutForm.value.metodoEntrega,
         metodoPago: this.checkoutForm.value.metodoPago,
-
-        codigoCupon: this.hasDsc
-          ? this.couponCode
-          : null,
-
+        codigoCupon: this.hasDsc ? this.couponCode : null,
         items: this.carrito.map(item => ({
           productoId: item.id,
           cantidad: item.cantidad
         }))
       };
 
-      // --- BUSCA ESTA SECCIÓN EN TU CÓDIGO Y REEMPLÁZALA ---
+      this.http.post<any>(`${this.ApiUrl}/api/tienda/checkout`, payload).subscribe({
+        next: (res) => {
+          this.confirmacionData = res;
+          this.numeroOrden = res.numeroOrden || 'FG-999999';
+          this.fechaActual = new Date();
+          this.carritoConfirmado = [...this.carrito];
+          this.subtotalConfirmado = this.subtotal;
+          this.descuentoConfirmado = this.discountAmount;
+          this.igvConfirmado = this.igv;
+          this.totalConfirmado = this.total;
+          this.vistaActual = 'confirmacion';
 
-    this.http.post<any>(
-      `${this.ApiUrl}/api/tienda/checkout`,
-      payload
-    ).subscribe({
-
-      next: (res) => {
-        this.confirmacionData = res;
-        this.numeroOrden = res.numeroOrden || 'FG-999999';
-        this.fechaActual = new Date();
-        this.carritoConfirmado = [...this.carrito];
-        this.subtotalConfirmado = this.subtotal;
-        this.descuentoConfirmado = this.discountAmount;
-        this.igvConfirmado = this.igv;
-        this.totalConfirmado = this.total;
-        this.vistaActual = 'confirmacion';
-        this.cartService.limpiarCarrito();
-        window.scrollTo(0, 0);
-      },
-
-      error: (err) => {
-        alert(
-          'Error: ' +
-          (err.error?.message || 'Revisa tu conexión')
-        );
-      }
-    });
-
-
+          this.cartService.limpiarCarrito();
+          window.scrollTo(0, 0);
+        },
+        error: (err) => {
+          alert('Error: ' + (err.error?.message || 'Revisa tu conexión'));
+        }
+      });
     } else {
-
       if (this.carrito.length === 0) {
-
         alert('Tu carrito está vacío.');
-
       } else {
-
         this.checkoutForm.markAllAsTouched();
-
-        alert(
-          'Por favor, completa correctamente todos los campos obligatorios.'
-        );
+        alert('Por favor, completa correctamente todos los campos obligatorios.');
       }
     }
   }

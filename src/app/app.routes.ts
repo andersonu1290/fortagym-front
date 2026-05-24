@@ -18,6 +18,7 @@ import { TiendaComponent } from './components/tienda/tienda';
 import { ProductosAdmin } from './components/dashboard/admin/productos/productos';
 import { CompraComponent } from './components/tienda/compra/compra';
 import { CarritoComponent } from './components/tienda/carrito/carrito';
+import { MembresiaComponent } from './components/membresia/membresia';
 
 export const routes: Routes = [
   // ==========================================
@@ -30,6 +31,7 @@ export const routes: Routes = [
   { path: 'tienda', component: TiendaComponent },
   { path: 'carrito', component: CarritoComponent },
   { path: 'compra', component: CompraComponent },
+  { path: 'membresia', component: MembresiaComponent },
 
   // ==========================================
   // 🔒 VISTAS PRIVADAS (Protegidas por authGuard)

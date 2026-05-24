@@ -11,21 +11,80 @@
       <p class="slide-up-3">No somos solo un gimnasio, somos la comunidad fitness más grande. Equipos biomecánicos modernos, clases inmersivas y zonas de alto rendimiento.</p>
       <div class="hero-actions slide-up-4">
         <button class="btn-hero" routerLink="/registro">¡Inscríbete ya!</button>
-        <button class="btn-hero-outline">Ver Instalaciones</button>
+        <button class="btn-hero-outline" (click)="irABuscar()">Ver Instalaciones</button>
+
+
       </div>
     </div>
   </section>
 
-  <section class="search-section">
-    <div class="container">
+  <section id="buscar-sede" class="search-section">
+    <div class="container" style="position: relative;">
       <h2>Encuentra tu sede ideal</h2>
       <p>Contamos con más de 3 sedes equipadas.</p>
-      <div class="search-box-pill">
-        <input type="text" placeholder="Ingresa tu distrito o ciudad...">
+
+      <div class="search-box-pill" style="position: relative; z-index: 10;">
+        <input
+          type="text"
+          placeholder="Ingresa tu distrito o ciudad..."
+          [(ngModel)]="busquedaSede"
+          (input)="buscarSedes()">
         <button class="btn-search-pill">Buscar sede</button>
+
+        <div class="search-dropdown" *ngIf="sedesFiltradas.length > 0">
+          <div class="search-item" *ngFor="let sede of sedesFiltradas" (click)="abrirModalSede(sede)">
+            <img [src]="sede.img" [alt]="sede.nombre">
+            <div class="search-item-info">
+              <h4>{{ sede.nombre }}</h4>
+              <p>{{ sede.direccion }}</p>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </section>
+
+  <div class="promo-modal-backdrop" *ngIf="modalSedeAbierto" (click)="cerrarModalSede()" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 20px;">
+
+    <div class="promo-modal-content" (click)="$event.stopPropagation()" style="background: #0d0d0d; color: #fff; max-width: 600px; width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
+
+      <button (click)="cerrarModalSede()" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: none; color: #fff; font-size: 22px; cursor: pointer; font-weight: bold; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">×</button>
+
+      <div style="width: 100%; height: 200px; position: relative;">
+        <img [src]="sedeSeleccionada?.img" style="width: 100%; height: 100%; object-fit: cover;">
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: linear-gradient(to top, #0d0d0d, transparent);"></div>
+      </div>
+
+      <div style="padding: 20px 30px;">
+        <span class="promo-badge" style="margin-bottom: 10px; background-color: #ff8d22; color: #000;">NUESTRA SEDE</span>
+        <h2 style="margin: 0 0 10px 0; font-size: 1.8rem; font-weight: 900; text-transform: uppercase;">{{ sedeSeleccionada?.nombre }}</h2>
+
+        <p style="color: #ccc; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 8px;">
+          <i class="ti ti-map-pin" style="color: #ff8d22; font-size: 20px; margin-top: 2px;"></i>
+          <span>{{ sedeSeleccionada?.direccion }}</span>
+        </p>
+
+        <div style="width: 100%; border-radius: 12px; overflow: hidden; height: 250px; border: 1px solid rgba(255,255,255,0.1);">
+          <iframe
+            [src]="sedeSeleccionada?.mapaUrl"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+
+        <!-- <<div style="margin-top: 20px; text-align: center;">
+          <button class="btn-promo" style="width: 100%; padding: 14px;" routerLink="/registro">Inscribirme en esta sede</button>
+        </div> -->
+      </div>
+
+    </div>
+  </div>
 
   <section class="plans-section">
     <div class="container">
@@ -53,7 +112,7 @@
               <li><strong>5 invitados VIP al mes</strong></li>
             </ul>
           </div>
-          <button class="btn-block-bottom" routerLink="/registro">¡Elegir plan Black!</button>
+          <button class="btn-block-bottom" routerLink="/membresia">¡Elegir plan Black!</button>
         </div>
 
         <div class="plan-card normal-theme pop-in delay-1">
@@ -75,7 +134,7 @@
               <li class="disabled">Invitados VIP al mes</li>
             </ul>
           </div>
-          <button class="btn-block-bottom" routerLink="/registro">¡Elegir Plan Fit!</button>
+          <button class="btn-block-bottom" routerLink="/membresia">¡Elegir Plan Fit!</button>
         </div>
 
         <div class="plan-card normal-theme pop-in delay-2">
@@ -97,7 +156,7 @@
               <li class="disabled">Invitados VIP al mes</li>
             </ul>
           </div>
-          <button class="btn-block-bottom" routerLink="/registro">¡Elegir Plan Smart!</button>
+          <button class="btn-block-bottom" routerLink="/membresia">¡Elegir Plan Smart!</button>
         </div>
       </div>
     </div>
