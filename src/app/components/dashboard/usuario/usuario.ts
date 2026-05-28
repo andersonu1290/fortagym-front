@@ -72,7 +72,7 @@ onFotoSeleccionada(event: any) {
   if (!this.archivoFoto) return;
   this.usuarioService.subirFoto(this.archivoFoto).subscribe({
     next: () => {
-      alert('✅ Foto guardada en Wansd System');
+      alert('✅ Foto guardada en Sistema Fortagym');
       this.cargarPerfil(); // Recarga para refrescar la URL con el nuevo timestamp
     }
   });

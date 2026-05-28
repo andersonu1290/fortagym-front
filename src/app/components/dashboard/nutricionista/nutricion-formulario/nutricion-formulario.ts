@@ -15,6 +15,7 @@ import { UsuarioService } from '../../../../services/usuario.service';
 export class NutricionFormulario implements OnInit {
   usuarioId: number = 0;
   paciente: any = { nombre: '', apellido: '' };
+  tieneCartilla: boolean = false; // 🔥 Bandera para saber si mostramos el botón de borrar en el HTML
 
   // Objeto que coincide con tu modelo Nutricion.java del backend
   nutricion: any = {
@@ -43,6 +44,7 @@ export class NutricionFormulario implements OnInit {
     this.nutricionService.getNutricionPorUsuario(this.usuarioId).subscribe((data: any) => {
       if (data && !data.mensaje) {
         this.nutricion = data;
+        this.tieneCartilla = true; // 🔥 Detectamos que sí existe una cartilla en la BD y habilitamos el borrado
       }
     });
   }
@@ -65,5 +67,21 @@ export class NutricionFormulario implements OnInit {
         alert('❌ Error al guardar la cartilla. Revisa el backend.');
       }
     });
+  }
+
+  // 🔥 Función para borrar
+  eliminar() {
+    if (confirm('¿Estás seguro de que deseas eliminar todo el expediente nutricional de este paciente? Esto reseteará su estado a "Pendiente".')) {
+      this.nutricionService.eliminarNutricion(this.usuarioId).subscribe({
+        next: () => {
+          alert('🗑️ Cartilla eliminada con éxito.');
+          this.router.navigate(['/nutricion/dashboard']);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('❌ Ocurrió un error al intentar eliminar el expediente.');
+        }
+      });
+    }
   }
 }

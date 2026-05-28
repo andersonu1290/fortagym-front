@@ -32,4 +32,9 @@ export class NutricionService {
   guardarNutricion(datos: any): Observable<any> {
     return this.http.post(`${this.apiNutri}/guardar`, datos, { headers: this.getHeaders() });
   }
+
+  // 🗑️ Eliminar cartilla de un usuario
+  eliminarNutricion(usuarioId: number): Observable<any> {
+    return this.http.delete(`${this.apiNutri}/eliminar/usuario/${usuarioId}`, { headers: this.getHeaders() });
+  }
 }

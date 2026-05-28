@@ -62,9 +62,17 @@ export class RutinaFormulario implements OnInit {
   agregarEjercicio(datos: any = null) {
     const ejercicioGroup = this.fb.group({
       ejercicio: [datos?.ejercicio || '', Validators.required],
-      seriesReps: [datos?.seriesReps || '', Validators.required],
-      descanso: [datos?.descanso || ''],
-      dias: [datos?.dias || '']
+      // 🔥 Sincronizado con el Regex de Java para Series
+      seriesReps: [datos?.seriesReps || '', [
+        Validators.required,
+        Validators.pattern('^[0-9]{1,2} ?x ?[0-9]{1,3}$')
+      ]],
+      // 🔥 Sincronizado con el Regex de Java para Descanso (acepta la barra /)
+      descanso: [datos?.descanso || '', [
+        Validators.required,
+        Validators.pattern('^[0-9]{1,3} ?(seg|s|min)( ?/ ?[0-9]{1,3} ?(seg|s|min))?$')
+      ]],
+      dias: [datos?.dias || '', Validators.required]
     });
     this.listaEjercicios.push(ejercicioGroup);
   }
@@ -74,25 +82,38 @@ export class RutinaFormulario implements OnInit {
   }
 
   onSubmit() {
-  if (this.rutinaForm.valid) {
+    // 🛡️ EL ESCUDO: Validación en frontend antes de molestar a Java
+    if (this.rutinaForm.invalid) {
+      // Pone los inputs en rojo si tienes el CSS configurado
+      this.rutinaForm.markAllAsTouched();
+
+      // La alerta precisa para educar al entrenador
+      alert("⚠️ ¡Alto ahí! Hay errores en los datos ingresados.\n\n" +
+            "Por favor revisa que:\n" +
+            "- Ningún campo esté vacío.\n" +
+            "- Series / Reps tenga el formato: 4x12 o 4 x 12\n" +
+            "- Descanso tenga el formato: 60s, 90 seg, o 60s / 90s");
+
+      return; // 🛑 Abortamos la petición, evitamos el error 500
+    }
+
     // Estructuramos el objeto para que coincida con el @RequestBody Map de Java
     const payload = {
       usuarioId: this.usuarioId,
       nombreEntrenador: this.rutinaForm.value.nombreEntrenador,
-      observaciones: "Rutina asignada por el coach", // O agrega un campo en el form
+      observaciones: "Rutina asignada por el coach",
       detalles: this.rutinaForm.value.detalles
     };
 
     this.rutinaService.guardarRutina(payload).subscribe({
       next: () => {
-        alert('✅ ¡Wansd System actualizó la rutina con éxito!');
+        alert('✅ ¡Sistema Fortagym actualizó la rutina con éxito!');
         this.router.navigate(['/entrenador/lista-usuarios']);
       },
       error: (err) => {
         console.error(err);
-        alert('❌ Error al guardar. Revisa que el usuario no tenga ya una rutina (403/500).');
+        alert('❌ Error interno del servidor. Revisa los logs de Spring Boot.');
       }
     });
   }
-}
 }

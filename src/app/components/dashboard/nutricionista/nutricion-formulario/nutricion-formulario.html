@@ -92,6 +92,14 @@
             style="width: auto;">
             <i class="fa fa-times"></i> Cancelar
           </button>
+          <button
+            type="button"
+            *ngIf="tieneCartilla"
+            (click)="eliminar()"
+            class="btn-cancel-admin"
+            style="width: auto; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); margin-left: auto;">
+            <i class="fa fa-trash"></i> Eliminar Expediente
+          </button>
         </div>
 
       </form>

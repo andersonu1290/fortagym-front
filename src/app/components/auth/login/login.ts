@@ -21,7 +21,7 @@ export class Login {
     // 1. Intentamos iniciar sesión
     this.authService.login(this.credentials).subscribe({
       next: (response) => {
-        // 2. Guardamos el Token de Wansd System
+        // 2. Guardamos el Token de Sistema Fortagym
         this.authService.saveToken(response.token);
 
         // 3. Pedimos el perfil completo para saber el ROL

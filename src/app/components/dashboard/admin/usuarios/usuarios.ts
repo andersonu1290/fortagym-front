@@ -40,20 +40,18 @@ export class Usuarios implements OnInit {
   // ── Cambiar rol (sin cambios, solo se ajustan los valores
   //    al formato minúscula que devuelve tu backend) ──────────
   cambiarRol(id: number, rolSeleccionado: string) {
-    // El select del HTML ya manda minúsculas ('usuario', 'entrenador'…)
-    // así que no necesitamos mapeo extra. Lo dejamos por si acaso:
-    const rolFinal = rolSeleccionado === 'cliente' ? 'usuario' : rolSeleccionado;
-
-    this.adminService.actualizarRol(id, rolFinal).subscribe({
-      next: () => {
-        alert(`✅ Rol actualizado a ${rolFinal} con éxito`);
-        this.cargarUsuarios();
-      },
-      error: (err) => {
-        console.error('Error al actualizar rol', err);
-        alert('❌ No se pudo actualizar el rol');
-      }
-    });
+      // Convertimos a mayúsculas para que el backend lo mapee correctamente con el Enum de Java
+      const rolFinal = (rolSeleccionado === 'cliente' ? 'usuario' : rolSeleccionado).toUpperCase();
+      this.adminService.actualizarRol(id, rolFinal).subscribe({
+          next: () => {
+              alert(`Rol actualizado a ${rolFinal} con éxito`);
+              this.cargarUsuarios();
+          },
+          error: (err) => {
+              console.error('Error al actualizar rol', err);
+              alert('No se pudo actualizar el rol');
+          }
+      });
   }
 
   // ── Eliminar usuario (sin cambios) ─────────────────────────
