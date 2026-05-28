@@ -15,8 +15,9 @@ export class ProductoService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-  guardarProducto(producto: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/guardar`, producto);
+  // Ahora acepta FormData explícitamente para que los archivos viajen al backend
+  guardarProducto(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/guardar`, formData);
   }
 
   eliminarProducto(id: number): Observable<any> {

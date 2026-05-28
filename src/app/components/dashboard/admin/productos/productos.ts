@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProductoService } from '../../../../services/producto.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-productos',
@@ -84,8 +85,8 @@ export class ProductosAdmin implements OnInit {
   }
 
   guardarProducto() {
-    if (!this.productoActual.nombre || !this.productoActual.precio) {
-      alert("Por favor llena los campos obligatorios");
+    if (!this.productoActual.nombre || this.productoActual.precio == null || this.productoActual.stock == null) {
+      alert("Por favor llena los campos obligatorios (Nombre, Precio y Stock)");
       return;
     }
 
@@ -110,28 +111,32 @@ export class ProductosAdmin implements OnInit {
 
     this.productoService.guardarProducto(formData).subscribe({
       next: () => {
-        alert("Producto guardado exitosamente");
+        alert("✅ Producto guardado exitosamente");
         this.limpiarFormulario();
         this.cargarProductos();
       },
       error: (err) => {
         console.error("Error al guardar:", err);
-        alert("Error al guardar. Revisa la consola.");
+        alert("❌ Error al guardar el producto. Revisa la consola.");
       }
     });
   }
 
   editarProducto(producto: any) {
     this.productoActual = { ...producto };
-    // Determinar modo automáticamente al editar
     this.modoSubida = (producto.img && producto.img.startsWith('http')) ? 'url' : 'archivo';
+    this.archivoSeleccionado = null;
+
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   }
 
   eliminarProducto(id: number) {
-    if(confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+    if(confirm("¿Estás seguro de que deseas eliminar este producto de forma permanente?")) {
       this.productoService.eliminarProducto(id).subscribe({
-        next: () => this.cargarProductos(),
+        next: () => {
+          alert("🗑️ Producto eliminado correctamente");
+          this.cargarProductos();
+        },
         error: (err) => console.error("Error al eliminar", err)
       });
     }
@@ -141,5 +146,13 @@ export class ProductosAdmin implements OnInit {
     this.productoActual = { id: null, nombre: '', categoria: 'SUPLEMENTOS', precio: null, stock: null, descripcion: '', img: '' };
     this.archivoSeleccionado = null;
     this.modoSubida = 'archivo';
+  }
+
+  // Función inteligente vinculada a tu variable environment.apiUrl
+  getImagenUrl(img: string): string {
+    if (!img) return '';
+    if (img.startsWith('http')) return img;
+    if (img.startsWith('/uploads/')) return `${environment.apiUrl}${img}`;
+    return `${environment.apiUrl}/uploads/${img}`;
   }
 }

@@ -50,12 +50,14 @@
 
   <div class="products-grid">
     <div class="product-card" *ngFor="let p of productosFiltrados">
-      <div class="product-img">
-        <img [src]="p.img || 'https://via.placeholder.com/400x300?text=Sin+Imagen'" [alt]="p.nombre">
+
+      <div class="product-img contenedor-imagen-manual">
+        <img [src]="getImagenUrl(p.img) || 'https://via.placeholder.com/400x300?text=Sin+Imagen'" [alt]="p.nombre">
         <span class="img-badge" [class.agotado]="p.stock === 0">
           {{ p.stock === 0 ? 'Agotado' : 'Disponible' }}
         </span>
       </div>
+
       <div class="product-body">
         <div class="product-cat">{{ p.categoria }}</div>
         <div class="product-name">{{ p.nombre }}</div>
@@ -140,4 +142,3 @@
   </div>
 
 </div>
-
