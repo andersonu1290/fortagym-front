@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   registrar(usuario: any): Observable<any> {
-    // Apuntamos al endpoint que definimos en la Fase 2 (Puerto 8090)
+    // Apuntamos al endpoint que definimos en la Fase 2 (Puerto 8089)
     return this.http.post(`${environment.apiUrl}/api/usuarios/registro`, usuario);
   }
 

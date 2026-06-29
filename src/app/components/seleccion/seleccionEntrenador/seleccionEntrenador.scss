@@ -1,0 +1,358 @@
+// =============================================================
+// seleccionEntrenador.scss
+// Componente: Selección de Entrenador Personal y Reserva de Horario
+// Hereda variables y convenciones del Design System FortaGym
+// (--color-forta-primary, --font-title, --font-body, etc.)
+// =============================================================
+
+.seleccion-entrenador-page {
+  padding: 60px 0 80px;
+  font-family: var(--font-body);
+}
+
+// Utilidad accesible: oculta visualmente sin quitar del flujo de lectura
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.text-highlight {
+  color: var(--color-forta-primary);
+}
+
+.text-muted {
+  color: var(--color-text-secondary, #64748b);
+}
+
+// =========================================
+// PASO 1 — GRID DE ENTRENADORES
+// =========================================
+.entrenadores-section {
+  margin-bottom: 60px;
+}
+
+.entrenadores-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Extiende .pro-profile-card del design system global
+.pro-profile-card {
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  &.selected {
+    border-color: var(--color-forta-primary);
+    box-shadow: 0 20px 40px rgba(255, 141, 34, 0.18);
+  }
+
+  .pro-card-trigger {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: center;
+    display: block;
+  }
+
+  .btn-agendar {
+    display: inline-block;
+    width: 100%;
+    background: transparent;
+    border: 2px solid #111;
+    color: #111;
+    padding: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    border-radius: 8px;
+    transition: 0.3s;
+    box-sizing: border-box;
+
+    &.activo {
+      background: var(--color-forta-primary);
+      border-color: var(--color-forta-primary);
+      color: #fff;
+    }
+  }
+
+  .pro-card-trigger:hover .btn-agendar:not(.activo) {
+    background: var(--color-forta-primary);
+    border-color: var(--color-forta-primary);
+    color: #fff;
+  }
+}
+
+// =========================================
+// PASO 2 — HORARIOS DISPONIBLES
+// =========================================
+.horarios-section {
+  margin-bottom: 50px;
+  animation: fadeInUp 0.4s ease forwards;
+
+  h2 {
+    font-family: var(--font-title);
+    font-size: 1.6rem;
+    font-weight: 900;
+    margin-bottom: 25px;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--color-forta-dark, #111);
+  }
+}
+
+.horarios-subtitle {
+  text-align: center;
+  color: var(--color-text-secondary, #64748b);
+}
+
+// Extiende .schedule-grid / .time-slot del design system global
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.time-slot {
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 14px 10px;
+  font-weight: bold;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  &:hover:not(.disabled) {
+    border-color: var(--color-forta-primary);
+    color: var(--color-forta-primary);
+  }
+
+  &.selected {
+    background: var(--color-forta-primary);
+    border-color: var(--color-forta-primary);
+    color: #fff;
+
+    .time-slot-duracion {
+      color: #fff;
+      opacity: 0.85;
+    }
+  }
+
+  &.disabled {
+    background: #f4f4f4;
+    color: #aaa;
+    border-color: #eee;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+}
+
+.time-slot-fecha {
+  font-size: 0.9rem;
+}
+
+.time-slot-duracion {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+// Detalle de la sesión: qué se entrena, duración total y ejercicios
+.sesion-detalle {
+  max-width: 600px;
+  margin: 35px auto 0;
+  background: #fff;
+  border: 1px solid var(--color-border-tertiary, #e2e8f0);
+  border-radius: var(--border-radius-lg, 16px);
+  padding: 28px 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+
+  h3 {
+    font-family: var(--font-title);
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+    color: var(--color-forta-dark, #111);
+  }
+
+  h4 {
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary, #64748b);
+    margin: 20px 0 10px;
+  }
+}
+
+.sesion-meta {
+  margin-bottom: 12px;
+}
+
+.sesion-duracion {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 141, 34, 0.1);
+  color: var(--color-forta-primary);
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.sesion-descripcion {
+  margin: 0;
+  color: var(--color-text-primary, #111);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.sesion-ejercicios {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  li {
+    background: var(--color-background-tertiary, #f4f6f8);
+    border: 1px solid var(--color-border-tertiary, #e2e8f0);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #111);
+  }
+}
+
+// =========================================
+// PASO 3 — RESUMEN Y CONFIRMACIÓN
+// =========================================
+.resumen-section {
+  max-width: 600px;
+  margin: 0 auto;
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.resumen-card {
+  background: var(--color-background-secondary, #f8fafc);
+  border: 1px solid var(--color-border-tertiary, #e2e8f0);
+  border-radius: var(--border-radius-lg, 16px);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+  }
+}
+
+.resumen-detalle {
+  p {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    color: var(--color-text-primary, #111);
+
+    strong {
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      color: var(--color-text-secondary, #64748b);
+      display: block;
+      margin-bottom: 2px;
+    }
+  }
+}
+
+// Extiende .btn-confirm-booking del design system global
+.btn-confirm-booking {
+  background: var(--color-forta-primary);
+  color: #fff;
+  padding: 16px 30px;
+  font-weight: 900;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+
+  &:hover:not(:disabled) {
+    background: #111;
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.confirmacion-mensaje {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: 700;
+  color: #2ecc71;
+  background: rgba(46, 204, 113, 0.08);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

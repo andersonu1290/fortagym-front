@@ -210,3 +210,39 @@
     }
   }
 }
+
+/* ==========================================================================
+   INSIGNIA DE MEMBRESÍA EN EL HEADER
+   ========================================================================== */
+.badge-membresia {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+  width: max-content;
+
+  i {
+    font-size: 12px;
+  }
+
+  /* Estilo exclusivo para el Plan Black */
+  &.badge-black {
+    background: #111111;
+    color: var(--color-forta-primary, #ff8d22);
+    border: 1px solid var(--color-forta-primary, #ff8d22);
+    box-shadow: 0 2px 8px rgba(255, 141, 34, 0.2);
+  }
+
+  /* Estilo para los demás planes (Fit, Smart, etc.) */
+  &.badge-orange {
+    background: rgba(255, 141, 34, 0.15);
+    color: var(--color-forta-primary, #ff8d22);
+    border: 1px solid rgba(255, 141, 34, 0.3);
+  }
+}

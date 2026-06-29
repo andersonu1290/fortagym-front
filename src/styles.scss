@@ -452,3 +452,64 @@ textarea.form-control-premium {
   background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column;
   &:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); border-color: rgba(255, 141, 34, 0.3); }
 }
+
+/* ==========================================================================
+   18. STEPPER GLOBAL (Indicador de pasos para Checkout/Registros)
+   ========================================================================== */
+.steps-wrap { width: 100%; background: var(--color-background-primary); border-bottom: 1px solid var(--color-border-tertiary); padding: 16px 20px; }
+.steps { display: flex; align-items: center; justify-content: center; }
+.step { display: flex; align-items: center; gap: 8px; }
+.snum { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--color-border-tertiary); display: flex; align-items: center; justify-content: center; background: var(--color-background-primary); color: var(--color-text-secondary); font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.slbl { color: var(--color-text-secondary); font-size: 12px; font-weight: 500; }
+.sline { width: 48px; height: 1px; background: var(--color-border-tertiary); margin: 0 8px; }
+.sline.done { background: var(--color-forta-primary); }
+.step.done .snum { background: var(--color-forta-dark); border-color: var(--color-forta-dark); color: var(--color-forta-primary); }
+.step.active .snum { background: var(--color-forta-primary); border-color: var(--color-forta-primary); color: #fff; box-shadow: 0 0 0 4px rgba(255, 141, 34, 0.15); }
+.step.active .slbl { color: var(--color-text-primary); font-weight: 700; }
+
+@media (max-width: 640px) {
+  .steps { justify-content: flex-start; overflow-x: auto; }
+}
+
+/* ==========================================================================
+   19. TARJETAS DE DATOS GLOBALES (Para Checkout o Formularios)
+   ========================================================================== */
+.card, .sum-card, .rcard { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: 22px; overflow: hidden; animation: slideUpFade .35s ease both; }
+.card-hd, .rcrd-hd { padding: 18px 22px; border-bottom: 1px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 12px; }
+.card-ico { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,141,34,.1); display: flex; align-items: center; justify-content: center; }
+.card-ico i { color: var(--color-forta-primary); }
+.card-ttl, .rcrd-ttl { font-size: 15px; font-weight: 700; }
+.card-sub { color: var(--color-text-secondary); font-size: 12px; margin-top: 2px; }
+.card-bd, .rcrd-bd { padding: 22px; }
+
+/* ==========================================================================
+   20. FORMULARIOS CHECKOUT Y PESTAÑAS GLOBALES (.fg, .finp, .ptabs)
+   ========================================================================== */
+.fg { margin-bottom: 16px; }
+.flbl { display: block; margin-bottom: 8px; color: var(--color-text-secondary); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; }
+.finp { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); color: var(--color-text-primary); font-size: 14px; outline: none; transition: .2s ease; }
+.finp:focus { border-color: var(--color-forta-primary); box-shadow: 0 0 0 4px rgba(255,141,34,.1); }
+.finp.input-error { border-color: #ef4444 !important; background-color: #fff5f5 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important; }
+.err-msg { display: block; margin-top: 5px; font-size: 0.78rem; font-weight: 600; color: #ef4444; font-family: var(--font-body); }
+
+/* Checkbox Label Global */
+.chrow { display: flex; align-items: flex-start; gap: 10px; }
+.chlbl { color: var(--color-text-secondary); font-size: 13px; line-height: 1.5; }
+
+/* Pestañas (Tabs de pago u opciones) */
+.ptabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.ptab { flex: 1; border: 1px solid var(--color-border-tertiary); border-radius: 14px; background: var(--color-background-secondary); padding: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--color-text-secondary); font-size: 12px; font-weight: 700; transition: .2s ease; }
+.ptab.act { border-color: var(--color-forta-primary); background: rgba(255,141,34,.06); color: var(--color-text-primary); }
+
+/* ==========================================================================
+   21. BOTONES DE ACCIÓN GLOBALES (Checkout / Confirmación)
+   ========================================================================== */
+.btn-pay { width: 100%; border: none; border-radius: 16px; background: var(--color-forta-primary); color: #fff; padding: 18px; cursor: pointer; font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; transition: background .2s ease, transform .2s ease; }
+.btn-pay:hover { background: var(--color-forta-primary-hover); transform: translateY(-2px); }
+
+.btn-back, .btn-home { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid var(--color-border-secondary); background: transparent; cursor: pointer; color: var(--color-text-secondary); font-size: 13px; font-weight: 700; transition: .2s ease; }
+.btn-back { margin-top: 12px; }
+.btn-back:hover, .btn-home:hover { background: var(--color-background-secondary); }
+
+.btn-acc { flex: 1; border: none; border-radius: 14px; padding: 16px; cursor: pointer; font-size: 13px; font-weight: 800; text-transform: uppercase; background: var(--color-forta-primary); color: #fff; transition: .2s ease; }
+.btn-acc:hover { background: var(--color-forta-primary-hover); }

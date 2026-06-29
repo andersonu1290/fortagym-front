@@ -3,13 +3,6 @@
 ═══════════════════════════════════ -->
 <div class="screen act" *ngIf="pasoActual === 1">
 
-  <div class="topbar">
-    <div class="topbar-right">
-      <i class="ti ti-lock" aria-hidden="true"></i>
-      Proceso de pago seguro
-    </div>
-  </div>
-
   <div class="steps-wrap">
     <div class="steps">
 
@@ -37,19 +30,12 @@
 
   <div class="plan-hero">
     <div class="plan-hero-inner">
-
       <div class="plan-eyebrow">
         <span></span>
         Membresías FortaGym
       </div>
-
       <h1>Elige tu plan y empieza hoy</h1>
-
-      <p>
-        Sin excusas. Selecciona la membresía perfecta para ti
-        y empieza a entrenar hoy mismo.
-      </p>
-
+      <p>Sin excusas. Selecciona la membresía perfecta para ti y empieza a entrenar hoy mismo.</p>
     </div>
   </div>
 
@@ -65,56 +51,28 @@
         (click)="seleccionarPlan(plan)"
       >
 
-        <div
-          class="plan-badge"
-          *ngIf="plan.recomendado"
-        >
-          Recomendado
-        </div>
+        <div class="plan-badge" *ngIf="plan.recomendado">Recomendado</div>
 
-        <div class="selected-ring">
+        <div class="selected-ring" *ngIf="planSeleccionado?.id === plan.id">
           <i class="ti ti-check"></i>
         </div>
 
-        <div
-          class="plan-hd"
-          [class.plan-hd-black]="plan.recomendado"
-        >
-
-          <div class="plan-name">
-            {{ plan.nombre }}
-          </div>
-
-          <div class="plan-sub">
-            {{ plan.descripcion }}
-          </div>
-
+        <div class="plan-hd" [class.plan-hd-black]="plan.recomendado">
+          <div class="plan-name">{{ plan.nombre }}</div>
+          <div class="plan-sub">{{ plan.descripcion }}</div>
         </div>
 
         <div class="plan-price-wrap">
-
           <span class="plan-currency">s/</span>
-
-          <span class="plan-amount">
-            {{ plan.precio }}
-          </span>
-
-          <div class="plan-fidelidad">
-            {{ plan.descripcion }}
-          </div>
-
+          <span class="plan-amount">{{ plan.precio.toFixed(2).replace('.', ',') }}</span>
+          <div class="plan-fidelidad">{{ plan.fidelidad }}</div>
         </div>
 
         <div class="plan-feats">
-
-          <div
-            class="feat-item"
-            *ngFor="let feature of plan.features"
-          >
-            <i class="ti ti-check ok"></i>
-            <span>{{ feature }}</span>
+          <div class="feat-item" *ngFor="let feature of plan.features" [class.feat-disabled]="!feature.incluido">
+            <i class="ti" [ngClass]="feature.incluido ? 'ti-check' : 'ti-x'"></i>
+            <span [innerHTML]="feature.nombre"></span>
           </div>
-
         </div>
 
         <button
@@ -133,45 +91,17 @@
     </div>
 
     <div class="guarantees-strip">
-
-      <div class="gi">
-        <i class="ti ti-circle-check"></i>
-        Cancela cuando quieras
-      </div>
-
+      <div class="gi"><i class="ti ti-circle-check"></i> Cancela cuando quieras</div>
       <div class="gi-sep"></div>
-
-      <div class="gi">
-        <i class="ti ti-circle-check"></i>
-        Sin cargos ocultos
-      </div>
-
+      <div class="gi"><i class="ti ti-circle-check"></i> Sin cargos ocultos</div>
       <div class="gi-sep"></div>
-
-      <div class="gi">
-        <i class="ti ti-circle-check"></i>
-        Acceso inmediato
-      </div>
-
+      <div class="gi"><i class="ti ti-circle-check"></i> Acceso inmediato</div>
       <div class="gi-sep"></div>
-
-      <div class="gi">
-        <i class="ti ti-circle-check"></i>
-        Pago 100% seguro
-      </div>
-
+      <div class="gi"><i class="ti ti-circle-check"></i> Pago 100% seguro</div>
     </div>
 
     <div style="margin-top: 28px;">
-
-      <button
-        type="button"
-        class="btn-pay"
-        (click)="irPaso(2)"
-      >
-        Continuar
-      </button>
-
+      <button type="button" class="btn-pay" (click)="irPaso(2)">Continuar</button>
     </div>
 
   </div>
@@ -183,33 +113,11 @@
 ═══════════════════════════════════ -->
 <div class="screen act" *ngIf="pasoActual === 2">
 
-  <div class="topbar">
-
-    <div class="logo">
-      <div class="logo-box">
-        <i class="ti ti-bolt"></i>
-      </div>
-
-      <span class="logo-name">
-        FORTAGYM
-      </span>
-    </div>
-
-    <div class="topbar-right">
-      <i class="ti ti-lock"></i>
-      Pago 100% seguro
-    </div>
-
-  </div>
-
   <div class="steps-wrap">
     <div class="steps">
 
       <div class="step done">
-        <div class="snum">
-          <i class="ti ti-check"></i>
-        </div>
-
+        <div class="snum"><i class="ti ti-check"></i></div>
         <span class="slbl">Elegir plan</span>
       </div>
 
@@ -232,130 +140,131 @@
 
   <div class="checkout-layout">
 
-    <!-- IZQUIERDA -->
+    <!-- ── IZQUIERDA ─────────────────────────────────────────── -->
     <div>
 
-      <!-- DATOS -->
+      <!-- DATOS PERSONALES -->
       <div class="card">
 
         <div class="card-hd">
-
-          <div class="card-ico">
-            <i class="ti ti-user"></i>
-          </div>
-
+          <div class="card-ico"><i class="ti ti-user"></i></div>
           <div>
-            <div class="card-ttl">
-              Datos personales
-            </div>
-
-            <div class="card-sub">
-              Completa tu información
-            </div>
+            <div class="card-ttl">Datos personales</div>
+            <div class="card-sub">Completa tu información</div>
           </div>
-
         </div>
 
         <div class="card-bd">
 
           <div class="g2">
 
+            <!-- Nombre -->
             <div class="fg">
               <label class="flbl">Nombre</label>
-
               <input
                 type="text"
                 class="finp"
+                [class.input-error]="errores['nombre']"
                 placeholder="Tu nombre"
+                [value]="nombre"
+                (input)="onSoloLetras($event, 'nombre')"
+                maxlength="50"
               >
+              <span class="err-msg" *ngIf="errores['nombre']">{{ errores['nombre'] }}</span>
             </div>
 
+            <!-- Apellido -->
             <div class="fg">
               <label class="flbl">Apellido</label>
-
               <input
                 type="text"
                 class="finp"
+                [class.input-error]="errores['apellido']"
                 placeholder="Tu apellido"
+                [value]="apellido"
+                (input)="onSoloLetras($event, 'apellido')"
+                maxlength="50"
               >
+              <span class="err-msg" *ngIf="errores['apellido']">{{ errores['apellido'] }}</span>
             </div>
 
           </div>
 
           <div class="g2">
 
+            <!-- DNI -->
             <div class="fg">
               <label class="flbl">DNI</label>
-
               <input
                 type="text"
                 class="finp"
+                [class.input-error]="errores['dni']"
                 placeholder="00000000"
+                [value]="dni"
+                (input)="onDni($event)"
+                inputmode="numeric"
+                maxlength="8"
               >
+              <span class="err-msg" *ngIf="errores['dni']">{{ errores['dni'] }}</span>
             </div>
 
+            <!-- Teléfono -->
             <div class="fg">
               <label class="flbl">Teléfono</label>
-
               <input
                 type="text"
                 class="finp"
+                [class.input-error]="errores['telefono']"
                 placeholder="+51 999 999 999"
+                [value]="telefono"
+                (focus)="onTelefonoFocus($event)"
+                (input)="onTelefono($event, 'telefono')"
+                inputmode="numeric"
+                maxlength="15"
               >
+              <span class="err-msg" *ngIf="errores['telefono']">{{ errores['telefono'] }}</span>
             </div>
 
           </div>
 
+          <!-- Email -->
           <div class="fg">
-
-            <label class="flbl">
-              Correo electrónico
-            </label>
-
+            <label class="flbl">Correo electrónico</label>
             <input
               type="email"
               class="finp"
+              [class.input-error]="errores['email']"
               placeholder="correo@ejemplo.com"
+              [(ngModel)]="email"
+              maxlength="100"
             >
-
+            <span class="err-msg" *ngIf="errores['email']">{{ errores['email'] }}</span>
           </div>
 
         </div>
-      </div>
+      </div><!-- /card datos -->
 
-      <!-- PAGO -->
+      <!-- MÉTODO DE PAGO -->
       <div class="card">
 
         <div class="card-hd">
-
-          <div class="card-ico">
-            <i class="ti ti-credit-card"></i>
-          </div>
-
+          <div class="card-ico"><i class="ti ti-credit-card"></i></div>
           <div>
-            <div class="card-ttl">
-              Método de pago
-            </div>
-
-            <div class="card-sub">
-              Tus datos están protegidos
-            </div>
+            <div class="card-ttl">Método de pago</div>
+            <div class="card-sub">Tus datos están protegidos</div>
           </div>
-
         </div>
 
         <div class="card-bd">
 
           <div class="ptabs">
-
             <button
               type="button"
               class="ptab"
               [class.act]="metodoPago === 'tarjeta'"
               (click)="metodoPago = 'tarjeta'"
             >
-              <i class="ti ti-credit-card"></i>
-              Tarjeta
+              <i class="ti ti-credit-card"></i> Tarjeta
             </button>
 
             <button
@@ -364,193 +273,158 @@
               [class.act]="metodoPago === 'yape'"
               (click)="metodoPago = 'yape'"
             >
-              <i class="ti ti-device-mobile"></i>
-              Yape/Plin
+              <i class="ti ti-device-mobile"></i> Yape/Plin
             </button>
-
           </div>
 
-          <!-- TARJETA -->
+          <!-- ── TARJETA ────────────────────────────────────── -->
           <div *ngIf="metodoPago === 'tarjeta'">
 
+            <!-- Número de tarjeta -->
             <div class="fg">
-
-              <label class="flbl">
-                Número de tarjeta
-              </label>
-
+              <label class="flbl">Número de tarjeta</label>
               <input
                 type="text"
                 class="finp"
+                [class.input-error]="errores['numTarjeta']"
                 placeholder="0000 0000 0000 0000"
+                [value]="numTarjeta"
+                (input)="onNumTarjeta($event)"
+                inputmode="numeric"
+                maxlength="19"
               >
-
+              <span class="err-msg" *ngIf="errores['numTarjeta']">{{ errores['numTarjeta'] }}</span>
             </div>
 
+            <!-- Titular -->
             <div class="fg">
-
-              <label class="flbl">
-                Nombre del titular
-              </label>
-
+              <label class="flbl">Nombre del titular</label>
               <input
                 type="text"
                 class="finp"
+                [class.input-error]="errores['titular']"
                 placeholder="Nombre completo"
+                [value]="titular"
+                (input)="onSoloLetras($event, 'titular')"
+                maxlength="60"
               >
-
+              <span class="err-msg" *ngIf="errores['titular']">{{ errores['titular'] }}</span>
             </div>
 
             <div class="g2">
 
+              <!-- Vencimiento -->
               <div class="fg">
-
-                <label class="flbl">
-                  Vencimiento
-                </label>
-
+                <label class="flbl">Vencimiento</label>
                 <input
                   type="text"
                   class="finp"
+                  [class.input-error]="errores['vencimiento']"
                   placeholder="MM/AA"
+                  [value]="vencimiento"
+                  (input)="onVencimiento($event)"
+                  inputmode="numeric"
+                  maxlength="5"
                 >
-
+                <span class="err-msg" *ngIf="errores['vencimiento']">{{ errores['vencimiento'] }}</span>
               </div>
 
+              <!-- CVV -->
               <div class="fg">
-
-                <label class="flbl">
-                  CVV
-                </label>
-
+                <label class="flbl">CVV</label>
                 <input
                   type="text"
                   class="finp"
+                  [class.input-error]="errores['cvv']"
                   placeholder="123"
+                  [value]="cvv"
+                  (input)="onCvv($event)"
+                  inputmode="numeric"
+                  maxlength="4"
                 >
-
+                <span class="err-msg" *ngIf="errores['cvv']">{{ errores['cvv'] }}</span>
               </div>
 
             </div>
 
-          </div>
+          </div><!-- /tarjeta -->
 
-          <!-- YAPE -->
+          <!-- ── YAPE ───────────────────────────────────────── -->
           <div *ngIf="metodoPago === 'yape'">
 
             <div class="fg">
-
-              <label class="flbl">
-                Número asociado a Yape
-              </label>
-
+              <label class="flbl">Número asociado a Yape</label>
               <input
                 type="text"
                 class="finp"
+                [class.input-error]="errores['telefonoYape']"
                 placeholder="+51 999 999 999"
+                [value]="telefonoYape"
+                (focus)="onTelefonoYapeFocus($event)"
+                (input)="onTelefono($event, 'telefonoYape')"
+                inputmode="numeric"
+                maxlength="15"
               >
-
+              <span class="err-msg" *ngIf="errores['telefonoYape']">{{ errores['telefonoYape'] }}</span>
             </div>
 
-          </div>
+          </div><!-- /yape -->
 
+          <!-- Términos -->
           <div class="chrow">
-
             <input
               type="checkbox"
               [(ngModel)]="terminosAceptados"
             >
-
-            <span class="chlbl">
-              Acepto los términos y condiciones
-            </span>
-
+            <span class="chlbl">Acepto los términos y condiciones</span>
           </div>
+          <span class="err-msg" *ngIf="errores['terminos']">{{ errores['terminos'] }}</span>
 
         </div>
 
-      </div>
+      </div><!-- /card pago -->
 
-    </div>
+    </div><!-- /izquierda -->
 
 
-    <!-- DERECHA -->
+    <!-- ── DERECHA ────────────────────────────────────────────── -->
     <div>
 
       <div class="sum-card">
 
         <div class="sum-hd">
-
-          <span class="sum-ttl">
-            Tu membresía
-          </span>
-
-          <span class="plan-pill">
-            {{ planSeleccionado?.nombre }}
-          </span>
-
+          <span class="sum-ttl">Tu membresía</span>
+          <span class="plan-pill">{{ planSeleccionado?.nombre }}</span>
         </div>
 
         <div class="sum-plan-block">
-
-          <div class="sum-plan-name">
-            {{ planSeleccionado?.nombre }}
-          </div>
-
-          <div class="sum-plan-desc">
-            {{ planSeleccionado?.descripcion }}
-          </div>
-
+          <div class="sum-plan-name">{{ planSeleccionado?.nombre }}</div>
+          <div class="sum-plan-desc">{{ planSeleccionado?.descripcion }}</div>
           <div class="sum-feats">
-
-            <div
-              class="sf"
-              *ngFor="let feature of planSeleccionado?.features"
-            >
-              <i class="ti ti-check"></i>
-              {{ feature }}
-            </div>
-
+            <ng-container *ngFor="let feature of planSeleccionado?.features">
+              <div class="sf" *ngIf="feature.incluido">
+                <i class="ti ti-check"></i>
+                <span [innerHTML]="feature.nombre"></span>
+              </div>
+            </ng-container>
           </div>
-
         </div>
 
         <div class="breakdown">
 
           <div class="brow">
-
-            <span class="blbl">
-              Membresía mensual
-            </span>
-
-            <span class="bval">
-              S/. {{ planSeleccionado?.precio }}
-            </span>
-
+            <span class="blbl">Membresía mensual</span>
+            <span class="bval">S/. {{ planSeleccionado?.precio }}</span>
           </div>
 
           <div class="brow">
-
-            <span class="blbl">
-              IGV incluido (18%)
-            </span>
-
-            <span class="bval">
-              S/. {{ calcularIGV().toFixed(2) }}
-            </span>
-
+            <span class="blbl">IGV incluido (18%)</span>
+            <span class="bval">S/. {{ calcularIGV().toFixed(2) }}</span>
           </div>
 
           <div class="brow total">
-
-            <span class="blbl">
-              Total / mes
-            </span>
-
-            <span class="bval">
-              S/. {{ calcularTotal().toFixed(2) }}
-            </span>
-
+            <span class="blbl">Total / mes</span>
+            <span class="bval">S/. {{ calcularTotal().toFixed(2) }}</span>
           </div>
 
         </div>
@@ -579,7 +453,7 @@
 
       </div>
 
-    </div>
+    </div><!-- /derecha -->
 
   </div>
 </div>
@@ -590,48 +464,19 @@
 ═══════════════════════════════════ -->
 <div class="screen act" *ngIf="pasoActual === 3">
 
-  <div class="topbar">
-
-    <div class="logo">
-      <div class="logo-box">
-        <i class="ti ti-bolt"></i>
-      </div>
-
-      <span class="logo-name">
-        FORTAGYM
-      </span>
-    </div>
-
-    <div class="topbar-right" style="color:#16a34a;">
-      <i class="ti ti-circle-check"></i>
-      Membresía activada
-    </div>
-
-  </div>
-
   <div class="steps-wrap">
     <div class="steps">
 
       <div class="step done">
-        <div class="snum">
-          <i class="ti ti-check"></i>
-        </div>
-
-        <span class="slbl">
-          Elegir plan
-        </span>
+        <div class="snum"><i class="ti ti-check"></i></div>
+        <span class="slbl">Elegir plan</span>
       </div>
 
       <div class="sline done"></div>
 
       <div class="step done">
-        <div class="snum">
-          <i class="ti ti-check"></i>
-        </div>
-
-        <span class="slbl">
-          Datos &amp; Pago
-        </span>
+        <div class="snum"><i class="ti ti-check"></i></div>
+        <span class="slbl">Datos &amp; Pago</span>
       </div>
 
       <div class="sline done"></div>
@@ -647,78 +492,39 @@
   <div class="conf-wrap">
 
     <div class="conf-hero">
-
-      <div class="conf-circle">
-        <i class="ti ti-check"></i>
-      </div>
-
-      <h1 class="conf-ttl">
-        ¡Bienvenido a FortaGym!
-      </h1>
-
-      <p class="conf-sub">
-        Tu membresía fue activada correctamente.
-      </p>
-
+      <div class="conf-circle"><i class="ti ti-check"></i></div>
+      <h1 class="conf-ttl">¡Bienvenido a FortaGym!</h1>
+      <p class="conf-sub">Tu membresía fue activada correctamente.</p>
     </div>
 
     <div class="rcard">
 
       <div class="rcrd-hd">
-
         <i class="ti ti-id-badge"></i>
-
-        <span class="rcrd-ttl">
-          Tu membresía
-        </span>
-
+        <span class="rcrd-ttl">Tu membresía</span>
       </div>
 
       <div class="rcrd-bd">
-
         <div class="conf-plan-block">
-
-          <div class="conf-plan-ico">
-            <i class="ti ti-bolt"></i>
-          </div>
-
+          <div class="conf-plan-ico"><i class="ti ti-bolt"></i></div>
           <div>
-
-            <div class="conf-plan-nm">
-              {{ planSeleccionado?.nombre }}
-            </div>
-
-            <div class="conf-plan-dur">
-              {{ planSeleccionado?.descripcion }}
-            </div>
-
+            <div class="conf-plan-nm">{{ planSeleccionado?.nombre }}</div>
+            <div class="conf-plan-dur">{{ planSeleccionado?.descripcion }}</div>
           </div>
-
-          <div class="conf-plan-price">
-            S/. {{ planSeleccionado?.precio }} / mes
-          </div>
-
+          <div class="conf-plan-price">S/. {{ planSeleccionado?.precio }} / mes</div>
         </div>
-
       </div>
 
     </div>
 
     <div class="conf-actions">
 
-      <button
-        type="button"
-        class="btn-acc"
-      >
+      <button type="button" class="btn-acc">
         <i class="ti ti-user-circle"></i>
         Ver mi cuenta
       </button>
 
-      <button
-        type="button"
-        class="btn-home"
-        (click)="irPaso(1)"
-      >
+      <button type="button" class="btn-home" (click)="irPaso(1)">
         <i class="ti ti-home"></i>
         Volver al inicio
       </button>

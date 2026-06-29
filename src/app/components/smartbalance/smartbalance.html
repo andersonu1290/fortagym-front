@@ -1,0 +1,564 @@
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 1 — FORMULARIO DE DATOS BIOMÉTRICOS
+════════════════════════════════════════════════════════════ -->
+<div class="screen" *ngIf="pasoActual === 1">
+
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-box"><i class="ti ti-chart-dots-3" aria-hidden="true"></i></div>
+      <span class="logo-name">SMARTBALANCE</span>
+    </div>
+    <div class="topbar-right">
+      <i class="ti ti-flask" aria-hidden="true"></i>
+      Fórmulas científicamente validadas
+    </div>
+  </div>
+
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step active">
+        <div class="snum">1</div>
+        <span class="slbl">Datos biométricos</span>
+      </div>
+      <div class="sline"></div>
+      <div class="step">
+        <div class="snum">2</div>
+        <span class="slbl">Resultados</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="sb-hero">
+    <div class="sb-hero-inner">
+      <div class="sb-eyebrow">
+        <span></span>
+        Análisis de Composición Corporal
+      </div>
+      <h1>Conoce tu cuerpo con precisión científica</h1>
+      <p>Ingresa tus medidas y calcula en segundos tu porcentaje de grasa, índice muscular y agua corporal total con fórmulas usadas por profesionales.</p>
+    </div>
+  </div>
+
+  <!-- FORM WRAPPER -->
+  <div class="form-outer">
+
+    <div class="form-layout">
+
+      <!-- ── COLUMNA IZQUIERDA: Formulario ─────────────────────────── -->
+      <div>
+
+        <!-- BLOQUE GÉNERO -->
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-ico"><i class="ti ti-user" aria-hidden="true"></i></div>
+            <div>
+              <div class="card-ttl">Género biológico</div>
+              <div class="card-sub">Necesario para las fórmulas de cálculo</div>
+            </div>
+          </div>
+          <div class="card-bd">
+            <div class="gender-tabs">
+
+              <button
+                type="button"
+                class="gtab"
+                [class.act]="genero === 'M'"
+                (click)="cambiarGenero('M')"
+              >
+                <i class="ti ti-man" aria-hidden="true"></i>
+                Masculino
+              </button>
+
+              <button
+                type="button"
+                class="gtab"
+                [class.act]="genero === 'F'"
+                (click)="cambiarGenero('F')"
+              >
+                <i class="ti ti-woman" aria-hidden="true"></i>
+                Femenino
+              </button>
+
+            </div>
+          </div>
+        </div><!-- /card género -->
+
+        <!-- BLOQUE MEDIDAS GENERALES -->
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-ico"><i class="ti ti-ruler-measure" aria-hidden="true"></i></div>
+            <div>
+              <div class="card-ttl">Medidas generales</div>
+              <div class="card-sub">Edad, estatura y peso corporal</div>
+            </div>
+          </div>
+          <div class="card-bd">
+
+            <div class="g3">
+
+              <!-- Edad -->
+              <div class="fg">
+                <label class="flbl" for="edad">Edad <span class="funit">años</span></label>
+                <input
+                  id="edad"
+                  type="number"
+                  class="finp"
+                  [class.input-error]="tieneError('edad')"
+                  placeholder="Ej. 28"
+                  [(ngModel)]="edad"
+                  min="10"
+                  max="100"
+                >
+                <span class="err-msg" *ngIf="tieneError('edad')">{{ errores['edad'] }}</span>
+              </div>
+
+              <!-- Estatura -->
+              <div class="fg">
+                <label class="flbl" for="estatura">Estatura <span class="funit">cm</span></label>
+                <input
+                  id="estatura"
+                  type="number"
+                  class="finp"
+                  [class.input-error]="tieneError('estatura')"
+                  placeholder="Ej. 175"
+                  [(ngModel)]="estatura"
+                  min="100"
+                  max="250"
+                >
+                <span class="err-msg" *ngIf="tieneError('estatura')">{{ errores['estatura'] }}</span>
+              </div>
+
+              <!-- Peso -->
+              <div class="fg">
+                <label class="flbl" for="peso">Peso <span class="funit">kg</span></label>
+                <input
+                  id="peso"
+                  type="number"
+                  class="finp"
+                  [class.input-error]="tieneError('peso')"
+                  placeholder="Ej. 75.5"
+                  [(ngModel)]="peso"
+                  min="20"
+                  max="300"
+                  step="0.1"
+                >
+                <span class="err-msg" *ngIf="tieneError('peso')">{{ errores['peso'] }}</span>
+              </div>
+
+            </div>
+
+          </div>
+        </div><!-- /card medidas generales -->
+
+        <!-- BLOQUE CIRCUNFERENCIAS -->
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-ico"><i class="ti ti-circle-dashed" aria-hidden="true"></i></div>
+            <div>
+              <div class="card-ttl">Circunferencias corporales</div>
+              <div class="card-sub">Mide con cinta flexible, en cm</div>
+            </div>
+          </div>
+          <div class="card-bd">
+
+            <div class="circ-tip">
+              <i class="ti ti-info-circle" aria-hidden="true"></i>
+              Mide en el punto más estrecho para cintura, a nivel de las vértebras C7 para cuello<span *ngIf="esFemenino">, y en la parte más ancha para cadera</span>.
+            </div>
+
+            <div [class]="esFemenino ? 'g3' : 'g2'">
+
+              <!-- Cintura -->
+              <div class="fg">
+                <label class="flbl" for="cintura">Cintura <span class="funit">cm</span></label>
+                <input
+                  id="cintura"
+                  type="number"
+                  class="finp"
+                  [class.input-error]="tieneError('cintura')"
+                  placeholder="Ej. 82"
+                  [(ngModel)]="cintura"
+                  min="40"
+                  max="200"
+                  step="0.1"
+                >
+                <span class="err-msg" *ngIf="tieneError('cintura')">{{ errores['cintura'] }}</span>
+              </div>
+
+              <!-- Cuello -->
+              <div class="fg">
+                <label class="flbl" for="cuello">Cuello <span class="funit">cm</span></label>
+                <input
+                  id="cuello"
+                  type="number"
+                  class="finp"
+                  [class.input-error]="tieneError('cuello')"
+                  placeholder="Ej. 38"
+                  [(ngModel)]="cuello"
+                  min="20"
+                  max="80"
+                  step="0.1"
+                >
+                <span class="err-msg" *ngIf="tieneError('cuello')">{{ errores['cuello'] }}</span>
+              </div>
+
+              <!-- Cadera — solo femenino -->
+              <div class="fg" *ngIf="esFemenino">
+                <label class="flbl" for="cadera">Cadera <span class="funit">cm</span></label>
+                <input
+                  id="cadera"
+                  type="number"
+                  class="finp"
+                  [class.input-error]="tieneError('cadera')"
+                  placeholder="Ej. 98"
+                  [(ngModel)]="cadera"
+                  min="40"
+                  max="200"
+                  step="0.1"
+                >
+                <span class="err-msg" *ngIf="tieneError('cadera')">{{ errores['cadera'] }}</span>
+              </div>
+
+            </div>
+
+          </div>
+        </div><!-- /card circunferencias -->
+
+        <button type="button" class="btn-calc" (click)="calcular()">
+          <i class="ti ti-calculator" aria-hidden="true"></i>
+          Calcular composición corporal
+        </button>
+
+      </div><!-- /columna izquierda -->
+
+      <!-- ── COLUMNA DERECHA: Referencia visual ─────────────────────── -->
+      <div>
+
+        <div class="ref-card">
+          <div class="ref-hd">
+            <i class="ti ti-map-pin" aria-hidden="true"></i>
+            <span class="ref-ttl">¿Cómo tomar las medidas?</span>
+          </div>
+          <div class="ref-bd">
+
+            <div class="ref-item">
+              <div class="ref-num">1</div>
+              <div>
+                <div class="ref-name">Cintura</div>
+                <div class="ref-desc">Justo por encima del ombligo, en el punto más estrecho. Sin ropa y sin meter el abdomen.</div>
+              </div>
+            </div>
+
+            <div class="ref-item">
+              <div class="ref-num">2</div>
+              <div>
+                <div class="ref-name">Cuello</div>
+                <div class="ref-desc">A la altura de la nuez de Adán, pasando por las vértebras cervicales posteriores.</div>
+              </div>
+            </div>
+
+            <div class="ref-item" *ngIf="esFemenino">
+              <div class="ref-num">3</div>
+              <div>
+                <div class="ref-name">Cadera</div>
+                <div class="ref-desc">En la parte más ancha de los glúteos, manteniendo los pies juntos.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="methods-card">
+          <div class="ref-hd">
+            <i class="ti ti-microscope" aria-hidden="true"></i>
+            <span class="ref-ttl">Métodos utilizados</span>
+          </div>
+          <div class="ref-bd">
+
+            <div class="method-item">
+              <div class="method-badge">Grasa</div>
+              <div>
+                <div class="method-name">U.S. Navy Method</div>
+                <div class="ref-desc">Fórmula logarítmica validada por la Marina de los EE.UU. con precisión ±3% en poblaciones generales.</div>
+              </div>
+            </div>
+
+            <div class="method-item">
+              <div class="method-badge">Músculo</div>
+              <div>
+                <div class="method-name">Estimación por MLG</div>
+                <div class="ref-desc">Basada en la masa libre de grasa, descontando masa ósea y órganos para aproximar la masa muscular esquelética.</div>
+              </div>
+            </div>
+
+            <div class="method-item">
+              <div class="method-badge">Agua</div>
+              <div>
+                <div class="method-name">Ecuación de Watson</div>
+                <div class="ref-desc">Calcula el agua corporal total en función de estatura, peso y género. Error estándar ≈ ±1.5 L.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /columna derecha -->
+
+    </div><!-- /form-layout -->
+
+    <div class="disclaimer-strip">
+      <i class="ti ti-shield-check" aria-hidden="true"></i>
+      Los resultados son estimaciones estadísticas. No reemplazan una evaluación médica profesional ni métodos de referencia como DEXA o hidrodensitometría.
+    </div>
+
+  </div><!-- /form-outer -->
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 2 — RESULTADOS
+════════════════════════════════════════════════════════════ -->
+<div class="screen" *ngIf="pasoActual === 2 && resultado">
+
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-box"><i class="ti ti-chart-dots-3" aria-hidden="true"></i></div>
+      <span class="logo-name">SMARTBALANCE</span>
+    </div>
+    <div class="topbar-right" style="color: #16a34a;">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+      Análisis completado
+    </div>
+  </div>
+
+  <div class="steps-wrap">
+    <div class="steps">
+      <div class="step done">
+        <div class="snum"><i class="ti ti-check" aria-hidden="true"></i></div>
+        <span class="slbl">Datos biométricos</span>
+      </div>
+      <div class="sline done"></div>
+      <div class="step active">
+        <div class="snum">2</div>
+        <span class="slbl">Resultados</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS HERO -->
+  <div class="res-hero">
+    <div class="res-hero-inner">
+      <div class="sb-eyebrow">
+        <span></span>
+        Tu perfil corporal
+      </div>
+      <h1>Análisis de composición corporal</h1>
+      <p>Basado en tus medidas biométricas. Revisa cada métrica y su clasificación personalizada.</p>
+    </div>
+  </div>
+
+  <div class="results-outer">
+
+    <!-- ══════════════════════════════════════════
+         TARJETA 1 — GRASA CORPORAL
+    ══════════════════════════════════════════ -->
+    <div class="res-card">
+      <div class="res-card-stripe stripe-orange"></div>
+      <div class="res-card-hd">
+        <div class="res-card-ico res-ico-orange">
+          <i class="ti ti-flame" aria-hidden="true"></i>
+        </div>
+        <div>
+          <div class="res-card-eyebrow">Método U.S. Navy</div>
+          <div class="res-card-ttl">Porcentaje de grasa corporal</div>
+          <div class="res-card-desc">La fórmula de la Marina de EE.UU. estima el porcentaje de grasa mediante circunferencias corporales. Precisión validada en estudios con ±3% de error estándar.</div>
+        </div>
+        <div class="res-main-val orange">
+          <span class="res-big-num">{{ fmt1(resultado!.grasa.porcentaje) }}</span>
+          <span class="res-big-unit">%</span>
+          <div class="res-sub-val">{{ fmt1(resultado!.grasa.kgGrasa) }} kg de grasa</div>
+        </div>
+      </div>
+
+      <div class="res-bar-wrap">
+        <div class="res-bar-labels">
+          <span class="res-bar-lbl">Clasificación</span>
+          <span
+            class="clasif-badge"
+            [ngClass]="'clasif-' + resultado!.grasa.clasificacion.toLowerCase()"
+          >
+            {{ resultado!.grasa.clasificacion }}
+          </span>
+        </div>
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            [style.width.%]="resultado!.grasa.barPct"
+            [style.background]="resultado!.grasa.barColor"
+          ></div>
+        </div>
+      </div>
+
+      <div class="res-sub-metrics">
+        <div class="sm-item">
+          <div class="sm-val">{{ fmt1(resultado!.grasa.kgGrasa) }} kg</div>
+          <div class="sm-lbl">Masa grasa</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-val">{{ fmt1(resultado!.grasa.kgMasaLibreGrasa) }} kg</div>
+          <div class="sm-lbl">Masa libre de grasa</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-val">{{ resultado!.grasa.targetSaludable }}</div>
+          <div class="sm-lbl">Rango saludable</div>
+        </div>
+      </div>
+    </div><!-- /card grasa -->
+
+    <!-- ══════════════════════════════════════════
+         TARJETA 2 — IMME
+    ══════════════════════════════════════════ -->
+    <div class="res-card">
+      <div class="res-card-stripe stripe-blue"></div>
+      <div class="res-card-hd">
+        <div class="res-card-ico res-ico-blue">
+          <i class="ti ti-bolt" aria-hidden="true"></i>
+        </div>
+        <div>
+          <div class="res-card-eyebrow">Índice Muscular</div>
+          <div class="res-card-ttl">Masa muscular esquelética (IMME)</div>
+          <div class="res-card-desc">El Índice de Masa Muscular Esquelética relaciona tu masa muscular con tu estatura. Es un indicador de condición física funcional y predictor de riesgo de sarcopenia.</div>
+        </div>
+        <div class="res-main-val blue">
+          <span class="res-big-num">{{ fmt2(resultado!.imme.imme) }}</span>
+          <span class="res-big-unit">kg/m²</span>
+          <div class="res-sub-val">{{ fmt1(resultado!.imme.kgMusculo) }} kg músculo</div>
+        </div>
+      </div>
+
+      <div class="res-bar-wrap">
+        <div class="res-bar-labels">
+          <span class="res-bar-lbl">Clasificación</span>
+          <span
+            class="clasif-badge"
+            [ngClass]="'clasif-' + resultado!.imme.clasificacion.toLowerCase()"
+          >
+            {{ resultado!.imme.clasificacion }}
+          </span>
+        </div>
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            [style.width.%]="resultado!.imme.barPct"
+            [style.background]="resultado!.imme.barColor"
+          ></div>
+        </div>
+      </div>
+
+      <div class="res-sub-metrics">
+        <div class="sm-item">
+          <div class="sm-val">{{ fmt1(resultado!.imme.kgMusculo) }} kg</div>
+          <div class="sm-lbl">Músculo esquelético</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-val">{{ fmt1(resultado!.imme.kgMasaOsea) }} kg</div>
+          <div class="sm-lbl">Masa ósea estimada</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-val">{{ fmt2(resultado!.imme.imme) }}</div>
+          <div class="sm-lbl">IMME (kg/m²)</div>
+        </div>
+      </div>
+    </div><!-- /card imme -->
+
+    <!-- ══════════════════════════════════════════
+         TARJETA 3 — ACT
+    ══════════════════════════════════════════ -->
+    <div class="res-card">
+      <div class="res-card-stripe stripe-teal"></div>
+      <div class="res-card-hd">
+        <div class="res-card-ico res-ico-teal">
+          <i class="ti ti-droplet" aria-hidden="true"></i>
+        </div>
+        <div>
+          <div class="res-card-eyebrow">Fórmula de Watson</div>
+          <div class="res-card-ttl">Agua corporal total (ACT)</div>
+          <div class="res-card-desc">La ecuación de Watson calcula el volumen de agua total en función de estatura, peso y género. El agua corporal es esencial para el metabolismo y el rendimiento deportivo.</div>
+        </div>
+        <div class="res-main-val teal">
+          <span class="res-big-num">{{ fmt1(resultado!.act.litros) }}</span>
+          <span class="res-big-unit">L</span>
+          <div class="res-sub-val">{{ fmtPct(resultado!.act.porcentajePeso) }} del peso</div>
+        </div>
+      </div>
+
+      <!-- Agua visual: ring + datos -->
+      <div class="act-visual">
+
+        <div class="act-ring-wrap">
+          <svg class="act-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#ccfbf1" stroke-width="10"/>
+            <circle
+              cx="50" cy="50" r="42"
+              fill="none"
+              stroke="#14b8a6"
+              stroke-width="10"
+              [attr.stroke-dasharray]="RING_CIRCUMFERENCE"
+              [attr.stroke-dashoffset]="resultado!.act.ringOffset"
+              stroke-linecap="round"
+              style="transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 0.8s ease;"
+            />
+          </svg>
+          <div class="act-ring-label">
+            <span class="act-ring-pct">{{ fmtPct(resultado!.act.porcentajePeso) }}</span>
+            <span class="act-ring-sub">ACT</span>
+          </div>
+        </div>
+
+        <div class="act-facts">
+          <div class="act-row">
+            <span class="act-lbl">Agua corporal total</span>
+            <span class="act-val">{{ fmt1(resultado!.act.litros) }} L</span>
+          </div>
+          <div class="act-row">
+            <span class="act-lbl">% del peso corporal</span>
+            <span class="act-val">{{ fmtPct(resultado!.act.porcentajePeso) }}</span>
+          </div>
+          <div class="act-row">
+            <span class="act-lbl">Estado de hidratación</span>
+            <span
+              class="clasif-badge"
+              [ngClass]="resultado!.act.estadoBadgeClass"
+            >
+              {{ resultado!.act.estado }}
+            </span>
+          </div>
+          <div class="act-row">
+            <span class="act-lbl">Ingesta diaria recomendada</span>
+            <span class="act-val">{{ fmt1(resultado!.act.recomendacionDiaria) }} L/día</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /card act -->
+
+    <!-- ACCIONES -->
+    <div class="res-actions">
+      <button type="button" class="btn-recalc" (click)="recalcular()">
+        <i class="ti ti-refresh" aria-hidden="true"></i>
+        Nuevo análisis
+      </button>
+      <button type="button" class="btn-back-res" (click)="volver()">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i>
+        Editar medidas
+      </button>
+    </div>
+
+    <div class="disclaimer-strip">
+      <i class="ti ti-shield-check" aria-hidden="true"></i>
+      Resultados basados en modelos estadísticos validados. No sustituyen una evaluación médica profesional. Complementa este análisis con seguimiento de un profesional certificado.
+    </div>
+
+  </div><!-- /results-outer -->
+</div>

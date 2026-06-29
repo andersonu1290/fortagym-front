@@ -23,6 +23,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // 🛒 Variable lista para el HTML (inicializada en 0 temporalmente)
   cantidadTotal: number = 0;
 
+  nombreMembresia: string | null = null;
+  colorMembresia: string = '';
+
   private routerSub!: Subscription;
 
   constructor(
@@ -56,8 +59,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.authService.getPerfil().subscribe({
         next: (data: any) => {
           this.nombreUsuario = data.nombre;
-          // CÓDIGO CORREGIDO EN header.ts
           this.fotoPreviewUrl = `${environment.apiUrl}/api/usuarios/foto/${data.id}?t=${Date.now()}`;
+
+          // 🔥 NUEVO: LÓGICA PARA DETECTAR LA MEMBRESÍA
+          if (data.membresiaActiva && data.membresiaActiva.tipo) {
+            this.nombreMembresia = data.membresiaActiva.tipo;
+            // Si el nombre tiene la palabra "black", usamos el estilo oscuro, si no el naranja
+            this.colorMembresia = this.nombreMembresia?.toLowerCase().includes('black') ? 'badge-black' : 'badge-orange';
+          } else {
+            this.nombreMembresia = null;
+          }
 
           if (data.rol === 'ADMIN') this.rutaPanel = '/admin/dashboard';
           else if (data.rol === 'ENTRENADOR') this.rutaPanel = '/entrenador/dashboard';

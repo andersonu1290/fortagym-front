@@ -43,7 +43,7 @@ export class Calendario implements OnInit {
     this.cargarEventosDesdeBD(); // 🔥 Llamamos a la base de datos al iniciar
   }
 
-  // 📡 Carga los eventos reales desde el puerto 8090
+  // 📡 Carga los eventos reales desde el puerto 8089
   cargarEventosDesdeBD() {
     // 🔄 CORREGIDO: Se cambiaron las comillas simples por backticks ` y se inyectó api/ correctamente sin romper la ruta
     this.http.get<any[]>(`${environment.apiUrl}/api/calendario/mis-eventos`).subscribe({

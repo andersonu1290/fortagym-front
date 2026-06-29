@@ -41,9 +41,18 @@
 
       <!-- Menú desplegable interactivo con foto de perfil -->
       <li class="user-menu" [class.open]="menuAbierto" style="display: inline-block; position: relative;">
-        <button class="user-btn" (click)="toggleMenu($event)" style="background: none; border: none; color: #fff; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-          <img [src]="fotoPreviewUrl" class="user-icon" onerror="this.src='assets/img/user-icon.png'" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #ff4500;">
-          <span>Hola, {{ nombreUsuario }}</span>
+        <button class="user-btn" (click)="toggleMenu($event)" style="background: none; border: none; color: #fff; display: flex; align-items: center; gap: 10px; cursor: pointer; text-align: left;">
+
+          <img [src]="fotoPreviewUrl" class="user-icon" onerror="this.src='assets/img/user-icon.png'" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-forta-primary);">
+
+          <div style="display: flex; flex-direction: column; line-height: 1.2;">
+            <span style="font-size: 14px; font-weight: 600;">Hola, {{ nombreUsuario }}</span>
+
+            <span *ngIf="nombreMembresia" class="badge-membresia" [ngClass]="colorMembresia">
+              <i class="ti ti-bolt"></i> {{ nombreMembresia }}
+            </span>
+          </div>
+
         </button>
 
         <!-- Dropdown flotante -->

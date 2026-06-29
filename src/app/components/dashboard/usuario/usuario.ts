@@ -43,7 +43,7 @@ cargarPerfil() {
       this.fotoPreviewUrl = `${environment.apiUrl}/api/usuarios/foto/${data.id}?t=${Date.now()}`;
     },
     error: (err) => {
-      console.error("Error al conectar con el servidor 8090", err);
+      console.error("Error al conectar con el servidor 8089", err);
       // Fallback si el servidor está caído
       this.fotoPreviewUrl = 'assets/img/user-icon.png';
     }

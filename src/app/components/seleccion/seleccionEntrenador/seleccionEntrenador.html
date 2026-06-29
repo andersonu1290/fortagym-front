@@ -1,0 +1,147 @@
+<!--
+  seleccionEntrenador.html
+  Componente: Selección de Entrenador Personal y Reserva de Horario
+  Plataforma: FortaGym
+-->
+<main class="seleccion-entrenador-page">
+  <div class="container">
+
+    <!-- ===========================
+         ENCABEZADO DE SECCIÓN
+    ============================ -->
+    <header class="seleccion-header">
+      <h1 class="section-title">Elige a tu Entrenador</h1>
+      <p class="section-subtitle">
+        Selecciona al profesional ideal para ti y reserva tu horario de entrenamiento personal.
+      </p>
+    </header>
+
+    <!-- ===========================
+         PASO 1: LISTADO DE ENTRENADORES
+    ============================ -->
+    <section class="entrenadores-section" aria-labelledby="entrenadores-heading">
+      <h2 id="entrenadores-heading" class="visually-hidden">Entrenadores disponibles</h2>
+
+      <ul class="entrenadores-grid" role="list">
+        <li
+          *ngFor="let entrenador of entrenadores"
+          class="pro-profile-card"
+          [class.selected]="esEntrenadorSeleccionado(entrenador)"
+        >
+          <article>
+            <button
+              type="button"
+              class="pro-card-trigger"
+              [attr.aria-pressed]="esEntrenadorSeleccionado(entrenador)"
+              (click)="seleccionarEntrenador(entrenador)"
+            >
+              <div class="pro-cover"></div>
+
+              <div class="pro-avatar">
+                <img [src]="entrenador.fotoUrl" onerror="this.src='assets/img/user-icon.png'" [alt]="'Foto de ' + entrenador.nombre" />
+              </div>
+              <div class="pro-info">
+                <span class="pro-badge badge-entrenador">{{ entrenador.especialidad }}</span>
+                <h3>{{ entrenador.nombre }}</h3>
+                <p>{{ entrenador.descripcion }}</p>
+
+                <span class="btn-agendar" [class.activo]="esEntrenadorSeleccionado(entrenador)">
+                  {{ esEntrenadorSeleccionado(entrenador) ? 'Seleccionado ✓' : 'Elegir Entrenador' }}
+                </span>
+              </div>
+            </button>
+          </article>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ===========================
+         PASO 2: HORARIOS DISPONIBLES
+    ============================ -->
+    <section
+      class="horarios-section"
+      aria-labelledby="horarios-heading"
+      *ngIf="entrenadorSeleccionado"
+    >
+      <h2 id="horarios-heading">
+        Horarios disponibles con <span class="text-highlight">{{ entrenadorSeleccionado.nombre }}</span>
+      </h2>
+
+      <p class="horarios-subtitle" *ngIf="entrenadorSeleccionado.horarios.length === 0">
+        Este entrenador no tiene horarios disponibles por el momento.
+      </p>
+
+      <div class="schedule-grid" role="list">
+        <button
+          type="button"
+          role="listitem"
+          *ngFor="let horario of entrenadorSeleccionado.horarios"
+          class="time-slot"
+          [class.selected]="esHorarioSeleccionado(horario)"
+          [class.disabled]="!horario.disponible"
+          [disabled]="!horario.disponible"
+          [attr.aria-pressed]="esHorarioSeleccionado(horario)"
+          (click)="seleccionarHorario(horario)"
+        >
+          <span class="time-slot-fecha">{{ horario.dia }} · {{ horario.hora }}</span>
+          <span class="time-slot-duracion">{{ horario.sesion.duracionMinutos }} min</span>
+        </button>
+      </div>
+
+      <!-- Detalle de la sesión: qué se entrena, duración y ejercicios -->
+      <article class="sesion-detalle" *ngIf="horarioSeleccionado">
+        <h3>Qué incluye esta sesión</h3>
+
+        <div class="sesion-meta">
+          <span class="sesion-duracion">⏱ {{ horarioSeleccionado.sesion.duracionMinutos }} minutos</span>
+        </div>
+
+        <p class="sesion-descripcion">{{ horarioSeleccionado.sesion.descripcion }}</p>
+
+        <h4>Ejercicios de la sesión</h4>
+        <ul class="sesion-ejercicios">
+          <li *ngFor="let ejercicio of horarioSeleccionado.sesion.ejercicios">{{ ejercicio }}</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- ===========================
+         PASO 3: RESUMEN Y CONFIRMACIÓN
+    ============================ -->
+    <section class="resumen-section" aria-labelledby="resumen-heading" *ngIf="entrenadorSeleccionado">
+      <h2 id="resumen-heading" class="visually-hidden">Resumen de la reserva</h2>
+
+      <div class="resumen-card">
+        <div class="resumen-detalle">
+          <p>
+            <strong>Entrenador:</strong>
+            {{ entrenadorSeleccionado.nombre }}
+          </p>
+          <p>
+            <strong>Horario:</strong>
+            <span *ngIf="horarioSeleccionado">
+              {{ horarioSeleccionado.dia }} · {{ horarioSeleccionado.hora }}
+              ({{ horarioSeleccionado.sesion.duracionMinutos }} min)
+            </span>
+            <span *ngIf="!horarioSeleccionado" class="text-muted">Selecciona un horario</span>
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-confirm-booking"
+          [disabled]="!puedeConfirmar()"
+          (click)="confirmarReserva()"
+        >
+          Confirmar Reserva
+        </button>
+      </div>
+
+      <p class="confirmacion-mensaje" *ngIf="reservaConfirmada" role="status">
+        ¡Reserva confirmada con {{ reservaConfirmada.entrenador.nombre }}
+        el {{ reservaConfirmada.horario.dia }} a las {{ reservaConfirmada.horario.hora }}!
+      </p>
+    </section>
+
+  </div>
+</main>
