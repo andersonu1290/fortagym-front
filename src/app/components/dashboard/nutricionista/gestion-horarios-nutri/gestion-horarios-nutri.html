@@ -1,0 +1,94 @@
+<div class="gestion-container">
+  <div class="header-actions">
+    <h2>Disponibilidad de Consultas</h2>
+    <button class="btn-primary" (click)="abrirModalNuevo()">
+      <i class="ti ti-plus"></i> Nueva Consulta
+    </button>
+  </div>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th>Hora</th>
+          <th>Duración</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of horarios">
+          <td><strong>{{ h.dia }}</strong></td>
+          <td>{{ h.hora }}</td>
+          <td>{{ h.duracion_minutos }} min</td>
+          <td class="desc-cell">{{ h.descripcion }}</td>
+          <td>
+            <span class="badge" [ngClass]="h.disponible ? 'badge-activo' : 'badge-inactivo'">
+              {{ h.disponible ? 'Disponible' : 'Ocupado / Pausa' }}
+            </span>
+          </td>
+          <td class="acciones-cell">
+            <button class="btn-icon text-blue" title="Editar" (click)="abrirModalEditar(h)">
+              <i class="ti ti-pencil"></i>
+            </button>
+            <button class="btn-icon" [ngClass]="h.disponible ? 'text-orange' : 'text-green'" [title]="h.disponible ? 'Pausar' : 'Activar'" (click)="cambiarEstado(h.id)">
+              <i class="ti" [ngClass]="h.disponible ? 'ti-player-pause' : 'ti-player-play'"></i>
+            </button>
+            <button class="btn-icon text-red" title="Eliminar" (click)="eliminarHorario(h.id)">
+              <i class="ti ti-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="horarios.length === 0">
+          <td colspan="6" class="empty-msg">No tienes horarios configurados. Haz clic en "Nueva Consulta" para empezar.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>{{ esEdicion ? 'Editar Horario' : 'Crear Nuevo Horario' }}</h3>
+        <button class="btn-close" (click)="cerrarModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Día de la semana</label>
+            <select [(ngModel)]="horarioActual.dia">
+              <option *ngFor="let d of diasSemana" [value]="d">{{ d }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Hora (Ej: 10:00 AM)</label>
+            <input type="text" [(ngModel)]="horarioActual.hora" placeholder="10:00 AM">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Duración en minutos</label>
+          <input type="number" [(ngModel)]="horarioActual.duracion_minutos" min="15" step="15">
+        </div>
+
+        <div class="form-group">
+          <label>Descripción de la consulta</label>
+          <input type="text" [(ngModel)]="horarioActual.descripcion" placeholder="Ej: Evaluación de pliegues y peso">
+        </div>
+
+        <div class="form-group">
+          <label>Temas a tratar (Separados por coma)</label>
+          <textarea [(ngModel)]="horarioActual.temas" rows="3" placeholder="Ej: Dieta Keto, Déficit calórico, Suplementación"></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn-primary" (click)="guardarHorario()">Guardar Horario</button>
+      </div>
+    </div>
+  </div>
+</div>

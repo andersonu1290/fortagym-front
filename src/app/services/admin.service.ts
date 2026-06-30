@@ -25,4 +25,14 @@ export class AdminService {
   actualizarRol(id: number, nuevoRol: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/cambiar-rol/${id}?rol=${nuevoRol}`, {});
   }
+
+  // 📦 OBTENER TODOS LOS PEDIDOS (Tienda)
+  getPedidosTienda(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/pedidos`);
+  }
+
+  // 🔄 CAMBIAR ESTADO DEL PEDIDO
+  actualizarEstadoPedido(id: number, nuevoEstado: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/pedidos/${id}/estado?nuevoEstado=${nuevoEstado}`, {});
+  }
 }

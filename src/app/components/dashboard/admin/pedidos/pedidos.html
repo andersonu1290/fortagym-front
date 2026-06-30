@@ -1,0 +1,93 @@
+<div class="admin-container">
+  <div class="header">
+    <h2>Gestión de Pedidos de Tienda</h2>
+    <p>Administra las compras de los usuarios y cambia su estado de envío.</p>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>N° Orden</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Método Entrega</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pedidos">
+          <td><strong>{{ p.numeroOrden }}</strong></td>
+          <td>
+            <div class="cliente-info">
+              <span class="nombre">{{ p.nombreCliente }}</span>
+              <span class="correo">{{ p.correo }}</span>
+            </div>
+          </td>
+          <td>{{ p.fechaCreacion | date:'shortDate' }}</td>
+          <td><strong>S/. {{ p.total.toFixed(2) }}</strong></td>
+          <td>
+            <span class="badge" [ngClass]="p.metodoEntrega === 'delivery' ? 'badge-delivery' : 'badge-recojo'">
+              {{ p.metodoEntrega | uppercase }}
+            </span>
+          </td>
+          <td>
+            <select class="estado-select" [ngClass]="'estado-' + p.estado" [value]="p.estado" (change)="cambiarEstado(p, $event)">
+              <option value="procesando">Procesando</option>
+              <option value="en_camino">En Camino</option>
+              <option value="entregado">Entregado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </td>
+          <td class="acciones">
+            <button class="btn-detalles" (click)="verDetalles(p)">
+              <i class="ti ti-eye"></i> Detalles
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="pedidos.length === 0">
+          <td colspan="7" class="empty-msg">No hay pedidos registrados en la tienda.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModal && pedidoSeleccionado">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Detalles de la Orden: {{ pedidoSeleccionado.numeroOrden }}</h3>
+        <button class="btn-close" (click)="cerrarModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="info-grid">
+          <div class="info-card">
+            <h4>Información del Cliente</h4>
+            <p><strong>Nombre:</strong> {{ pedidoSeleccionado.nombreCliente }}</p>
+            <p><strong>Correo:</strong> {{ pedidoSeleccionado.correo }}</p>
+            <p><strong>Método de Pago:</strong> {{ pedidoSeleccionado.metodoPago | uppercase }}</p>
+          </div>
+
+          <div class="info-card" *ngIf="pedidoSeleccionado.metodoEntrega === 'delivery'">
+            <h4>Dirección de Envío</h4>
+            <p>{{ pedidoSeleccionado.direccion }}</p>
+          </div>
+        </div>
+
+        <h4 class="mt-4">Productos Comprados</h4>
+        <div class="items-list">
+          <div class="item" *ngFor="let item of pedidoSeleccionado.items">
+            <img [src]="resolverImg(item.img)" alt="producto">
+            <div class="item-detalles">
+              <span class="item-nombre">{{ item.nombre }}</span>
+              <span class="item-precio">{{ item.cantidad }}x S/. {{ item.precio.toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

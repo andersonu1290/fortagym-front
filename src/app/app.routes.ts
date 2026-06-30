@@ -23,6 +23,10 @@ import { SmartBalance } from './components/smartbalance/smartbalance';
 import { SeleccionEntrenadorComponent } from './components/seleccion/seleccionEntrenador/seleccionEntrenador';
 import { SeleccionNutricionistaComponent } from './components/seleccion/seleccionNutricionista/seleccionNutricionista';
 import { HistorialComprasComponent } from './components/historial-compras/historial-compras';
+import { GestionHorariosComponent } from './components/dashboard/entrenador/gestion-horarios/gestion-horarios';
+import { GestionHorariosNutriComponent } from './components/dashboard/nutricionista/gestion-horarios-nutri/gestion-horarios-nutri';
+import { NutricionistaUsuarios } from './components/dashboard/nutricionista/nutricion-usuarios/nutricion-usuarios';
+import { AdminPedidosComponent } from './components/dashboard/admin/pedidos/pedidos';
 
 export const routes: Routes = [
   // ==========================================
@@ -58,14 +62,16 @@ export const routes: Routes = [
   { path: 'admin/lista-usuarios', component: Usuarios, canActivate: [authGuard] },
   { path: 'admin/promociones', component: Promociones, canActivate: [authGuard] },
   { path: 'admin/productos', component: ProductosAdmin, canActivate: [authGuard] },
-
+  { path: 'admin/pedidos', component: AdminPedidosComponent, canActivate: [authGuard] },  
   // Dashboard Clínico Deportivo (Entrenador y Nutricionista)
   { path: 'entrenador/dashboard', component: Entrenador, canActivate: [authGuard] },
   { path: 'nutricion/dashboard', component: Nutricionista, canActivate: [authGuard] },
   { path: 'entrenador/lista-usuarios', component: RutinaUsuarios, canActivate: [authGuard] },
   { path: 'entrenador/rutina-nueva/:id', component: RutinaFormulario, canActivate: [authGuard] },
   { path: 'nutricion/evaluar/:id', component: NutricionFormulario, canActivate: [authGuard] },
-
+  { path: 'entrenador/gestion-horarios', component: GestionHorariosComponent, canActivate: [authGuard] },
+  { path: 'nutricion/gestion-horarios', component: GestionHorariosNutriComponent, canActivate: [authGuard] },
+  { path: 'nutricion/usuarios', component: NutricionistaUsuarios, canActivate: [authGuard] },
   // ==========================================
   // 🛑 RUTAS NO ENCONTRADAS
   // ==========================================

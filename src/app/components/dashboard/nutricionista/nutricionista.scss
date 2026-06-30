@@ -1,86 +1,173 @@
-/* ==========================================================================
-   PANEL NUTRICIONISTA - Estilos Locales
-   El 90% de la UI (Tablas, Fondos, Botones) viene de style.scss global.
-   ========================================================================== */
+/* =========================================
+   ADMIN DASHBOARD
+========================================= */
 
-// ── HERO BANNER (Estilo Clínico) ──────────────────────────────────────────
-.hero-banner {
-  background: #111;
-  border-radius: 18px;
-  padding: 2.5rem 2.5rem 2rem;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
+:host {
+  display: block;
+  width: 100%;
+  background: #f5f7fa;
+}
+
+/* =========================================
+   WRAPPER
+========================================= */
+
+.admin-wrapper {
+  padding: 25px 0 40px;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+/* =========================================
+   GRID
+========================================= */
+
+.admin-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(340px, 1fr));
+
+  gap: 35px;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.admin-card {
+  background: #fff;
+
+  border-radius: 24px;
+
   overflow: hidden;
-  min-height: 160px;
-  position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    // Imagen de nutrición/ensalada de fondo oscuro
-    background: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1400&q=80') center / cover no-repeat;
-    opacity: 0.20;
-    border-radius: 18px;
+  border: 1px solid #eeeeee;
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.06);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+
+  &:hover {
+    transform: translateY(-10px);
+
+    border-color: var(--color-forta-primary);
+
+    box-shadow:
+      0 20px 45px rgba(255,141,34,0.12);
+
+    .admin-img-wrapper img {
+      transform: scale(1.06);
+    }
   }
 }
 
-.hero-stripe {
-  position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
-  background: var(--color-forta-primary); border-radius: 18px 0 0 18px;
+/* =========================================
+   IMAGEN
+========================================= */
+
+.admin-img-wrapper {
+  height: 240px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.5s ease;
+  }
 }
 
-.hero-text { position: relative; z-index: 2; }
-.hero-title {
-  font-family: var(--font-title); font-size: 2.4rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: -1px; line-height: 1; margin: 0;
-  .accent { color: var(--color-forta-primary); }
-}
-.hero-sub { color: #aaa; font-size: 0.95rem; margin-top: 8px; margin-bottom: 0; }
+/* =========================================
+   BODY
+========================================= */
 
-.hero-stats { position: relative; z-index: 2; display: flex; gap: 1rem; flex-shrink: 0; }
-.stat-chip {
-  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 14px 22px; text-align: center; min-width: 85px;
-  .stat-num { font-size: 2rem; font-weight: 900; color: var(--color-forta-primary); line-height: 1; }
-  .stat-lbl { font-size: 0.68rem; color: #777; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-}
+.admin-card-body {
+  padding: 30px;
 
-// ── CELDA DE PACIENTE (AVATAR) ────────────────────────────────────────────
-.user-cell { display: flex; align-items: center; gap: 12px; }
-.avatar {
-  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-title); font-weight: 800; font-size: 0.85rem; flex-shrink: 0; overflow: hidden;
-  img { width: 100%; height: 100%; object-fit: cover; }
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 900;
 
-  // Colores rotativos simples
-  &.av-1 { background: rgba(255, 141, 34, 0.15); color: #b85f00; }
-  &.av-2 { background: rgba(55, 138, 221, 0.15); color: #0c447c; }
-  &.av-3 { background: rgba(40, 167, 69, 0.15);  color: #1a7a35; }
-}
-.user-name { font-weight: 700; font-size: 0.95rem; color: #111; }
-.user-email-sm { font-size: 0.75rem; color: #aaa; margin-top: 2px; display: none; }
+    color: #111;
 
-// ── FOOTER TABLA Y ESTADO VACÍO ───────────────────────────────────────────
-.table-footer { padding: 16px 25px; border-top: 1px solid #f0f0f0; font-size: 0.85rem; color: #888; strong { color: #111; } }
-.empty-state {
-  text-align: center !important; padding: 60px 20px !important; color: #bbb;
-  i { font-size: 2.5rem; display: block; margin-bottom: 12px; color: #ccc; }
-  p { font-size: 1rem; margin: 0; }
+    margin-bottom: 15px;
+
+    text-transform: uppercase;
+  }
+
+  p {
+    color: #666;
+
+    line-height: 1.7;
+
+    margin-bottom: 30px;
+  }
 }
 
-// ── RESPONSIVE ────────────────────────────────────────────────────────────
-@media (max-width: 992px) {
-  .hero-banner { flex-direction: column; align-items: flex-start; min-height: auto; }
-  .hero-stats { width: 100%; justify-content: flex-start; }
+/* =========================================
+   BOTÓN
+========================================= */
+
+.btn-admin-action {
+  display: inline-block;
+
+  background: var(--color-forta-primary);
+
+  color: #fff;
+
+  padding: 14px 28px;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  font-weight: 900;
+
+  text-transform: uppercase;
+
+  transition: 0.3s ease;
+
+  &:hover {
+    background: #111;
+
+    transform: translateY(-2px);
+  }
 }
+
+/* =========================================
+   RESPONSIVE
+========================================= */
 
 @media (max-width: 768px) {
-  .hero-title { font-size: 1.8rem; }
-  .hide-mobile { display: none; }
-  .user-email-sm { display: block; } // Muestra email pequeño bajo el nombre
 
-  .btn-icon-action {
-    width: 100%; justify-content: center;
-    .btn-text { display: inline !important; }
+  .admin-wrapper {
+    padding: 20px 0 60px;
   }
+
+  .admin-header {
+    margin-bottom: 40px;
+  }
+
+  .admin-card-body {
+    padding: 25px;
+  }
+
+  .admin-card-body h3 {
+    font-size: 1.3rem;
+  }
+
 }

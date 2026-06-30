@@ -1,112 +1,95 @@
-<main class="section-admin" (click)="cerrarMenu()">
-  <div class="container gestion-container">
+<main class="admin-wrapper section-light" (click)="cerrarMenu()">
 
-    <div class="hero-banner mb-30">
-      <div class="hero-stripe"></div>
+  <section class="admin-wrapper">
 
-      <div class="hero-text">
-        <h1 class="hero-title mt-20">
-          Panel de <span class="accent">Nutrición</span>
+    <div class="container">
+
+      <!-- HEADER -->
+      <div class="admin-header">
+
+        <span class="badge-tech">
+          Panel de Nutricionista
+        </span>
+
+        <h1 class="section-title">
+          Gestión Clínica Nutricional
         </h1>
-        <p class="hero-sub">Gestión clínica, evaluaciones y cartillas nutricionales de socios.</p>
+
+        <p class="section-subtitle">
+          Diseña, controla y actualiza las rutinas de alimentación personalizadas de tus clientes.
+        </p>
+
       </div>
 
-      <div class="hero-stats">
-        <div class="stat-chip">
-          <div class="stat-num">{{ usuarios.length }}</div>
-          <div class="stat-lbl">Pacientes Totales</div>
-        </div>
-        <div class="stat-chip">
-          <div class="stat-num" style="color: #ef4444;">
-            {{ (usuarios | filterPendientes).length }}
+      <!-- GRID (Estructura idéntica lista para recibir más módulos en el futuro) -->
+      <div class="admin-grid">
+
+        <!-- CARD DE GESTIÓN DE RUTINAS -->
+        <div class="admin-card">
+
+          <div class="admin-img-wrapper">
+            <img
+              src="https://blog.auna.pe/hubfs/que%20es%20un%20plan%20nutricional%20y%20como%20ayuda%20en%20tu%20rutina.webp"
+              alt="Gestión de rutinas">
           </div>
-          <div class="stat-lbl">Pendientes</div>
+
+          <div class="admin-card-body">
+
+            <h3>
+              Gestión de Rutinas
+            </h3>
+
+            <p>
+              Crea y actualiza los planes de alimentación adaptados a los objetivos de los clientes.
+            </p>
+
+            <a
+              routerLink="/nutricion/usuarios"
+              class="btn-admin-action">
+
+              Ir a Rutinas
+
+            </a>
+
+          </div>
+
         </div>
-      </div>
-    </div>
 
-    <div class="table-wrapper-premium slide-up-1">
-      <div class="table-responsive">
-        <table class="table-premium-admin">
+        <!-- CARD DE GESTIÓN DE HORARIOS -->
+        <div class="admin-card">
 
-          <thead>
-            <tr>
-              <th>Paciente (Socio)</th>
-              <th>Contacto (Email)</th>
-              <th>Estado Clínico</th>
-              <th class="text-center">Expediente</th>
-            </tr>
-          </thead>
+          <div class="admin-img-wrapper">
+            <img
+              src="https://www.bizneo.com/blog/wp-content/uploads/2022/03/programa-de-control-horario.jpg"
+              alt="Gestión de horarios">
+          </div>
 
-          <tbody>
-            <tr *ngIf="usuarios.length === 0">
-              <td colspan="4" class="empty-state">
-                <i class="fa fa-folder-open"></i>
-                <p>No hay pacientes registrados en el sistema.</p>
-              </td>
-            </tr>
+          <div class="admin-card-body">
 
-            <tr *ngFor="let u of usuarios">
+            <h3>
+              Gestión de Horarios
+            </h3>
 
-              <td>
-                <div class="user-cell">
-                  <!-- Contenedor del Avatar Inteligente -->
-                  <div class="avatar" [ngClass]="avatarClass(u)" style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            <p>
+              Administra tu disponibilidad y organiza tus sesiones de nutrición con los clientes.
+            </p>
 
-                    <!-- 🖼️ Intenta cargar la imagen real de la API -->
-                    <img [src]="apiUrl + '/api/usuarios/foto/' + u.id"
-                         (error)="$any($event.target).style.display = 'none'"
-                         alt="Foto"
-                         style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2;">
+            <a
+              routerLink="/nutricion/gestion-horarios"
+              class="btn-admin-action">
 
-                    <!-- 🔤 Si la imagen falla o no existe (404), este texto queda visible por debajo -->
-                    <span style="position: relative; z-index: 1;">{{ iniciales(u) }}</span>
+              Ir a Horarios
 
-                  </div>
-                  <div>
-                    <div class="user-name">{{ u.nombre }}</div>
-                    <div class="user-email-sm">{{ u.email }}</div>
-                  </div>
-                </div>
-              </td>
+            </a>
 
-              <td class="text-gray-soft hide-mobile">{{ u.email }}</td>
+          </div>
 
-              <td>
-                <span class="badge-status"
-                      [ngClass]="u.tieneNutricion ? 'status-entrenador' : 'status-admin'">
-                  <i class="fa" [ngClass]="u.tieneNutricion ? 'fa-check-circle' : 'fa-clock-o'"></i>
-                  {{ u.tieneNutricion ? 'Evaluado' : 'Pendiente' }}
-                </span>
-              </td>
-
-              <td>
-                <div class="flex-center">
-                  <button (click)="evaluar(u.id)"
-                          class="btn-icon-action"
-                          [ngClass]="u.tieneNutricion ? 'edit' : 'danger'"
-                          [title]="u.tieneNutricion ? 'Editar expediente' : 'Realizar evaluación inicial'">
-
-                    <i class="fa" [ngClass]="u.tieneNutricion ? 'fa-folder-open' : 'fa-stethoscope'"></i>
-                    <span class="btn-text" style="margin-left: 8px;">
-                      {{ u.tieneNutricion ? 'Abrir Cartilla' : 'Evaluar Ahora' }}
-                    </span>
-
-                  </button>
-                </div>
-              </td>
-
-            </tr>
-          </tbody>
-
-        </table>
       </div>
 
-      <div class="table-footer">
-        <span>Total de expedientes clínicos: <strong>{{ usuarios.length }}</strong></span>
       </div>
 
     </div>
 
-  </div>
+  </section>
+
 </main>
