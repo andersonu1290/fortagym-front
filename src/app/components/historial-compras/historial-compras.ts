@@ -275,8 +275,53 @@ export class HistorialComprasComponent implements OnInit, OnDestroy {
   }
 
   descargarFactura(id: number): void {
-    console.log('[MOCK] Descargar boleta pedido ID:', id);
-    // Próximo paso: Conectar con generación de PDF
+    // 1. Buscamos el pedido exacto
+    const pedido = this.pedidos.find(p => p.id === id);
+    if (!pedido) return;
+
+    // 2. Creamos el documento PDF
+    const doc = new jsPDF();
+
+    // 3. Cabecera de la empresa
+    doc.setFontSize(22);
+    doc.setTextColor(255, 141, 34); // Color naranja de FortaGym
+    doc.text('FORTAGYM', 14, 20);
+
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Boleta de Venta Electrónica', 14, 28);
+
+    // 4. Datos del Cliente y Orden
+    doc.setFontSize(10);
+    doc.text(`Orden N°: ${pedido.numeroOrden}`, 14, 40);
+    doc.text(`Fecha: ${new Date(pedido.fechaCreacion).toLocaleDateString()}`, 14, 46);
+    doc.text(`Cliente: ${pedido.nombreCliente}`, 14, 52);
+    doc.text(`Estado: ${pedido.estado.toUpperCase()}`, 14, 58);
+
+    // 5. Preparar los datos de los productos para la tabla
+    const bodyTabla = pedido.items.map(item => [
+      item.cantidad,
+      item.nombre,
+      `S/. ${item.precio.toFixed(2)}`,
+      `S/. ${(item.precio * item.cantidad).toFixed(2)}`
+    ]);
+
+    // 6. Dibujar la tabla
+    autoTable(doc, {
+      startY: 65,
+      head: [['Cant.', 'Descripción del Producto', 'Precio Unit.', 'Subtotal']],
+      body: bodyTabla,
+      headStyles: { fillColor: [255, 141, 34] }, // Cabecera naranja
+    });
+
+    // 7. Totales (se calculan justo debajo de donde terminó la tabla)
+    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    doc.setFontSize(12);
+    doc.text(`Costo de Envío: S/. ${pedido.costoEnvio.toFixed(2)}`, 140, finalY);
+    doc.text(`Total Pagado: S/. ${pedido.total.toFixed(2)}`, 140, finalY + 8);
+
+    // 8. Descargar el archivo
+    doc.save(`Boleta_${pedido.numeroOrden}.pdf`);
   }
 
   rastrearPedido(id: number): void {
