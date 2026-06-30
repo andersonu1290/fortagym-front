@@ -1,0 +1,352 @@
+<div class="pg-hist">
+
+
+  <!-- ══════════════════════════════════════════════════
+       CABECERA DE SECCIÓN
+       ══════════════════════════════════════════════════ -->
+  <div class="hist-header">
+    <div class="hist-header-inner">
+      <div class="hist-title-block">
+        <div class="hist-icon"><i class="ti ti-clipboard-list" aria-hidden="true"></i></div>
+        <div>
+          <h1 class="hist-ttl">Mis pedidos</h1>
+          <p class="hist-sub">Consulta el estado y detalle de todas tus compras</p>
+        </div>
+      </div>
+      <!-- STATS RÁPIDAS -->
+      <div class="hist-stats">
+        <div class="hstat">
+          <!-- BACKEND: Reemplazar con | async desde el servicio -->
+          <span class="hstat-num">{{ totalPedidos }}</span>
+          <span class="hstat-lbl">Pedidos</span>
+        </div>
+        <div class="hstat-div"></div>
+        <div class="hstat">
+          <!-- BACKEND: Calcular suma de totales confirmados -->
+          <span class="hstat-num">S/. {{ totalGastado | number:'1.2-2' }}</span>
+          <span class="hstat-lbl">Total gastado</span>
+        </div>
+        <div class="hstat-div"></div>
+        <div class="hstat">
+          <!-- BACKEND: Contar pedidos con estado 'en_camino' o 'procesando' -->
+          <span class="hstat-num">{{ pedidosActivos }}</span>
+          <span class="hstat-lbl">En curso</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       BARRA DE FILTROS Y BÚSQUEDA
+       ══════════════════════════════════════════════════ -->
+  <div class="filter-bar">
+    <div class="filter-bar-inner">
+
+      <!-- Búsqueda por N° de orden -->
+      <div class="search-wrap">
+        <i class="ti ti-search srch-ico" aria-hidden="true"></i>
+        <input
+          class="srch-inp"
+          type="text"
+          placeholder="Buscar por N° de orden..."
+          [(ngModel)]="terminoBusqueda"
+          (input)="aplicarFiltros()"
+        >
+        <!-- BACKEND: El filtro puede funcionar en cliente con la lista cargada,
+             o llamar a GET /api/tienda/pedidos?q=terminoBusqueda para búsqueda server-side -->
+      </div>
+
+      <!-- Filtro por estado -->
+      <select class="fsel-hist" [(ngModel)]="filtroEstado" (change)="aplicarFiltros()">
+        <option value="">Todos los estados</option>
+        <option value="procesando">Procesando</option>
+        <option value="en_camino">En camino</option>
+        <option value="entregado">Entregado</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+
+      <!-- Filtro por período -->
+      <select class="fsel-hist" [(ngModel)]="filtroPeriodo" (change)="aplicarFiltros()">
+        <option value="">Todo el tiempo</option>
+        <option value="30">Últimos 30 días</option>
+        <option value="90">Últimos 3 meses</option>
+        <option value="180">Últimos 6 meses</option>
+        <option value="365">Este año</option>
+      </select>
+
+      <!-- Contador de resultados -->
+      <span class="result-count">
+        {{ pedidosFiltrados.length }} resultado{{ pedidosFiltrados.length !== 1 ? 's' : '' }}
+      </span>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       CONTENIDO PRINCIPAL
+       ══════════════════════════════════════════════════ -->
+  <div class="hist-body">
+
+    <!-- ── ESTADO DE CARGA ───────────────────────────── -->
+    <!-- BACKEND: Mostrar mientras GET /api/tienda/pedidos está pendiente -->
+    <div class="empty-state" *ngIf="cargando">
+      <div class="empty-spinner">
+        <i class="ti ti-loader-2 spin" aria-hidden="true"></i>
+      </div>
+      <p class="empty-ttl">Cargando tus pedidos...</p>
+    </div>
+
+    <!-- ── ESTADO VACÍO ──────────────────────────────── -->
+    <div class="empty-state" *ngIf="!cargando && pedidosFiltrados.length === 0">
+      <div class="empty-icon">
+        <i class="ti ti-shopping-bag-x" aria-hidden="true"></i>
+      </div>
+      <p class="empty-ttl">
+        {{ terminoBusqueda || filtroEstado ? 'Sin resultados para tu búsqueda' : 'Aún no tienes pedidos' }}
+      </p>
+      <p class="empty-sub">
+        {{ terminoBusqueda || filtroEstado ? 'Prueba con otros filtros o términos de búsqueda.' : 'Cuando realices una compra, aparecerá aquí.' }}
+      </p>
+      <a href="#" class="btn-ir-tienda" *ngIf="!terminoBusqueda && !filtroEstado">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        Ir a la tienda
+      </a>
+      <button class="btn-ir-tienda" *ngIf="terminoBusqueda || filtroEstado" (click)="limpiarFiltros()">
+        <i class="ti ti-x" aria-hidden="true"></i>
+        Limpiar filtros
+      </button>
+    </div>
+
+    <!-- ── LISTA DE PEDIDOS ──────────────────────────── -->
+    <!-- BACKEND: *ngFor sobre pedidosFiltrados, cargados desde GET /api/tienda/pedidos -->
+    <div class="order-list" *ngIf="!cargando && pedidosFiltrados.length > 0">
+
+      <div class="order-card" *ngFor="let pedido of pedidosFiltrados" [class.expandido]="pedidoExpandido === pedido.id">
+
+        <!-- ┌─ CABECERA DE LA ORDEN ───────────────────────────────────────┐ -->
+        <div class="order-hd" (click)="toggleExpand(pedido.id)">
+
+          <!-- Columna: Número y fecha -->
+          <div class="order-meta">
+            <span class="order-num"># {{ pedido.numeroOrden }}</span>
+            <span class="order-date">
+              <i class="ti ti-calendar" aria-hidden="true"></i>
+              {{ pedido.fechaCreacion | date:'dd MMM yyyy, HH:mm' : '' : 'es' }}
+            </span>
+          </div>
+
+          <!-- Columna: Items (miniatura) -->
+          <div class="order-thumbs">
+            <img
+              class="thumb-img"
+              *ngFor="let item of pedido.items | slice:0:3; let i = index"
+              [src]="resolverImg(item.img)"
+              [alt]="item.nombre"
+              [style.z-index]="10 - i"
+            >
+            <span class="thumb-more" *ngIf="pedido.items.length > 3">
+              +{{ pedido.items.length - 3 }}
+            </span>
+          </div>
+
+          <!-- Columna: Estado -->
+          <div class="order-status-col">
+            <span class="status-badge" [ngClass]="'status-' + pedido.estado">
+              <i class="ti" [ngClass]="getStatusIcon(pedido.estado)" aria-hidden="true"></i>
+              {{ getStatusLabel(pedido.estado) }}
+            </span>
+          </div>
+
+          <!-- Columna: Total -->
+          <div class="order-total-col">
+            <span class="order-total-lbl">Total</span>
+            <span class="order-total-val">S/. {{ pedido.total | number:'1.2-2' }}</span>
+          </div>
+
+          <!-- Columna: Expansión -->
+          <div class="order-expand-btn">
+            <i class="ti" [ngClass]="pedidoExpandido === pedido.id ? 'ti-chevron-up' : 'ti-chevron-down'" aria-hidden="true"></i>
+          </div>
+
+        </div>
+        <!-- └──────────────────────────────────────────────────────────────┘ -->
+
+        <!-- ┌─ DETALLE EXPANDIDO ──────────────────────────────────────────┐ -->
+        <div class="order-detail" *ngIf="pedidoExpandido === pedido.id">
+
+          <div class="detail-grid">
+
+            <!-- COLUMNA IZQUIERDA: Productos y precios -->
+            <div class="detail-col-main">
+
+              <!-- Sub-card: Productos -->
+              <div class="detail-subcard">
+                <div class="detail-subcard-hd">
+                  <i class="ti ti-package" aria-hidden="true"></i>
+                  Productos del pedido
+                </div>
+                <div class="detail-subcard-bd">
+
+                  <!-- BACKEND: items provienen de GET /api/tienda/pedidos/:id/items
+                       o incluidos en la respuesta completa del pedido -->
+                  <div class="detail-prod" *ngFor="let item of pedido.items">
+                    <img
+                      class="dp-img"
+                      [src]="resolverImg(item.img)"
+                      [alt]="item.nombre"
+                    >
+                    <div class="dp-info">
+                      <span class="dp-cat">{{ item.categoria }}</span>
+                      <span class="dp-nm">{{ item.nombre }}</span>
+                      <span class="dp-qty">Cantidad: {{ item.cantidad }}</span>
+                    </div>
+                    <span class="dp-price">S/. {{ (item.precio * item.cantidad) | number:'1.2-2' }}</span>
+                  </div>
+
+                  <!-- Desglose de precios -->
+                  <table class="price-tbl-hist">
+                    <tr>
+                      <td>Subtotal</td>
+                      <td>S/. {{ pedido.subtotal | number:'1.2-2' }}</td>
+                    </tr>
+                    <tr>
+                      <td>Envío</td>
+                      <td [style.color]="pedido.costoEnvio === 0 ? '#16a34a' : ''">
+                        {{ pedido.costoEnvio === 0 ? 'GRATIS' : ('S/. ' + (pedido.costoEnvio | number:'1.2-2')) }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="pedido.descuento > 0">
+                      <td style="color:#16a34a">Descuento aplicado</td>
+                      <td style="color:#16a34a">— S/. {{ pedido.descuento | number:'1.2-2' }}</td>
+                    </tr>
+                    <tr>
+                      <td style="color:#64748b">IGV incluido (18%)</td>
+                      <td>S/. {{ pedido.igv | number:'1.2-2' }}</td>
+                    </tr>
+                    <tr class="total-row-hist">
+                      <td>Total pagado</td>
+                      <td>S/. {{ pedido.total | number:'1.2-2' }}</td>
+                    </tr>
+                  </table>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: Info de envío + Timeline -->
+            <div class="detail-col-side">
+
+              <!-- Sub-card: Información de envío -->
+              <div class="detail-subcard">
+                <div class="detail-subcard-hd">
+                  <i class="ti ti-map-pin" aria-hidden="true"></i>
+                  Información de envío
+                </div>
+                <div class="detail-subcard-bd">
+                  <div class="info-grid-hist">
+                    <div class="ig-item">
+                      <span class="ig-lbl">Destinatario</span>
+                      <span class="ig-val">{{ pedido.nombreCliente }}</span>
+                    </div>
+                    <div class="ig-item">
+                      <span class="ig-lbl">Método entrega</span>
+                      <span class="ig-val" style="text-transform:capitalize">{{ pedido.metodoEntrega }}</span>
+                    </div>
+                    <div class="ig-item" style="grid-column: 1 / -1">
+                      <span class="ig-lbl">Dirección</span>
+                      <span class="ig-val">{{ pedido.direccion }}, {{ pedido.distrito }}, {{ pedido.departamento }}</span>
+                    </div>
+                    <div class="ig-item">
+                      <span class="ig-lbl">Método de pago</span>
+                      <span class="ig-val" style="text-transform:capitalize">{{ pedido.metodoPago }}</span>
+                    </div>
+                    <div class="ig-item">
+                      <span class="ig-lbl">Correo</span>
+                      <span class="ig-val">{{ pedido.correo }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-card: Timeline de seguimiento -->
+              <div class="detail-subcard">
+                <div class="detail-subcard-hd">
+                  <i class="ti ti-route" aria-hidden="true"></i>
+                  Seguimiento del pedido
+                  <!-- BACKEND: Los estados del timeline provienen de un campo
+                       'historialEstados' en la respuesta del pedido, o de un
+                       endpoint GET /api/tienda/pedidos/:id/tracking -->
+                </div>
+                <div class="detail-subcard-bd">
+                  <div class="timeline">
+
+                    <div class="tl-item" *ngFor="let etapa of getTimeline(pedido.estado); let last = last">
+                      <div class="tl-left">
+                        <div class="tl-dot" [ngClass]="etapa.clase">
+                          <i class="ti" [ngClass]="etapa.icono" aria-hidden="true"></i>
+                        </div>
+                        <div class="tl-line" *ngIf="!last"></div>
+                      </div>
+                      <div class="tl-info">
+                        <div class="tl-ttl" [ngClass]="etapa.clase">{{ etapa.titulo }}</div>
+                        <!-- BACKEND: etapa.fecha vendría del historialEstados real -->
+                        <div class="tl-time">{{ etapa.fecha || '—' }}</div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Acciones del pedido expandido -->
+          <div class="detail-actions">
+
+            <!-- BACKEND: El botón de cancelar sólo aparece si el pedido está en
+                 estado 'procesando'. Llama a PATCH /api/tienda/pedidos/:id/cancelar -->
+            <button
+              class="btn-det-secondary danger-btn"
+              *ngIf="pedido.estado === 'procesando'"
+              (click)="cancelarPedido(pedido.id)"
+            >
+              <i class="ti ti-x" aria-hidden="true"></i>
+              Cancelar pedido
+            </button>
+
+            <!-- BACKEND: Llama a GET /api/tienda/pedidos/:id/factura para descargar PDF -->
+            <button class="btn-det-secondary" (click)="descargarFactura(pedido.id)">
+              <i class="ti ti-file-invoice" aria-hidden="true"></i>
+              Descargar boleta
+            </button>
+
+            <!-- BACKEND: Redirige al módulo de seguimiento con el ID del pedido
+                 o llama a GET /api/tienda/pedidos/:id/tracking -->
+            <button class="btn-det-primary" *ngIf="pedido.estado === 'en_camino'" (click)="rastrearPedido(pedido.id)">
+              <i class="ti ti-truck" aria-hidden="true"></i>
+              Rastrear envío
+            </button>
+
+            <!-- BACKEND: Llama a POST /api/tienda/pedidos/:id/recomprar
+                 para agregar los mismos items al carrito actual -->
+            <button class="btn-det-primary" *ngIf="pedido.estado === 'entregado'" (click)="recomprar(pedido)">
+              <i class="ti ti-shopping-cart-plus" aria-hidden="true"></i>
+              Volver a comprar
+            </button>
+
+          </div>
+
+        </div>
+        <!-- └──────────────────────────────────────────────────────────────┘ -->
+
+      </div>
+    </div>
+    <!-- Fin lista de pedidos -->
+
+  </div>
+  <!-- Fin hist-body -->
+
+</div>

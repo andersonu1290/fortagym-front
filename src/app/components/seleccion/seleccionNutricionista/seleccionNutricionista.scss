@@ -1,11 +1,11 @@
 // =============================================================
-// seleccionEntrenador.scss
-// Componente: Selección de Entrenador Personal y Reserva de Horario
+// seleccionNutricionista.scss
+// Componente: Selección de Nutricionista y Reserva de Consulta
 // Hereda variables y convenciones del Design System FortaGym
 // (--color-forta-primary, --font-title, --font-body, etc.)
 // =============================================================
 
-.seleccion-entrenador-page {
+.seleccion-nutricionista-page {
   padding: 60px 0 80px;
   font-family: var(--font-body);
 }
@@ -29,13 +29,13 @@
 }
 
 // =========================================
-// PASO 1 — GRID DE ENTRENADORES
+// PASO 1 — GRID DE NUTRICIONISTAS
 // =========================================
-.entrenadores-section {
+.nutricionistas-section {
   margin-bottom: 60px;
 }
 
-.entrenadores-grid {
+.nutricionistas-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
@@ -89,7 +89,7 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1; /* 🔥 Toma todo el espacio restante vacío */
-    padding: 0 20px 25px;
+    padding: 0 20px 25px; /* Ajusta el padding interno si es necesario */
 
     p {
       flex-grow: 1; /* El texto absorbe el espacio vacío, empujando el botón hacia abajo */
@@ -125,8 +125,26 @@
   }
 }
 
+.pro-badge {
+  display: inline-block;
+  background: rgba(255, 141, 34, 0.1); /* Fondo naranja suave */
+  color: var(--color-forta-primary);  /* Color naranja fuerte */
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+
+  /* Esto evita que un texto muy largo rompa la tarjeta */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 // =========================================
-// PASO 2 — HORARIOS DISPONIBLES
+// PASO 2 — HORARIOS Y DETALLE DE CONSULTA
 // =========================================
 .horarios-section {
   margin-bottom: 50px;
@@ -218,8 +236,8 @@
   letter-spacing: 0.3px;
 }
 
-// Detalle de la sesión: qué se entrena, duración total y ejercicios
-.sesion-detalle {
+// Detalle de la consulta: qué incluye, duración total y temas
+.consulta-detalle {
   max-width: 600px;
   margin: 35px auto 0;
   background: #fff;
@@ -248,11 +266,11 @@
   }
 }
 
-.sesion-meta {
+.consulta-meta {
   margin-bottom: 12px;
 }
 
-.sesion-duracion {
+.consulta-duracion {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -265,14 +283,14 @@
   border-radius: 20px;
 }
 
-.sesion-descripcion {
+.consulta-descripcion {
   margin: 0;
   color: var(--color-text-primary, #111);
   font-size: 0.95rem;
   line-height: 1.6;
 }
 
-.sesion-ejercicios {
+.consulta-temas {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -292,7 +310,83 @@
 }
 
 // =========================================
-// PASO 3 — RESUMEN Y CONFIRMACIÓN
+// PASO 3 — DATOS BÁSICOS DEL USUARIO
+// =========================================
+.datos-basicos-section {
+  max-width: 600px;
+  margin: 0 auto 50px;
+  animation: fadeInUp 0.4s ease forwards;
+
+  h2 {
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--color-forta-dark, #111);
+  }
+}
+
+.datos-basicos-subtitle {
+  text-align: center;
+  color: var(--color-text-secondary, #64748b);
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+.datos-basicos-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: var(--color-background-secondary, #f8fafc);
+  border: 1px solid var(--color-border-tertiary, #e2e8f0);
+  border-radius: var(--border-radius-lg, 16px);
+  padding: 28px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &.form-field-objetivo {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-family: var(--font-title);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--color-text-secondary, #64748b);
+  }
+
+  input,
+  select {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-text-primary, #111);
+    background: #fff;
+    transition: 0.3s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-forta-primary);
+    }
+  }
+}
+
+// =========================================
+// PASO 4 — RESUMEN Y CONFIRMACIÓN
 // =========================================
 .resumen-section {
   max-width: 600px;

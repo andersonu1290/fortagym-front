@@ -1,0 +1,204 @@
+<!--
+  seleccionNutricionista.html
+  Componente: Selección de Nutricionista y Reserva de Consulta
+  Plataforma: FortaGym
+-->
+<main class="seleccion-nutricionista-page">
+  <div class="container">
+
+    <!-- ===========================
+         ENCABEZADO DE SECCIÓN
+    ============================ -->
+    <header class="seleccion-header">
+      <h1 class="section-title">Elige a tu Nutricionista</h1>
+      <p class="section-subtitle">
+        Selecciona a la profesional ideal para ti y reserva tu consulta de nutrición.
+      </p>
+    </header>
+
+    <!-- ===========================
+         PASO 1: LISTADO DE NUTRICIONISTAS
+    ============================ -->
+    <section class="nutricionistas-section" aria-labelledby="nutricionistas-heading">
+      <h2 id="nutricionistas-heading" class="visually-hidden">Nutricionistas disponibles</h2>
+
+      <ul class="nutricionistas-grid" role="list">
+        <li
+          *ngFor="let nutricionista of nutricionistas"
+          class="pro-profile-card"
+          [class.selected]="esNutricionistaSeleccionada(nutricionista)"
+        >
+          <article>
+            <button
+              type="button"
+              class="pro-card-trigger"
+              [attr.aria-pressed]="esNutricionistaSeleccionada(nutricionista)"
+              (click)="seleccionarNutricionista(nutricionista)"
+            >
+              <div class="pro-cover"></div>
+
+              <div class="pro-avatar">
+                <img [src]="nutricionista.fotoUrl" onerror="this.src='assets/img/user-icon.png'" [alt]="'Foto de ' + nutricionista.nombre" />
+              </div>
+
+              <div class="pro-info">
+                <span class="pro-badge badge-nutricionista">{{ nutricionista.especialidad }}</span>
+                <h3>{{ nutricionista.nombre }}</h3>
+                <p>{{ nutricionista.descripcion }}</p>
+
+                <span class="btn-agendar" [class.activo]="esNutricionistaSeleccionada(nutricionista)">
+                  {{ esNutricionistaSeleccionada(nutricionista) ? 'Seleccionada ✓' : 'Elegir Nutricionista' }}
+                </span>
+              </div>
+            </button>
+          </article>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ===========================
+         PASO 2: HORARIOS DISPONIBLES
+    ============================ -->
+    <section
+      class="horarios-section"
+      aria-labelledby="horarios-heading"
+      *ngIf="nutricionistaSeleccionado"
+    >
+      <h2 id="horarios-heading">
+        Horarios disponibles con <span class="text-highlight">{{ nutricionistaSeleccionado.nombre }}</span>
+      </h2>
+
+      <p class="horarios-subtitle" *ngIf="nutricionistaSeleccionado.horarios.length === 0">
+        Esta nutricionista no tiene horarios disponibles por el momento.
+      </p>
+
+      <div class="schedule-grid" role="list">
+        <button
+          type="button"
+          role="listitem"
+          *ngFor="let horario of nutricionistaSeleccionado.horarios"
+          class="time-slot"
+          [class.selected]="esHorarioSeleccionado(horario)"
+          [class.disabled]="!horario.disponible"
+          [disabled]="!horario.disponible"
+          [attr.aria-pressed]="esHorarioSeleccionado(horario)"
+          (click)="seleccionarHorario(horario)"
+        >
+          <span class="time-slot-fecha">{{ horario.dia }} · {{ horario.hora }}</span>
+          <span class="time-slot-duracion">{{ horario.detalle.duracionMinutos }} min</span>
+        </button>
+      </div>
+
+      <!-- Detalle de la consulta: qué incluye, duración y temas -->
+      <article class="consulta-detalle" *ngIf="horarioSeleccionado">
+        <h3>Qué incluye esta consulta</h3>
+
+        <div class="consulta-meta">
+          <span class="consulta-duracion">⏱ {{ horarioSeleccionado.detalle.duracionMinutos }} minutos</span>
+        </div>
+
+        <p class="consulta-descripcion">{{ horarioSeleccionado.detalle.descripcion }}</p>
+
+        <h4>Temas que se abordan</h4>
+        <ul class="consulta-temas">
+          <li *ngFor="let tema of horarioSeleccionado.detalle.temas">{{ tema }}</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- ===========================
+         PASO 3: DATOS BÁSICOS DEL USUARIO
+    ============================ -->
+    <section
+      class="datos-basicos-section"
+      aria-labelledby="datos-basicos-heading"
+      *ngIf="horarioSeleccionado"
+    >
+      <h2 id="datos-basicos-heading">Cuéntanos un poco sobre ti</h2>
+      <p class="datos-basicos-subtitle">
+        Esta información ayuda a tu nutricionista a preparar mejor la consulta.
+      </p>
+
+      <form class="datos-basicos-form" autocomplete="off">
+        <div class="form-field">
+          <label for="peso">Peso actual (kg)</label>
+          <input
+            id="peso"
+            name="peso"
+            type="number"
+            min="1"
+            step="0.1"
+            placeholder="Ej. 70"
+            [(ngModel)]="datosUsuario.pesoKg"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="altura">Altura (cm)</label>
+          <input
+            id="altura"
+            name="altura"
+            type="number"
+            min="1"
+            step="1"
+            placeholder="Ej. 170"
+            [(ngModel)]="datosUsuario.alturaCm"
+          />
+        </div>
+
+        <div class="form-field form-field-objetivo">
+          <label for="objetivo">Objetivo principal</label>
+          <select id="objetivo" name="objetivo" [(ngModel)]="datosUsuario.objetivo">
+            <option *ngFor="let opcion of objetivosDisponibles" [value]="opcion">{{ opcion }}</option>
+          </select>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===========================
+         PASO 4: RESUMEN Y CONFIRMACIÓN
+    ============================ -->
+    <section class="resumen-section" aria-labelledby="resumen-heading" *ngIf="nutricionistaSeleccionado">
+      <h2 id="resumen-heading" class="visually-hidden">Resumen de la reserva</h2>
+
+      <div class="resumen-card">
+        <div class="resumen-detalle">
+          <p>
+            <strong>Nutricionista:</strong>
+            {{ nutricionistaSeleccionado.nombre }}
+          </p>
+          <p>
+            <strong>Horario:</strong>
+            <span *ngIf="horarioSeleccionado">
+              {{ horarioSeleccionado.dia }} · {{ horarioSeleccionado.hora }}
+              ({{ horarioSeleccionado.detalle.duracionMinutos }} min)
+            </span>
+            <span *ngIf="!horarioSeleccionado" class="text-muted">Selecciona un horario</span>
+          </p>
+          <p>
+            <strong>Tus datos:</strong>
+            <span *ngIf="datosUsuarioValidos()">
+              {{ datosUsuario.pesoKg }} kg · {{ datosUsuario.alturaCm }} cm · {{ datosUsuario.objetivo }}
+            </span>
+            <span *ngIf="!datosUsuarioValidos()" class="text-muted">Completa tus datos básicos</span>
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-confirm-booking"
+          [disabled]="!puedeConfirmar()"
+          (click)="confirmarReserva()"
+        >
+          Confirmar Reserva
+        </button>
+      </div>
+
+      <p class="confirmacion-mensaje" *ngIf="reservaConfirmada" role="status">
+        ¡Reserva confirmada con {{ reservaConfirmada.nutricionista.nombre }}
+        el {{ reservaConfirmada.horario.dia }} a las {{ reservaConfirmada.horario.hora }}!
+      </p>
+    </section>
+
+  </div>
+</main>

@@ -18,7 +18,9 @@
       </div>
 
       <!-- CARD PRINCIPAL -->
-      <div class="card-premium-clara calendario-card">
+      <div
+        class="card-premium-clara calendario-card"
+        [class.modal-open]="eventoSeleccionado">
 
         <!-- CONTROLES -->
         <div class="controles-mes">
@@ -48,7 +50,7 @@
         <!-- GRID -->
         <div class="grid-calendario">
 
-          <!-- HEADERS -->
+          <!-- CABECERAS -->
           <div
             class="dia-header"
             *ngFor="let d of diasSemana">
@@ -72,17 +74,17 @@
             </span>
 
             <!-- EVENTOS -->
-            <ng-container
-              *ngIf="!dia.vacio && dia.eventos.length > 0">
-
-              <div
+            <ng-container *ngIf="!dia.vacio && dia.eventos.length > 0">
+              <button
+                type="button"
                 class="evento"
                 [ngClass]="evento.tipo"
-                *ngFor="let evento of dia.eventos">
+                *ngFor="let evento of dia.eventos"
+                (click)="abrirModal(evento)">
 
-                {{ evento.titulo }}
+                {{ evento.tipo === 'nutricion' ? 'Nutrición' : 'Entrenamiento' }}
 
-              </div>
+              </button>
 
             </ng-container>
 
@@ -95,5 +97,80 @@
     </div>
 
   </section>
+
+  <!-- =========================================
+       MODAL
+  ========================================== -->
+
+  <div
+    *ngIf="eventoSeleccionado"
+    class="cal-modal-overlay active"
+    (click)="cerrarModal()">
+
+    <div
+      class="cal-modal-content"
+      (click)="$event.stopPropagation()">
+
+      <button
+        class="cal-modal-close"
+        (click)="cerrarModal()">
+
+        <i class="ti ti-x"></i>
+
+      </button>
+
+      <div class="cal-modal-header">
+
+        <div class="cal-modal-icon">
+          <i class="ti ti-calendar-event"></i>
+        </div>
+
+        <h3>Detalle de Actividad</h3>
+
+      </div>
+
+      <div class="cal-modal-body">
+        <h4 class="cal-event-title">{{ eventoSeleccionado.titulo }}</h4>
+
+        <div class="cal-info-grid">
+          <div class="cal-info-item">
+            <i class="ti ti-calendar"></i>
+            <span><strong>Fecha:</strong> {{ eventoSeleccionado.fecha }}</span>
+          </div>
+          <div class="cal-info-item">
+            <i class="ti ti-clock"></i>
+            <span><strong>Hora:</strong> {{ eventoSeleccionado.hora }}</span>
+          </div>
+
+          <div class="cal-info-item">
+            <i class="ti ti-user"></i>
+            <span>
+              <strong>{{ eventoSeleccionado.tipo === 'nutricion' ? 'Nutricionista:' : 'Entrenador:' }}</strong>
+              {{ eventoSeleccionado.profesional }}
+            </span>
+          </div>
+
+          <div class="cal-info-item" *ngIf="eventoSeleccionado.descripcion">
+            <i class="ti ti-notes"></i>
+            <span><strong>Detalle:</strong> {{ eventoSeleccionado.descripcion }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cal-modal-footer">
+
+        <button
+          class="cal-btn-close"
+          (click)="cerrarModal()">
+
+          Entendido
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </main>

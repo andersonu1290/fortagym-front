@@ -20,6 +20,7 @@ export class Calendario implements OnInit {
   fotoPreviewUrl: string = 'assets/img/user-icon.png';
   rutaPanel: string = '/';
   menuAbierto: boolean = false;
+  eventoSeleccionado: any = null;
 
   // URL expuesta directamente para tu archivo HTML por si la necesitas
   apiUrl: string = environment.apiUrl;
@@ -127,6 +128,14 @@ export class Calendario implements OnInit {
   toggleMenu(event: Event) {
     event.stopPropagation();
     this.menuAbierto = !this.menuAbierto;
+  }
+
+  abrirModal(evento: any) {
+    this.eventoSeleccionado = evento;
+  }
+
+  cerrarModal() {
+    this.eventoSeleccionado = null;
   }
 
   cerrarSesion() {

@@ -258,3 +258,306 @@
     width: 100%;
   }
 }
+/* =========================================
+   MODAL PREMIUM - FORTAGYM STYLE
+========================================= */
+
+.cal-modal-overlay {
+  display: none;
+
+  &.active {
+    display: flex;
+    position: fixed;
+    inset: 0;
+
+    /* Sin fondo oscuro */
+    background: transparent;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 9999;
+    padding: 20px;
+  }
+}
+
+.cal-modal-content {
+  background: #fff;
+
+  /* Ocupa casi toda la pantalla */
+  width: min(1400px, 96vw);
+  height: min(92vh, 950px);
+
+  border-radius: 28px;
+  position: relative;
+
+  overflow-y: auto;
+
+  box-shadow: 0 25px 60px rgba(0,0,0,.12);
+
+  animation: modalOpen .25s ease;
+}
+
+@keyframes modalOpen {
+
+  from{
+    opacity:0;
+    transform:translateY(12px) scale(.985);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+
+}
+
+.cal-modal-close{
+
+  position:absolute;
+  top:28px;
+  right:28px;
+
+  width:46px;
+  height:46px;
+
+  border:none;
+  border-radius:50%;
+
+  background:#f1f5f9;
+
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:.25s;
+
+  i{
+    font-size:22px;
+  }
+
+  &:hover{
+
+    background:var(--color-forta-primary);
+    color:#fff;
+
+  }
+
+}
+
+.cal-modal-header{
+
+  display:flex;
+  align-items:center;
+  gap:24px;
+
+  padding:55px;
+
+  background:#f8fafc;
+  border-bottom:1px solid #e2e8f0;
+
+  .cal-modal-icon{
+
+    width:72px;
+    height:72px;
+
+    border-radius:18px;
+
+    background:var(--color-forta-primary);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    i{
+
+      color:#fff;
+      font-size:36px;
+
+    }
+
+  }
+
+  h3{
+
+    margin:0;
+
+    font-family:var(--font-title);
+
+    font-size:2rem;
+    font-weight:800;
+
+    color:#111827;
+
+  }
+
+}
+
+.cal-modal-body{
+
+  padding:55px;
+
+  .cal-event-title{
+
+    margin-bottom:35px;
+
+    font-size:2.4rem;
+    font-weight:800;
+
+    color:#111827;
+
+  }
+
+  .cal-info-row{
+
+    display:flex;
+    align-items:flex-start;
+
+    gap:18px;
+
+    margin-bottom:24px;
+
+    font-size:1.15rem;
+    line-height:1.7;
+
+    color:#475569;
+
+    i{
+
+      margin-top:4px;
+      font-size:24px;
+
+      color:var(--color-forta-primary);
+
+    }
+
+  }
+
+}
+
+.cal-modal-footer{
+
+  padding:0 55px 55px;
+
+  .cal-btn-close{
+
+    width:100%;
+
+    padding:18px;
+
+    border:none;
+    border-radius:16px;
+
+    background:var(--color-forta-dark);
+    color:#fff;
+
+    font-size:1rem;
+    font-weight:800;
+
+    letter-spacing:.5px;
+    text-transform:uppercase;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    &:hover{
+
+      background:var(--color-forta-primary);
+
+    }
+
+  }
+
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:900px){
+
+  .cal-modal-content{
+
+    width:100%;
+    height:100%;
+    border-radius:0;
+
+  }
+
+  .cal-modal-header{
+
+    padding:28px;
+
+    .cal-modal-icon{
+
+      width:56px;
+      height:56px;
+
+      i{
+        font-size:28px;
+      }
+
+    }
+
+    h3{
+      font-size:1.5rem;
+    }
+
+  }
+
+  .cal-modal-body{
+
+    padding:28px;
+
+    .cal-event-title{
+
+      font-size:1.8rem;
+
+    }
+
+    .cal-info-row{
+
+      font-size:1rem;
+
+    }
+
+  }
+
+  .cal-modal-footer{
+
+    padding:0 28px 28px;
+
+  }
+
+}
+.calendario-card.modal-open {
+  pointer-events: none;
+}
+
+.cal-modal-overlay,
+.cal-modal-content {
+  pointer-events: auto;
+}
+
+
+.cal-info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.cal-info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  color: #334155;
+  i { color: var(--color-forta-primary); font-size: 1.2rem; }
+}

@@ -21,6 +21,8 @@ import { CarritoComponent } from './components/tienda/carrito/carrito';
 import { MembresiaComponent } from './components/membresia/membresia';
 import { SmartBalance } from './components/smartbalance/smartbalance';
 import { SeleccionEntrenadorComponent } from './components/seleccion/seleccionEntrenador/seleccionEntrenador';
+import { SeleccionNutricionistaComponent } from './components/seleccion/seleccionNutricionista/seleccionNutricionista';
+import { HistorialComprasComponent } from './components/historial-compras/historial-compras';
 
 export const routes: Routes = [
   // ==========================================
@@ -36,10 +38,14 @@ export const routes: Routes = [
   { path: 'membresia', component: MembresiaComponent },
   { path: 'smartbalance', component: SmartBalance },
   { path: 'seleccion-entrenador', component: SeleccionEntrenadorComponent },
+  { path: 'seleccion-nutricionista', component: SeleccionNutricionistaComponent },
 
   // ==========================================
   // 🔒 VISTAS PRIVADAS (Protegidas por authGuard)
   // ==========================================
+
+  // Historial de compras del usuario
+  { path: 'historial-compras', component: HistorialComprasComponent, canActivate: [authGuard] },
 
   // Calendario general de los socios
   { path: 'calendario', component: Calendario, canActivate: [authGuard] },
